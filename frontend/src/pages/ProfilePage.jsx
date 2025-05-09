@@ -1,8 +1,9 @@
 import React from "react";
 import css from "./ProfilePage.module.css";
-import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg"
-import badge2 from "../assets/image 6.svg"
-import badge3 from "../assets/image 7.svg"
+import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
+import badge2 from "../assets/image 6.svg";
+import badge3 from "../assets/image 7.svg";
+import profile from "../assets/image 6.svg"
 
 const ProfilePage = () => {
   return (
@@ -11,11 +12,19 @@ const ProfilePage = () => {
         {/* 헤더영역 */}
         <header className={css.headerContainer}>
           <div className={css.header}>
-            <div>
-              <h2>
-                <span className={css.headerHighlight}>Hi</span> Profile,
-              </h2>
-              <p>It's looking like a slow day</p>
+            <div className={css.headerLeft}>
+              <img
+                src={profile}
+                alt="profile"
+                className={css.profileImage}
+              />
+
+              <div className={css.textGroup}>
+                <h2>
+                  <span className={css.headerHighlight}>Hi</span> Profile,
+                </h2>
+                <p>It's looking like a slow day</p>
+              </div>
             </div>
 
             <div className={css.search}>
@@ -58,9 +67,9 @@ const ProfilePage = () => {
 
           {/* 뱃지 영역 */}
           <section className={css.badgeContainer}>
-            <img src = {badge1} alt = "badee1" className={css.badge}/>
-            <img src = {badge2} alt = "badee1" className={css.badge}/>
-            <img src = {badge3} alt = "badee1" className={css.badge}/>
+            <img src={badge1} alt="badee1" className={css.badge} />
+            <img src={badge2} alt="badee1" className={css.badge} />
+            <img src={badge3} alt="badee1" className={css.badge} />
           </section>
 
           {/* 커밋 잔디 영역 */}

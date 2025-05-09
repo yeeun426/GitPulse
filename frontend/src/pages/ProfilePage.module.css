@@ -30,21 +30,34 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .headerLeft{
+    display : flex;
+    align-items: center;
+    gap : 1rem;
   }
   
+  .profileImage{
+    width: 10rem;
+    border-radius : 50%;
+    margin-right : 2rem;
+    object-fit: cover;
+  }
+
   .headerHighlight{
     color : var(--main-purple);
     font-weight : bold;
     
   }
-  .header h2 {
+  .textGroup h2 {
     font-size: var(--fs33);
     margin-bottom: var(--fs33);
     font-size: 3rem;
   }
   
-  .header p {
+  .textGroup p {
     color: #888;
     font-size: 1.5rem;
   }
@@ -52,7 +65,7 @@
   .search {
     position: relative;
     width: 25rem !important;
-    height: 2.75rem;
+    height: 4rem;
     background-color: #f2f2f2;
     border-radius: 15rem;
     padding-left: 1.2rem;
