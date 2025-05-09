@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import css from "./SideBar.module.css";
 import { NavLink } from "react-router-dom";
 import { throttle } from "../utils/feature";
+import { useOrganizationList } from "../apis/useOrganizationApi";
 
 const SideBar = () => {
-  const [isOn, setIsOn] = useState(false);
-
-  const addClassOn = () => {
-    setIsOn(!isOn);
-  };
+  const [isOn, setIsOn] = useState(false); // 반응형에 필요 (아직 미적용)
 
   const handleResize = throttle(() => {
     if (window.innerWidth > 1100) {
@@ -23,38 +20,31 @@ const SideBar = () => {
     };
   }, [handleResize]);
 
+  const {
+    data: groupList,
+    isLoading,
+    isError,
+  } = useOrganizationList("yeeun426");
+  console.log(groupList);
+
+  isLoading && <p>Loading</p>;
+  isError && <p>에러 발생</p>;
+
   return (
     <div className={isOn ? `${css.sideBarCon} ${css.on}` : css.sideBarCon}>
       <div className={css.icon}>
-        <img src="./img/icon_mini.png" />
+        <img src="/img/icon_mini.png" />
       </div>
       <div className={css.sideBarList}>
         <CustomNavLink to={"/"} label={"My Git"} icon={"bi-person-fill"} />
-        <CustomNavLink
-          to={"/organizaiton"}
-          label={"Organization_1"}
-          icon={"bi-people-fill"}
-        />
-        <CustomNavLink
-          to={"/organizaiton2"}
-          label={"Organization_2"}
-          icon={"bi-people-fill"}
-        />
-        <CustomNavLink
-          to={"/organizaiton3"}
-          label={"Organization_3"}
-          icon={"bi-people-fill"}
-        />
-        <CustomNavLink
-          to={"/organizaiton4"}
-          label={"Organization_4"}
-          icon={"bi-people-fill"}
-        />
-        <CustomNavLink
-          to={"/organizaiton5"}
-          label={"Organization_5"}
-          icon={"bi-people-fill"}
-        />
+        {groupList?.map((group) => (
+          <CustomNavLink
+            key={group.id}
+            to={`/org/${group.id}/${group.login}`}
+            label={group.login}
+            icon={"bi-people-fill"}
+          />
+        ))}
       </div>
     </div>
   );
