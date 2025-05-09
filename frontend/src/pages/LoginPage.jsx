@@ -3,9 +3,11 @@ import logo from "../assets/Logo.png";
 import git from "../assets/Git.png";
 import styles from "./LoginPage.module.css";
 import LogoutBtn from "../components/LogoutBtn";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [socialUser, setSocialUser] = useState(null);
+  const navigate = useNavigate(); // ⬅️ 추가
 
   // JWT 메시지 수신
   useEffect(() => {
@@ -15,6 +17,7 @@ const LoginPage = () => {
         localStorage.setItem("jwt", token);
         const payload = JSON.parse(atob(token.split(".")[1]));
         setSocialUser(payload);
+        navigate("/"); // ⬅️ 로그인 후 홈으로 이동
       }
     };
     window.addEventListener("message", handleMessage);
