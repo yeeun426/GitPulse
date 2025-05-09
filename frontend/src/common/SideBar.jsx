@@ -20,11 +20,9 @@ const SideBar = () => {
     };
   }, [handleResize]);
 
-  const {
-    data: groupList,
-    isLoading,
-    isError,
-  } = useOrganizationList("yeeun426");
+  const username = localStorage.getItem("username");
+
+  const { data: groupList, isLoading, isError } = useOrganizationList(username);
   console.log(groupList);
 
   isLoading && <p>Loading</p>;
