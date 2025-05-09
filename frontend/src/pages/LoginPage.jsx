@@ -7,9 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [socialUser, setSocialUser] = useState(null);
-  const navigate = useNavigate(); // ⬅️ 추가
+  const navigate = useNavigate();
 
-  // JWT 메시지 수신
   useEffect(() => {
     const handleMessage = (event) => {
       const token = event.data;
@@ -17,14 +16,13 @@ const LoginPage = () => {
         localStorage.setItem("jwt", token);
         const payload = JSON.parse(atob(token.split(".")[1]));
         setSocialUser(payload);
-        navigate("/"); // ⬅️ 로그인 후 홈으로 이동
+        navigate("/");
       }
     };
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, []);
 
-  // 새로고침 시 JWT 복원
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
@@ -53,15 +51,12 @@ const LoginPage = () => {
       <div className={styles.left}>
         <img src={logo} alt="GitPulse 로고" />
       </div>
-
       <div className={styles.right}>
         <p>반갑습니다.</p>
         <p>
-          <span className={styles.emphasis}>신뢰의 시작, 협업의 가교</span>,{" "}
-          <br />
+          <span className={styles.emphasis}>신뢰의 시작, 협업의 가교</span>, <br />
           <strong>GitPulse</strong> 입니다.
         </p>
-
         {!socialUser ? (
           <button className={styles.loginButton} onClick={onClickSocialLogin}>
             <img src={git} alt="GitHub 아이콘" />
