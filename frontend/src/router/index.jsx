@@ -6,21 +6,20 @@ import ProfilePage from "../pages/ProfilePage";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/", // 로그인 페이지
+    element: <LoginPage />,
+  },
+  {
+    path: "/", // 루트 경로 그대로 유지, 내부 children으로만 분기
     element: <DefaultLayout />,
     errorElement: <div>에러</div>,
     children: [
       {
-        index: true,
-        path: "/Login",
-        element: <LoginPage />,
-      },
-      {
-        path: "/organizaiton",
+        path: "organization",
         element: <OrganizationPage />,
       },
       {
-        path: "/profile",
+        path: "profile",
         element: <ProfilePage />,
       },
     ],
