@@ -8,7 +8,6 @@ export const DefaultLayout = () => {
   return (
     <div className={css.defaultLayout}>
       <Outlet />
-      <footer>copyrights</footer>
     </div>
   );
 };

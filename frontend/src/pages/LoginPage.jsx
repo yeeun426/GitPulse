@@ -55,6 +55,7 @@ const LoginPage = () => {
         <p>반갑습니다.</p>
         <p>
           <span className={styles.emphasis}>신뢰의 시작, 협업의 가교</span>,{" "}
+          <br />
           <strong>GitPulse</strong> 입니다.
         </p>
 
