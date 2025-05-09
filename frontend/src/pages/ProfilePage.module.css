@@ -1,43 +1,9 @@
 .container {
     display: flex;
     min-height: 100vh;
-    font-family: 'Pretendard', sans-serif;
     background-color: #f9f9fc;
   }
   
-  /* 사이드바 */
-  .sidebar {
-    width: 15rem;
-    border-right: 1px solid #e5e5e5;
-    padding: 1.5rem 1rem;
-  }
-  
-  .logo {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #a278ff;
-    margin-bottom: 2rem;
-  }
-  
-  .menu ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .menu li {
-    padding: 0.625rem 1rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    color: #555;
-    font-size: 0.95rem;
-  }
-  
-  .menu li:hover,
-  .menu .active {
-    background-color: #f0ebff;
-    color: #7b3fe4;
-  }
   
   /* 메인 컨텐츠 */
   .main {
@@ -48,13 +14,13 @@
   }
 
   .headerContainer{
-    width : 100%;
-    padding : 2rem;
+    width : 80%;
+    padding : 3rem 0;
     margin : 0 auto;
   }
 
   .contentContainer{
-    max-width: 90%;
+    max-width: 80%;
     margin : 0 auto;
 
   }
@@ -64,92 +30,128 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
   
+  .headerHighlight{
+    color : var(--main-purple);
+    font-weight : bold;
+    
+  }
   .header h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--fs33);
+    margin-bottom: var(--fs33);
+    font-size: 3rem;
   }
   
   .header p {
     color: #888;
-    font-size: 0.875rem;
+    font-size: 1.5rem;
   }
   
   .search {
+    position: relative;
+    width: 25rem !important;
+    height: 2.75rem;
+    background-color: #f2f2f2;
+    border-radius: 15rem;
+    padding-left: 1.2rem;
+    padding-right: 2.5rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    box-sizing: border-box;
   }
   
   .search input {
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ccc;
-    font-size: 0.875rem;
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: var(--fs14);
+  outline: none;
+  color: #333;
   }
-  
-  .search button {
-    padding: 0.5rem 0.75rem;
-    background-color: #a278ff;
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
+
+  .search i{
+    position: absolute;
+    right: 1rem;
+    font-size: 1rem;
+    color: #333;
     cursor: pointer;
   }
   
   /* 카드 */
   .profileStats {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     gap: 1.2rem;
-    margin-bottom: 1.5rem;
+    margin: 2rem 0;
   }
   
   .card {
-    flex: 1;
-    padding: 1.25rem;
-    background-color: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+    flex : 1;
+    max-width : 30rem;
     text-align: center;
-    min-width : var(--fs16);
-    max-width : var(--main-dark-gray);
-  }
-  
-  .card p {
-    color: #777;
-    font-size: 0.875rem;
-    margin-bottom: 0.375rem;
-  }
-  
-  .card h3 {
-    font-size: 1.5rem;
-    color: #333;
-  }
-  
-  /* 뱃지 */
-  .badges {
     display: flex;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    background-color: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
+    padding: 1.25rem 1.5rem;
+    transition: transform 0.2s ease;
   }
   
-  .badge {
-    width: 3.75rem;
-    height: 3.75rem;
-    background-color: white;
+  .card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .card i {
+    width: 5rem;
+    height: 5rem;
+    background-color: rgba(124, 58, 237, 0.1);
+    color: #7b3fe4;
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
+  
+  .cardText {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cardLabel {
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cardValue {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #111;
+    margin: 0;
+  }
+  
+  /* 뱃지 */
+ .badgeContainer{
+  display : flex;
+  justify-content: center;
+  gap : 1rem;
+  margin-bottom : 2rem;
+  padding : 2.5rem;
+  background-color: white;
+  border-radius : 1rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
+ }
+
+ .badge{
+  width : 7rem;
+  object-fit: contain;
+ }
   
   /* 커밋 잔디 */
   .contributions {
@@ -180,7 +182,7 @@
   /* 레포 테이블 */
   .repoTable {
     flex: 2;
-    background-color: white;
+    background-color:  white;
     border-radius: 0.75rem;
     padding: 1.25rem;
     box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
@@ -189,6 +191,7 @@
   .repoTable h4 {
     margin-bottom: 0.75rem;
     font-size: 1rem;
+    font-weight : bold;
   }
   
   .repoTable table {

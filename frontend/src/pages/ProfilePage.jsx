@@ -1,23 +1,12 @@
 import React from "react";
 import css from "./ProfilePage.module.css";
+import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg"
+import badge2 from "../assets/image 6.svg"
+import badge3 from "../assets/image 7.svg"
 
 const ProfilePage = () => {
   return (
     <div className={css.container}>
-      <section className={css.sidebar}>
-        <div className={css.logo}>logo</div>
-        <nav className={css.menu}>
-          <ul>
-            <li className={css.active}>My Git</li>
-            <li>Organization1</li>
-            <li>Organization2</li>
-            <li>Organization3</li>
-            <li>Organization4</li>
-            <li>Organization5</li>
-          </ul>
-        </nav>
-      </section>
-
       <main className={css.main}>
         {/* 헤더영역 */}
         <header className={css.headerContainer}>
@@ -34,7 +23,7 @@ const ProfilePage = () => {
                 type="text"
                 placeholder="궁금한 사람의 깃허브 아이디를 입력하세요"
               />
-              <button>?</button>
+              <i className="bi bi-search"></i>
             </div>
           </div>
         </header>
@@ -43,26 +32,35 @@ const ProfilePage = () => {
         <div className={css.contentContainer}>
           <section className={css.profileStats}>
             <div className={css.card}>
-              <p>Followers</p>
-              <p>350</p>
+              <i className="bi bi-person-fill-check"></i>
+              <div className={css.cardText}>
+                <p className={css.cardLabel}>Followers</p>
+                <p className={css.cardValue}>350</p>
+              </div>
             </div>
 
             <div className={css.card}>
-              <p>Followings</p>
-              <p>450</p>
+              <i className="bi bi-person-heart"></i>
+              <div className={css.cardText}>
+                <p className={css.cardLabel}>Followings</p>
+                <p className={css.cardValue}>450</p>
+              </div>
             </div>
 
             <div className={css.card}>
-              <p>Public Repos</p>
-              <p>3500</p>
+              <i className="bi bi-cloud-check"></i>
+              <div className={css.cardText}>
+                <p className={css.cardLabel}>Public Repos</p>
+                <p className={css.cardValue}>3500</p>
+              </div>
             </div>
           </section>
 
           {/* 뱃지 영역 */}
-          <section className={css.badges}>
-            <div className={css.badge}>금</div>
-            <div className={css.badge}>은</div>
-            <div className={css.badge}>동</div>
+          <section className={css.badgeContainer}>
+            <img src = {badge1} alt = "badee1" className={css.badge}/>
+            <img src = {badge2} alt = "badee1" className={css.badge}/>
+            <img src = {badge3} alt = "badee1" className={css.badge}/>
           </section>
 
           {/* 커밋 잔디 영역 */}

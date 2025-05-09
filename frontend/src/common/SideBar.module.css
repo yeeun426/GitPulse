@@ -1,0 +1,37 @@
+.sideBarCon {
+  padding: 0 2rem;
+  max-width: 350px;
+  min-width: 300px;
+  width: 27%;
+  border-right: 1px solid #b4b6c573;
+  height: calc(100vh - 4rem);
+  margin: 2rem 0;
+}
+.icon img {
+  height: 90px;
+}
+.sideBarList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.sideBarList > a {
+  color: var(--main-dark-gray);
+  padding: 10px;
+  background: none;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-weight: 400;
+  font-family: inter;
+  font-size: 18px;
+}
+.sideBarList > a.active {
+  color: var(--main-purple);
+  background: #ebeef2;
+  transition: 0.5s ease;
+  border-radius: 15px;
+}
+.sideBarList > a > i {
+  font-size: 25px;
+}
