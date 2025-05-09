@@ -1,0 +1,234 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #f9f9fc;
+  }
+  
+  /* 사이드바 */
+  .sidebar {
+    width: 15rem;
+    border-right: 1px solid #e5e5e5;
+    padding: 1.5rem 1rem;
+  }
+  
+  .logo {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #a278ff;
+    margin-bottom: 2rem;
+  }
+  
+  .menu ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .menu li {
+    padding: 0.625rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: #555;
+    font-size: 0.95rem;
+  }
+  
+  .menu li:hover,
+  .menu .active {
+    background-color: #f0ebff;
+    color: #7b3fe4;
+  }
+  
+  /* 메인 컨텐츠 */
+  .main {
+    flex: 1;
+    padding: 2rem;
+    width : 100%;
+    margin : 0 auto;
+  }
+
+  .headerContainer{
+    width : 100%;
+    padding : 2rem;
+    margin : 0 auto;
+  }
+
+  .contentContainer{
+    max-width: 90%;
+    margin : 0 auto;
+
+  }
+  
+  /* 상단 인사말 + 검색 */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .header p {
+    color: #888;
+    font-size: 0.875rem;
+  }
+  
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .search input {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 0.875rem;
+  }
+  
+  .search button {
+    padding: 0.5rem 0.75rem;
+    background-color: #a278ff;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  
+  /* 카드 */
+  .profileStats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .card {
+    flex: 1;
+    padding: 1.25rem;
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+    text-align: center;
+    min-width : var(--fs16);
+    max-width : var(--main-dark-gray);
+  }
+  
+  .card p {
+    color: #777;
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .card h3 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  /* 뱃지 */
+  .badges {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+  }
+  
+  .badge {
+    width: 3.75rem;
+    height: 3.75rem;
+    background-color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* 커밋 잔디 */
+  .contributions {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+  }
+  
+  .contributions h4 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  .contributionGraph {
+    height: 7.5rem;
+    background-color: #f0f0f5;
+    border-radius: 0.5rem;
+  }
+  
+  /* 하단 레이아웃 */
+  .bottom {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  /* 레포 테이블 */
+  .repoTable {
+    flex: 2;
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+  }
+  
+  .repoTable h4 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  .repoTable table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  
+  .repoTable th,
+  .repoTable td {
+    padding: 0.625rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  /* 원형 그래프 */
+  .commitTimeChart {
+    flex: 1;
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+    text-align: center;
+  }
+  
+  .commitTimeChart h4 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  
+  .chartBox {
+    height: 12.5rem;
+    background-color: #f0f0f5;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .commitCount p {
+    font-size: 0.875rem;
+    color: #444;
+    margin: 0.25rem 0;
+  }
+  

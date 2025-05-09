@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import { DefaultLayout } from "../common/DefaultLayout";
+import DefaultLayout from "../common/DefaultLayout";
 import LoginPage from "../pages/LoginPage";
+import ProfilePage from "../pages/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <LoginPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
       },
     ],
   },
