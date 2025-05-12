@@ -102,7 +102,11 @@ const ProfilePage = () => {
           {/* 커밋 잔디 영역 */}
           <section className={css.contributions}>
             <h4>History</h4>
-            <div className={css.contributionGraph}>커밋 잔디 그래프 자리</div>
+            <img
+              src={`https://ghchart.rshah.org/${githubId}`}
+              alt="GitHub Contributions"
+              style={{ width: "100%", height: "auto" }}
+            />
           </section>
 
           {/* repo & 그래프 영역 */}
