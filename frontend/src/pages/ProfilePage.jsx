@@ -7,6 +7,7 @@ import UserStatCard from "../components/UserStatCard";
 import { getGitHubUserInfo, getUserRepos } from "../apis/github";
 import RepoTable from "../components/RepoTable";
 import Header from "../components/Header";
+import CommitTimeChart from "../components/CommitTimeChart";
 
 const ProfilePage = () => {
   const username = localStorage.getItem("username");
@@ -33,13 +34,6 @@ const ProfilePage = () => {
     }
   }, [username]);
 
-  const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      const value = e.target.value.trim();
-      if (value) setGithubId(value);
-    }
-  };
-
   return (
     <div className={css.container}>
       <main className={css.main}>
@@ -56,21 +50,18 @@ const ProfilePage = () => {
               iconClass="bi bi-person-fill-check"
               label="Followers"
               value={userData.followers}
-              // value="450"
             />
 
             <UserStatCard
               iconClass="bi bi-person-heart"
               label="Followings"
               value={userData.following}
-              // value="450"
             />
 
             <UserStatCard
               iconClass="bi bi-cloud-check"
               label="Publoc Repos"
               value={userData.public_repos}
-              // value="450"
             />
           </section>
 
@@ -99,13 +90,7 @@ const ProfilePage = () => {
             {/* graph */}
             <div className={css.commitTimeChart}>
               <h4>낮/밤</h4>
-              <div className={css.chartBox}>원형차트자리</div>
-              <div className={css.commitcount}>
-                <p>Morning : 38%</p>
-                <p>Daytime : 38%</p>
-                <p>Evening : 38%</p>
-                <p>Night : 38%</p>
-              </div>
+              <CommitTimeChart username={username} />
             </div>
           </section>
         </div>

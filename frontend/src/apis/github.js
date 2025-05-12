@@ -2,7 +2,7 @@ import axios from "axios";
 
 /**
  * GitHub 유저 정보 조회
- * @param {string} username - GitHub 사용자 ID
+ * @param {string} username 
  * @returns {Promise<{followers: number, following: number, public_repos: number}>}
  */
 export const getGitHubUserInfo = async (username) => {
