@@ -3,6 +3,7 @@ import DefaultLayout from "../common/DefaultLayout";
 import LoginPage from "../pages/LoginPage";
 import OrganizationPage from "../pages/OrganizationPage";
 import ProfilePage from "../pages/ProfilePage";
+import DevTypeTest from "../components/dev-type-test";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <ProfilePage />,
+      },
+      {
+        path: "dev-type-test",
+        element: <DevTypeTest />,
       },
     ],
   },
