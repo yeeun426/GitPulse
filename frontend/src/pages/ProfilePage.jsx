@@ -6,9 +6,10 @@ import badge3 from "../assets/image 7.svg";
 import profile from "../assets/image 6.svg";
 import UserStatCard from "../components/UserStatCard";
 import { getGitHubUserInfo } from "../apis/github";
+import RepoTable from "../components/RepoTable";
 
 const ProfilePage = () => {
-  const [githubId, setGithubId] = useState("yonggyu99");
+  const [githubId, setGithubId] = useState("yeeun426");
   const [userData, setUserData] = useState({
     followers: 0,
     following: 0,
@@ -112,27 +113,7 @@ const ProfilePage = () => {
           {/* repo & 그래프 영역 */}
           <section className={css.bottom}>
             {/* repo table */}
-            <div className={css.repoTable}>
-              <h4>repo</h4>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Review</th>
-                    <th>Recently Commit</th>
-                    <th>Date Created</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>repo-name</td>
-                    <td>32</td>
-                    <td>2025.05.06</td>
-                    <td>2025.03.06</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <RepoTable repos={repos} />
 
             {/* graph */}
             <div className={css.commitTimeChart}>
