@@ -1,250 +1,174 @@
 .container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #f9f9fc;
-  }
-  
-  
-  /* 메인 컨텐츠 */
-  .main {
-    flex: 1;
-    padding: 2rem;
-    width : 100%;
-    margin : 0 auto;
-  }
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9f9fc;
+}
 
-  .headerContainer{
-    width : 80%;
-    padding : 3rem 0;
-    margin : 0 auto;
-  }
-
-  .contentContainer{
-    max-width: 80%;
-    margin : 0 auto;
-
-  }
-  
-  /* 상단 인사말 + 검색 */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .headerLeft{
-    display : flex;
-    align-items: center;
-    gap : 1rem;
-  }
-  
-  .profileImage{
-    width: 10rem;
-    border-radius : 50%;
-    margin-right : 2rem;
-    object-fit: cover;
-  }
-
-  .headerHighlight{
-    color : var(--main-purple);
-    font-weight : bold;
-    
-  }
-  .textGroup h2 {
-    font-size: var(--fs33);
-    margin-bottom: var(--fs33);
-    font-size: 3rem;
-  }
-  
-  .textGroup p {
-    color: #888;
-    font-size: 1.5rem;
-  }
-  
-  .search {
-    position: relative;
-    width: 25rem !important;
-    height: 4rem;
-    background-color: #f2f2f2;
-    border-radius: 15rem;
-    padding-left: 1.2rem;
-    padding-right: 2.5rem;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-  }
-  
-  .search input {
+/* 메인 컨텐츠 */
+.main {
+  flex: 1;
+  padding: 2rem;
   width: 100%;
-  border: none;
-  background: transparent;
-  font-size: var(--fs14);
-  outline: none;
-  color: #333;
-  }
+  margin: 0 auto;
+}
 
-  .search i{
-    position: absolute;
-    right: 1rem;
-    font-size: 1rem;
-    color: #333;
-    cursor: pointer;
-  }
-  
-  /* 카드 */
-  .profileStats {
-    display: flex;
-    justify-content: space-between;
-    gap: 1.2rem;
-    margin: 2rem 0;
-  }
-  
-  .card {
-    flex : 1;
-    max-width : 30rem;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #fff;
-    border-radius: 1rem;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
-    padding: 1.25rem 1.5rem;
-    transition: transform 0.2s ease;
-  }
-  
-  .card:hover {
-    transform: translateY(-3px);
-  }
-  
-  .card i {
-    width: 5rem;
-    height: 5rem;
-    background-color: rgba(124, 58, 237, 0.1);
-    color: #7b3fe4;
-    border-radius: 50%;
-    font-size: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  
-  .cardText {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .cardLabel {
-    font-size: 1rem;
-    color: #888;
-    margin-bottom: 0.5rem;
-  }
-  
-  .cardValue {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #111;
-    margin: 0;
-  }
-  
-  /* 뱃지 */
- .badgeContainer{
-  display : flex;
-  justify-content: center;
-  gap : 1rem;
-  margin-bottom : 2rem;
-  padding : 2.5rem;
-  background-color: white;
-  border-radius : 1rem;
+.contentContainer {
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+/* 카드 */
+.profileStats {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin: 2rem 0;
+}
+
+.card {
+  flex: 1;
+  max-width: 30rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  border-radius: 1rem;
   box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
- }
+  padding: 1.25rem 1.5rem;
+  transition: transform 0.2s ease;
+}
 
- .badge{
-  width : 7rem;
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card i {
+  width: 5rem;
+  height: 5rem;
+  background-color: rgba(124, 58, 237, 0.1);
+  color: #7b3fe4;
+  border-radius: 50%;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardLabel {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.cardValue {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #111;
+  margin: 0;
+}
+
+/* 뱃지 */
+.badgeContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 2.5rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+.badge {
+  width: 7rem;
   object-fit: contain;
- }
-  
-  /* 커밋 잔디 */
-  .contributions {
-    background-color: white;
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
-  }
-  
-  .contributions h4 {
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
-  }
-  
-  .contributionGraph {
-    height: 7.5rem;
-    background-color: #f0f0f5;
-    border-radius: 0.5rem;
-  }
-  
-  /* 하단 레이아웃 */
-  .bottom {
-    display: flex;
-    gap: 1.5rem;
-  }
-  
-  /* 레포 테이블 */
-  .repoTable {
-    flex: 2;
-    background-color:  white;
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
-  }
-  
-  .repoTable h4 {
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
-    font-weight : bold;
-  }
-  
-  .repoTable table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-  
-  .repoTable th,
-  .repoTable td {
-    padding: 0.625rem;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-  }
-  
-  /* 원형 그래프 */
-  .commitTimeChart {
-    flex: 1;
-    background-color: white;
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
-    text-align: center;
-  }
-  
-  .commitTimeChart h4 {
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-  
-  .chartBox {
-    height: 12.5rem;
-    background-color: #f0f0f5;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .commitCount p {
-    font-size: 0.875rem;
-    color: #444;
-    margin: 0.25rem 0;
-  }
-  
+}
+
+/* 커밋 잔디 */
+.contributions {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+}
+
+.contributions h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.contributionGraph {
+  height: 7.5rem;
+  background-color: #f0f0f5;
+  border-radius: 0.5rem;
+}
+
+/* 하단 레이아웃 */
+.bottom {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* 레포 테이블 */
+.repoTable {
+  flex: 2;
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+}
+
+.repoTable h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.repoTable table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.repoTable th,
+.repoTable td {
+  padding: 0.625rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+/* 원형 그래프 */
+.commitTimeChart {
+  flex: 1;
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.commitTimeChart h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.chartBox {
+  height: 12.5rem;
+  background-color: #f0f0f5;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.commitCount p {
+  font-size: 0.875rem;
+  color: #444;
+  margin: 0.25rem 0;
+}
