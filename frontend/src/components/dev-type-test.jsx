@@ -205,6 +205,7 @@ const DevTypeTest = () => {
             <div className="mt-8">
               <div
                 ref={resultRef}
+                style={{ backgroundColor: result.color }}
                 className="rounded-3xl p-10 shadow-xl transform transition-all duration-500 hover:shadow-2xl"
                 aria-live="polite"
               >
@@ -212,7 +213,7 @@ const DevTypeTest = () => {
                   <img
                     src={result.character}
                     alt={`${result.title} 캐릭터`}
-                    className="w-20 h-20 mb-6 block"
+                    className="w-100 h-100 mb-6 block"
                   />
                   <h2 className="text-3xl font-bold mb-4 text-gray-800">
                     당신의 개발자 유형은?
