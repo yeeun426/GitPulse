@@ -4,7 +4,7 @@ import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
 import badge2 from "../assets/image 6.svg";
 import badge3 from "../assets/image 7.svg";
 import UserStatCard from "../components/UserStatCard";
-import { getGitHubUserInfo } from "../apis/github";
+import { getGitHubUserInfo, getUserRepos } from "../apis/github";
 import RepoTable from "../components/RepoTable";
 import Header from "../components/Header";
 
@@ -18,10 +18,18 @@ const ProfilePage = () => {
     login: "",
     avatar_url: "",
   });
+  const [repos, setRepos] = useState([]);
 
   useEffect(() => {
     if (username) {
       getGitHubUserInfo(username).then((data) => setUserData(data));
+    }
+  }, [username]);
+
+  useEffect(() => {
+    if (username) {
+      getGitHubUserInfo(username).then((data) => setUserData(data));
+      getUserRepos(username).then((repoData) => setRepos(repoData));
     }
   }, [username]);
 
@@ -86,8 +94,7 @@ const ProfilePage = () => {
           {/* repo & 그래프 영역 */}
           <section className={css.bottom}>
             {/* repo table */}
-            {/* <RepoTable repos={repos} /> */}
-            <RepoTable />
+            <RepoTable username={username} />
 
             {/* graph */}
             <div className={css.commitTimeChart}>
