@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import css from "./ProfilePage.module.css";
+import Header from "../components/Header";
 
 const OrganizationPage = () => {
   const { id, name } = useParams();
@@ -9,26 +10,7 @@ const OrganizationPage = () => {
     <div className={css.container}>
       <main className={css.main}>
         {/* 헤더영역 */}
-        <header className={css.headerContainer}>
-          <div className={css.header}>
-            <div className={css.headerLeft}>
-              <div className={css.textGroup}>
-                <h2>
-                  <span className={css.headerHighlight}>Hi</span> {name},
-                </h2>
-                <p>It's looking like a good day</p>
-              </div>
-            </div>
-
-            <div className={css.search}>
-              <input
-                type="text"
-                placeholder="궁금한 사람의 깃허브 아이디를 입력하세요"
-              />
-              <i className="bi bi-search"></i>
-            </div>
-          </div>
-        </header>
+        <Header name={name} />
 
         <div className={css.contentContainer}>
           <section className={css.profileStats}>

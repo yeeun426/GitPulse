@@ -3,40 +3,14 @@ import css from "./ProfilePage.module.css";
 import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
 import badge2 from "../assets/image 6.svg";
 import badge3 from "../assets/image 7.svg";
-import profile from "../assets/image 6.svg"
+import profile from "../assets/image 6.svg";
+import Header from "../components/Header";
 
 const ProfilePage = () => {
   return (
     <div className={css.container}>
       <main className={css.main}>
-        {/* 헤더영역 */}
-        <header className={css.headerContainer}>
-          <div className={css.header}>
-            <div className={css.headerLeft}>
-              <img
-                src={profile}
-                alt="profile"
-                className={css.profileImage}
-              />
-
-              <div className={css.textGroup}>
-                <h2>
-                  <span className={css.headerHighlight}>Hi</span> Profile,
-                </h2>
-                <p>It's looking like a slow day</p>
-              </div>
-            </div>
-
-            <div className={css.search}>
-              <input
-                type="text"
-                placeholder="궁금한 사람의 깃허브 아이디를 입력하세요"
-              />
-              <i className="bi bi-search"></i>
-            </div>
-          </div>
-        </header>
-
+        <Header name="Profile" profile={profile} />
         {/* 카드 영역 */}
         <div className={css.contentContainer}>
           <section className={css.profileStats}>
