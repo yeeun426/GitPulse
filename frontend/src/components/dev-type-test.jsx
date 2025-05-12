@@ -72,45 +72,45 @@ const questions = [
 
 const results = {
   pikachu: {
-    title: "💻 피카츄 프론트엔드",
+    title: "💻 감성 가득 프론트엔드",
     desc: "디자인 안 예쁘면 커밋 안 해요. border-radius가 안 들어가면 분노 게이지가 차오르고, 협업툴보다 Figma랑 친해요. 말버릇은 '폰트 왜 이래요??'",
 
-    color: "#FFE5B4",
+    color: "#d3fbef",
     character: "/img/pikachu-image.png", // 피카츄 이미지 경로
   },
   backend: {
-    title: "⚙️ 고독한 백엔드 늑대인간",
+    title: "⚙️ 고독한 백엔드",
     desc: "REST? 난 REST할 시간도 없어. 팀에선 조용히 살지만, 서버에선 절대 조용하지 않아요. Git log엔 항상 'fix: 버그 수정'만 남기고, 프론트엔드 요청이 3분 이상이면 '무슨 API를 이렇게 써요?'라고 해요.",
 
-    color: "#E6E6FA",
+    color: "#1b234c",
     character: "/img/werewolf-image.png", // 늑대인간 이미지 경로
   },
   gpt: {
-    title: "🤖 GPT 영혼합체 AI 개발자",
+    title: "🤖 GPT 영혼 합체 AI 개발자",
     desc: "사실 이 기능은 내가 안 짰는데... 코드보다 프롬프트에 진심이고, 디버깅할 때 GPT랑 대화가 60줄이에요. 프론트, 백 상관없이 GPT가 다 해주죠.",
 
-    color: "#F0F8FF",
+    color: "#c2f0fe",
     character: "/img/robot-image.png", // 로봇 이미지 경로
   },
   data: {
-    title: "📊 숫자덕후 데이터 집착러",
+    title: "📊 숫자 덕후 데이터 집착러",
     desc: "사람보다 그래프가 더 솔직해요. 커밋보다 Recharts가 먼저고, 팀원들 이름 외우기보다 컬럼명 먼저 외워요. 코드 리뷰보다 SQL 튜닝이 더 재밌죠.",
 
-    color: "#E0FFFF",
+    color: "#ffe9bb",
     character: "/img/data-analyst-image.png", // 데이터 분석가 이미지 경로
   },
   artist: {
     title: "🎨 클래스명 예술가",
     desc: "이 div에 영혼을 담았습니다. div 하나에도 스토리가 있고, className='soul-container emotion-center' 같은 걸 써요. 협업 시 팀원이 클래스명 보고 철학 질문을 하죠.",
 
-    color: "#FFE4E1",
+    color: "#fee7ff",
     character: "/img/artist-image.png", // 예술가 이미지 경로
   },
   deadline: {
     title: "⌛ 마감형 괴물 커밋러",
     desc: "마감 1시간 전이면 1주일 분량 가능해요. 잔디밭은 주말에 몰아서 조성하고, 매일은 못 해도 몰아서 폭주하는 열정 폭탄이에요. 커밋 메시지 시간은 항상 23:59죠.",
 
-    color: "#FFF0F5",
+    color: "#70578f",
     character: "/img/monster-image.png", // 괴물 이미지 경로
   },
 };
@@ -205,8 +205,14 @@ const DevTypeTest = () => {
             <div className="mt-8">
               <div
                 ref={resultRef}
-                style={{ backgroundColor: result.color }}
-                className="rounded-3xl p-10 shadow-xl transform transition-all duration-500 hover:shadow-2xl"
+                style={{
+                  backgroundColor: result.color,
+                  color:
+                    result.color === "#1b234c" || result.color === "#70578f"
+                      ? "#f0f0f0"
+                      : "#1a202c",
+                }}
+                className="rounded-3xl p-4 shadow-xl transform transition-all duration-500 hover:shadow-2xl"
                 aria-live="polite"
               >
                 <div className="text-center mb-10">
@@ -215,13 +221,13 @@ const DevTypeTest = () => {
                     alt={`${result.title} 캐릭터`}
                     className="w-100 h-100 mb-6 block"
                   />
-                  <h2 className="text-3xl font-bold mb-4 text-gray-800">
-                    당신의 개발자 유형은?
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight drop-shadow-sm animate-fade-in-up">
+                    🧬 당신의 개발자 유형은?
                   </h2>
-                  <p className="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient">
+                  <p className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient drop-shadow-md">
                     {result.title}
                   </p>
-                  <p className="text-gray-700 text-xl leading-relaxed max-w-2xl mx-auto">
+                  <p className="text-lg md:text-xl text-gray-800 leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-150">
                     {result.desc}
                   </p>
                 </div>
