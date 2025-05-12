@@ -76,3 +76,7 @@ app.get("/oauth/github/callback", async (req, res) => {
 app.listen(4000, () => {
   console.log("✅ 백엔드 서버 실행 중 http://localhost:4000");
 });
+
+app.get("/", (req, res) => {
+  res.send("✅ GitHub OAuth 서버 작동 중");
+});

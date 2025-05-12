@@ -7,10 +7,12 @@ import profile from "../assets/image 6.svg";
 import Header from "../components/Header";
 
 const ProfilePage = () => {
+  const username = localStorage.getItem("username");
+
   return (
     <div className={css.container}>
       <main className={css.main}>
-        <Header name="Profile" profile={profile} />
+        <Header name={username} profile={profile} />
         {/* 카드 영역 */}
         <div className={css.contentContainer}>
           <section className={css.profileStats}>

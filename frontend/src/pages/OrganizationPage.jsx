@@ -4,7 +4,7 @@ import css from "./ProfilePage.module.css";
 import Header from "../components/Header";
 
 const OrganizationPage = () => {
-  const { id, name } = useParams();
+  const { name } = useParams();
 
   return (
     <div className={css.container}>

@@ -34,7 +34,11 @@ const SideBar = () => {
         <img src="/img/icon_mini.png" />
       </div>
       <div className={css.sideBarList}>
-        <CustomNavLink to={"/"} label={"My Git"} icon={"bi-person-fill"} />
+        <CustomNavLink
+          to={"/profile"}
+          label={"My Git"}
+          icon={"bi-person-fill"}
+        />
         {groupList?.map((group) => (
           <CustomNavLink
             key={group.id}
