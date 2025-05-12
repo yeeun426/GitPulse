@@ -3,7 +3,7 @@ import css from "./ProfilePage.module.css";
 import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
 import badge2 from "../assets/image 6.svg";
 import badge3 from "../assets/image 7.svg";
-import profile from "../assets/image 6.svg"
+import profile from "../assets/image 6.svg";
 
 const ProfilePage = () => {
   return (
@@ -13,11 +13,7 @@ const ProfilePage = () => {
         <header className={css.headerContainer}>
           <div className={css.header}>
             <div className={css.headerLeft}>
-              <img
-                src={profile}
-                alt="profile"
-                className={css.profileImage}
-              />
+              <img src={profile} alt="profile" className={css.profileImage} />
 
               <div className={css.textGroup}>
                 <h2>

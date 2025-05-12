@@ -16,7 +16,7 @@ const LoginPage = () => {
         localStorage.setItem("jwt", token);
         const payload = JSON.parse(atob(token.split(".")[1]));
         setSocialUser(payload);
-        navigate("/");
+        navigate("profile"); // ✅ 추가: 이미 로그인된 사용자면 바로 이동
       }
     };
     window.addEventListener("message", handleMessage);
@@ -54,7 +54,7 @@ const LoginPage = () => {
       <div className={styles.right}>
         <p>반갑습니다.</p>
         <p>
-          <span className={styles.emphasis}>신뢰의 시작, 협업의 가교</span>, <br />
+          <span className={styles.emphasis}>신뢰의 시작, 협업의 가교</span>,{" "}
           <strong>GitPulse</strong> 입니다.
         </p>
         {!socialUser ? (
