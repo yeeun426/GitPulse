@@ -19,7 +19,7 @@ export const useOrganizationList = (username) => {
     queryFn: async () => {
       try {
         const data = username && (await getOrganizationsByUser(username));
-        return data;
+        return data.reverse();
       } catch (err) {
         console.log("", err);
       }
