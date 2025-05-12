@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import css from "./SideBar.module.css";
 import { NavLink } from "react-router-dom";
 import { throttle } from "../utils/feature";
+import { useOrganizationList } from "../apis/useOrganizationApi";
 
 const SideBar = () => {
-  const [isOn, setIsOn] = useState(false);
-
-  const addClassOn = () => {
-    setIsOn(!isOn);
-  };
+  const [isOn, setIsOn] = useState(false); // 반응형에 필요 (아직 미적용)
 
   const handleResize = throttle(() => {
     if (window.innerWidth > 1100) {
@@ -23,38 +20,33 @@ const SideBar = () => {
     };
   }, [handleResize]);
 
+  const username = localStorage.getItem("username");
+
+  const { data: groupList, isLoading, isError } = useOrganizationList(username);
+  console.log(groupList);
+
+  isLoading && <p>Loading</p>;
+  isError && <p>에러 발생</p>;
+
   return (
     <div className={isOn ? `${css.sideBarCon} ${css.on}` : css.sideBarCon}>
       <div className={css.icon}>
         <img src="/img/icon_mini.png" />
       </div>
       <div className={css.sideBarList}>
-        <CustomNavLink to="profile" label="My Git" icon="bi-person-fill" />
         <CustomNavLink
-          to="organization"
-          label="Organization1"
-          icon="bi-people-fill"
+          to={"/profile"}
+          label={"My Git"}
+          icon={"bi-person-fill"}
         />
-        <CustomNavLink
-          to="organization2"
-          label="Organization2"
-          icon="bi-people-fill"
-        />
-        <CustomNavLink
-          to="organization3"
-          label="Organization3"
-          icon="bi-people-fill"
-        />
-        <CustomNavLink
-          to="organization4"
-          label="Organization4"
-          icon="bi-people-fill"
-        />
-        <CustomNavLink
-          to="organization5"
-          label="Organization5"
-          icon="bi-people-fill"
-        />
+        {groupList?.map((group) => (
+          <CustomNavLink
+            key={group.id}
+            to={`/org/${group.id}/${group.login}`}
+            label={group.login}
+            icon={"bi-people-fill"}
+          />
+        ))}
       </div>
     </div>
   );

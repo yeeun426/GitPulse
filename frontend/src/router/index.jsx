@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
     errorElement: <div>에러</div>,
     children: [
       {
-        path: "organization",
+        path: "/org/:id/:name",
         element: <OrganizationPage />,
       },
       {

@@ -3,31 +3,27 @@ import css from "./ProfilePage.module.css";
 import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
 import badge2 from "../assets/image 6.svg";
 import badge3 from "../assets/image 7.svg";
-import profile from "../assets/image 6.svg";
 import UserStatCard from "../components/UserStatCard";
 import { getGitHubUserInfo } from "../apis/github";
 import RepoTable from "../components/RepoTable";
+import Header from "../components/Header";
 
 const ProfilePage = () => {
-  const [githubId, setGithubId] = useState("yeeun426");
+  const username = localStorage.getItem("username");
   const [userData, setUserData] = useState({
     followers: 0,
     following: 0,
     public_repos: 0,
+    name: "",
+    login: "",
+    avatar_url: "",
   });
 
-  const fetchUserData = async (id) => {
-    try {
-      const data = await getGitHubUserInfo(id);
-      setUserData(data);
-    } catch (err) {
-      alert("유효하지 않은 GitHub ID입니다.");
-    }
-  };
-
   useEffect(() => {
-    fetchUserData(githubId);
-  }, [githubId]);
+    if (username) {
+      getGitHubUserInfo(username).then((data) => setUserData(data));
+    }
+  }, [username]);
 
   const handleSearch = (e) => {
     if (e.key === "Enter") {
@@ -40,33 +36,10 @@ const ProfilePage = () => {
     <div className={css.container}>
       <main className={css.main}>
         {/* 헤더영역 */}
-        <header className={css.headerContainer}>
-          <div className={css.header}>
-            <div className={css.headerLeft}>
-              <img
-                src={userData.avatar_url || profile}
-                alt="profile"
-                className={css.profileImage}
-              />
-
-              <div className={css.textGroup}>
-                <h2>
-                  <span className={css.headerHighlight}>Hi</span>
-                  {userData.name || userData.login},
-                </h2>
-                <p>It's looking like a slow day</p>
-              </div>
-            </div>
-
-            <div className={css.search}>
-              <input
-                type="text"
-                placeholder="궁금한 사람의 깃허브 아이디를 입력하세요"
-              />
-              <i className="bi bi-search"></i>
-            </div>
-          </div>
-        </header>
+        <Header
+          name={userData.name || userData.login}
+          profile={userData.avatar_url}
+        />
 
         {/* 카드 영역 */}
         <div className={css.contentContainer}>
@@ -104,7 +77,7 @@ const ProfilePage = () => {
           <section className={css.contributions}>
             <h4>History</h4>
             <img
-              src={`https://ghchart.rshah.org/${githubId}`}
+              src={`https://ghchart.rshah.org/${username}`}
               alt="GitHub Contributions"
               style={{ width: "100%", height: "auto" }}
             />
@@ -114,7 +87,7 @@ const ProfilePage = () => {
           <section className={css.bottom}>
             {/* repo table */}
             {/* <RepoTable repos={repos} /> */}
-            <RepoTable/>
+            <RepoTable />
 
             {/* graph */}
             <div className={css.commitTimeChart}>

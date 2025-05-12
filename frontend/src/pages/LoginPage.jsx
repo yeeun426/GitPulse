@@ -46,6 +46,7 @@ const LoginPage = () => {
 
   const onClickLogout = () => {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("username");
     setSocialUser(null);
   };
 
@@ -57,7 +58,7 @@ const LoginPage = () => {
       <div className={styles.right}>
         <p>반갑습니다.</p>
         <p>
-          <span className={styles.emphasis}>신뢰의 시작, 협업의 가교</span>,{" "}
+          <span className={styles.emphasis}>신뢰의 시작, 협업의 가교</span>,
           <strong>GitPulse</strong> 입니다.
         </p>
         {!socialUser ? (
