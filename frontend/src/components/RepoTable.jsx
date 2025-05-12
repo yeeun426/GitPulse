@@ -1,7 +1,7 @@
 import React from "react";
 import css from "./RepoTable.module.css";
 
-const RepoTable = ({repos}) => {
+const RepoTable = () => {
   return (
     <div className={css.repoTable}>
       <h4>Repo</h4>
@@ -15,7 +15,12 @@ const RepoTable = ({repos}) => {
           </tr>
         </thead>
         <tbody>
-          {repos.map((repo)=>())}
+          {<tr>
+            <td>repo-name</td>
+            <td>32</td>
+            <td>2025.05.06</td>
+            <td>2025.03.06</td>
+          </tr>}
         </tbody>
       </table>
     </div>

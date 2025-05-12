@@ -113,7 +113,8 @@ const ProfilePage = () => {
           {/* repo & 그래프 영역 */}
           <section className={css.bottom}>
             {/* repo table */}
-            <RepoTable repos={repos} />
+            {/* <RepoTable repos={repos} /> */}
+            <RepoTable/>
 
             {/* graph */}
             <div className={css.commitTimeChart}>
