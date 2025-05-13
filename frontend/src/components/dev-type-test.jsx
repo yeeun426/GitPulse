@@ -267,12 +267,13 @@ const DevTypeTest = () => {
                     : "#1a202c",
               }}
             >
+              <h3 className={styles.resultTitle}>{result.title}</h3>
               <img
                 src={result.character}
                 alt={result.title}
                 className={styles.resultImage}
               />
-              <h3 className={styles.resultTitle}>{result.title}</h3>
+
               <p className={styles.resultDesc}>{result.desc}</p>
             </div>
 
