@@ -3,16 +3,22 @@ import { useParams } from "react-router-dom";
 import css from "./ProfilePage.module.css";
 import orgs from "./OrganizationPage.module.css";
 import Header from "../components/Header";
-import { useOrgsInfo } from "../apis/useOrganizationApi";
+import { useOrgsInfo, useOrgsRepos } from "../apis/useOrganizationApi";
 
 const OrganizationPage = () => {
   const { name } = useParams();
   const { data, isLoading, isError } = useOrgsInfo(name);
-
   const members = data?.members;
   const repos = data?.repos;
 
   const [selected, setSelected] = useState("");
+  const [commitCounts, setCommitCounts] = useState({});
+
+  const {
+    data: commits,
+    isRepoLoading,
+    isRepoError,
+  } = useOrgsRepos(name, selected);
 
   useEffect(() => {
     if (repos && repos.length > 0) {
@@ -20,8 +26,46 @@ const OrganizationPage = () => {
     }
   }, [repos]);
 
-  isLoading && <p>Loading</p>;
-  isError && <p>에러 발생</p>;
+  useEffect(() => {
+    if (!commits) return;
+
+    // 현재 UTC 기준 일요일 날짜 계산
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setUTCDate(today.getUTCDate() - today.getUTCDay()); // 일요일
+    startOfWeek.setUTCHours(0, 0, 0, 0);
+
+    // 일요일 ~ 토요일 배열
+    const dateArray = [...Array(7)].map((_, i) => {
+      const d = new Date(startOfWeek);
+      d.setUTCDate(startOfWeek.getUTCDate() + i);
+      return d.toISOString().split("T")[0]; // 'YYYY-MM-DD'
+    });
+
+    // 초기값 0
+    const commitCountByDay = dateArray.reduce((acc, dateStr) => {
+      acc[dateStr] = 0;
+      return acc;
+    }, {});
+
+    // 커밋 수 계산
+    commits.forEach((commit) => {
+      const commitDate = new Date(commit.commit.author.date);
+      const dateStr = commitDate.toISOString().split("T")[0];
+      if (Object.prototype.hasOwnProperty.call(commitCountByDay, dateStr)) {
+        commitCountByDay[dateStr] += 1;
+      }
+    });
+
+    setCommitCounts(commitCountByDay);
+  }, [commits]);
+
+  useEffect(() => {
+    console.log(commitCounts);
+  }, [commitCounts]);
+
+  if (isLoading || isRepoLoading) return <p>Loading...</p>;
+  if (isError || isRepoError) return <p>에러 발생!</p>;
 
   return (
     <div className={css.container}>

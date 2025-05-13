@@ -60,3 +60,29 @@ export const useOrgsInfo = (org) => {
     retry: 1,
   });
 };
+
+// 조직 repo 불러오기
+export const getOrgsRepos = async (orgs, repo) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/repos/${orgs}/${repo}/commits`);
+    return res.data;
+  } catch (error) {
+    console.log("조직 정보 가져오기 실패", error);
+  }
+};
+
+export const useOrgsRepos = (orgs, repo) => {
+  return useQuery({
+    queryKey: ["orgsRepo", repo],
+    queryFn: async () => {
+      try {
+        const data = repo && (await getOrgsRepos(orgs, repo));
+        return data;
+      } catch (err) {
+        console.log("", err);
+      }
+    },
+    staleTime: 1000 * 60 * 10,
+    retry: 1,
+  });
+};
