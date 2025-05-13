@@ -1,7 +1,38 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import css from "./RepoTable.module.css";
+import { getUserRepos } from "../apis/github";
 
-const RepoTable = () => {
+const RepoTable = ({ username }) => {
+  const [repos, setRepos] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const observer = useRef();
+
+  const lastElementRef = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [hasMore]
+  );
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      const newRepos = await getUserRepos(username, page);
+      setRepos((prevRepos) => [...prevRepos, ...newRepos]);
+      if (newRepos.length === 0) setHasMore(false);
+    };
+    if (username) fetchRepos();
+  }, [username, page]);
+
   return (
     <div className={css.repoTable}>
       <h4>Repo</h4>
@@ -15,12 +46,21 @@ const RepoTable = () => {
           </tr>
         </thead>
         <tbody>
-          {<tr>
-            <td>repo-name</td>
-            <td>32</td>
-            <td>2025.05.06</td>
-            <td>2025.03.06</td>
-          </tr>}
+          {repos.map((repo, index) => (
+            <tr
+              key={repo.id}
+              ref={index === repos.length - 1 ? lastElementRef : null}
+            >
+              <td>
+                <a href={repo.url} target="_blank" rel="noreferer">
+                  {repo.name}
+                </a>
+              </td>
+              <td>{repo.stars}</td>
+              <td>{new Date(repo.pushed_at).toLocaleDateString()}</td>
+              <td>{new Date(repo.created_at).toLocaleDateString()}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
