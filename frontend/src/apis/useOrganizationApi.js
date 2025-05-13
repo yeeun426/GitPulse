@@ -28,3 +28,35 @@ export const useOrganizationList = (username) => {
     retry: 1,
   });
 };
+
+// orgs 정보 불러오기
+export const getOrgsInfo = async (org) => {
+  try {
+    const [members, repos] = await Promise.all([
+      axios.get(`${BASE_URL}/orgs/${org}/members`),
+      axios.get(`${BASE_URL}/orgs/${org}/repos`),
+    ]);
+    return {
+      members: members.data,
+      repos: repos.data,
+    };
+  } catch (error) {
+    console.log("조직 정보 가져오기 실패", error);
+  }
+};
+
+export const useOrgsInfo = (org) => {
+  return useQuery({
+    queryKey: ["orgsInfo", org],
+    queryFn: async () => {
+      try {
+        const data = org && (await getOrgsInfo(org));
+        return data;
+      } catch (err) {
+        console.log("", err);
+      }
+    },
+    staleTime: 1000 * 60 * 60,
+    retry: 1,
+  });
+};
