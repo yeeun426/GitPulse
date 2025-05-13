@@ -4,6 +4,7 @@ import LoginPage from "../pages/LoginPage";
 import OrganizationPage from "../pages/OrganizationPage";
 import ProfilePage from "../pages/ProfilePage";
 import DevTypeTest from "../components/dev-type-test";
+import NewsPage from "../pages/NewsPage";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       {
         path: "dev-type-test",
         element: <DevTypeTest />,
+      },
+      {
+        path: "news",
+        element: <NewsPage />,
       },
     ],
   },
