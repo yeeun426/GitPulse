@@ -8,7 +8,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
 }
 
 .headerLeft {
@@ -18,7 +17,7 @@
 }
 
 .profileImage {
-  width: 10rem;
+  width: 7rem;
   border-radius: 50%;
   margin-right: 2rem;
   object-fit: cover;
@@ -30,13 +29,13 @@
 }
 .textGroup h2 {
   font-size: var(--fs33);
-  margin-bottom: var(--fs33);
-  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
 }
 
 .textGroup p {
   color: #888;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 .search {

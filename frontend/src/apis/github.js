@@ -64,6 +64,68 @@ export const getRepoCommits = async (username, repoName, perPage = 30) => {
   }
 };
 
+//PR횟수
+export const getMergedPullRequests = async (username) => {
+  try {
+    const res = await fetchWithToken(`/search/issues`, {
+      q: `author:${username} is:pr is:merged`,
+    });
+    return res.total_count;
+  } catch (err) {
+    console.error("병합된 PR 검색 실패", err);
+    return 0;
+  }
+};
+
+//몇개언어
+export const getLanguageDiversity = async (username) => {
+  try {
+    const repos = await fetchWithToken(`/users/${username}/repos`, {
+      per_page: 100,
+    });
+    const languageSet = new Set();
+    repos.forEach((repo) => {
+      if (repo.language && repo.language !== "JavaScript") {
+        languageSet.add(repo.language);
+      }
+    });
+    return languageSet.size;
+  } catch (err) {
+    console.error("레포 언어 다변성 측정 실패", err);
+    return 0;
+  }
+};
+
+//커밋시간(야행성)
+export const getLateNightCommitDays = async (username) => {
+  try {
+    const repos = await getUserRepos(username, 1, 5); // 최근 5개 repo
+    const lateNightDays = new Set();
+
+    for (const repo of repos) {
+      const commits = await getRepoCommits(username, repo.name, 50);
+      commits.forEach((c) => {
+        const dateStr = c.commit?.author?.date;
+        if (dateStr) {
+          const date = new Date(dateStr);
+          let hour = date.getUTCHours() + 9;
+          if (hour >= 24) hour -= 24;
+          if (hour >= 0 && hour <= 4) {
+            // 0시~4시 사이
+            const dayOnly = dateStr.slice(0, 10);
+            lateNightDays.add(dayOnly);
+          }
+        }
+      });
+    }
+
+    return lateNightDays.size;
+  } catch (err) {
+    console.error("야행성 커밋 계산 실패", err);
+    return 0;
+  }
+};
+
 //요청 횟수 확인
 export async function getRateLimit() {
   return await fetchWithToken("/rate_limit");

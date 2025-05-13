@@ -22,7 +22,7 @@
   display: flex;
   justify-content: space-between;
   gap: 1.2rem;
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 .card {
@@ -75,15 +75,11 @@
 }
 
 /* 뱃지 */
-.badgeContainer {
+.badgeSection {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 2.5rem;
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
+  gap: 1.5rem;
+  margin: 2rem 0;
+  align-items: stretch;
 }
 
 .badge {
@@ -145,4 +141,68 @@
   font-size: 0.875rem;
   color: #444;
   margin: 0.25rem 0;
+}
+
+/* 왼쪽·오른쪽에 flex 박스 지정 */
+.badgeCol,
+.commentCol {
+  flex: 1;
+  display: flex;
+}
+
+/*높이 채우기 */
+.badgeCol > *,
+.commentCol > * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 9rem;
+}
+
+/* (선택) 카드 내부 중앙 정렬 */
+.commentCol > * {
+  justify-content: center;
+  align-items: center;
+}
+
+/* 커밋 잔디 */
+.contributions {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+}
+
+.contributions h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.contributionGraph {
+  height: 5.5rem;
+  background-color: #f0f0f5;
+  border-radius: 0.5rem;
+}
+
+/* 하단 레이아웃 */
+.bottom {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* 원형 그래프 */
+.commitTimeChart {
+  flex: 1;
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.commitTimeChart h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  text-align: left;
 }

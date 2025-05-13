@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import css from "./ProfilePage.module.css";
-import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
-import badge2 from "../assets/image 6.svg";
-import badge3 from "../assets/image 7.svg";
 import UserStatCard from "../components/UserStatCard";
 import { getGitHubUserInfo, getRateLimit, getUserRepos } from "../apis/github";
 import RepoTable from "../components/RepoTable";
 import Header from "../components/Header";
 import CommitTimeChart from "../components/CommitTimeChart";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import Badge from "../components/Badges";
+import OneLineComment from "../components/OneLineComment";
+import RewardBadges from "../utils/RewardBadges";
 
 const ProfilePage = () => {
   const username = localStorage.getItem("username");
@@ -22,6 +24,7 @@ const ProfilePage = () => {
   const [repos, setRepos] = useState([]);
 
   const [rate, setRate] = useState({ limit: 0, remaining: 0 });
+
 
   useEffect(() => {
     if (username) {
@@ -83,10 +86,13 @@ const ProfilePage = () => {
           </section>
 
           {/* 뱃지 영역 */}
-          <section className={css.badgeContainer}>
-            <img src={badge1} alt="badee1" className={css.badge} />
-            <img src={badge2} alt="badee1" className={css.badge} />
-            <img src={badge3} alt="badee1" className={css.badge} />
+          <section className={css.badgeSection}>
+            <div className={css.badgeCol}>
+            <RewardBadges username={username} />
+            </div>
+            <div className={css.commentCol}>
+              <OneLineComment comment="여기에 한 줄 코멘트가 들어갑니다." />
+            </div>
           </section>
 
           {/* 커밋 잔디 영역 */}
@@ -106,7 +112,7 @@ const ProfilePage = () => {
 
             {/* graph */}
             <div className={css.commitTimeChart}>
-              <h4>낮/밤</h4>
+              <h4>Commit Time Graph</h4>
               {username && <CommitTimeChart username={username} />}
             </div>
           </section>
