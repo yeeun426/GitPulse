@@ -52,7 +52,12 @@ const RepoTable = ({ username }) => {
               ref={index === repos.length - 1 ? lastElementRef : null}
             >
               <td>
-                <a href={repo.url} target="_blank" rel="noreferer">
+                <a
+                  href={repo.url}
+                  target="_blank"
+                  rel="noreferer"
+                  className={css.repoLink}
+                >
                   {repo.name}
                 </a>
               </td>

@@ -89,7 +89,7 @@ app.get("/oauth/github/callback", async (req, res) => {
   }
 });
 
-// 인증 프록시(미들웨어어)
+// 인증 프록시(미들웨어)
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "인증 토큰 없음" });
