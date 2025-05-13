@@ -22,7 +22,7 @@ export const fetchWithToken = async (path, params = {}) => {
 export const getGitHubUserInfo = async (username) => {
   try {
     const res = await fetchWithToken(`/users/${username}`);
-    console.log("GitHub 응답 데이터:", res.data);
+    console.log("GitHub 응답 데이터:", res);
     const { followers, following, public_repos, login, name, avatar_url } = res;
     return { followers, following, public_repos, login, name, avatar_url };
   } catch (error) {
@@ -38,7 +38,7 @@ export const getUserRepos = async (username, page = 1, perPage = 5) => {
       per_page: perPage,
       sort: "pushed",
     });
-    console.log("GitHub repo 응답 데이터:", res.data);
+    console.log("GitHub repo 응답 데이터:", res);
     return res.map((repo) => ({
       name: repo.name,
       url: repo.html_url,

@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-
-const BASE_URL = "https://api.github.com";
+import { fetchWithToken } from "./github";
 
 // 사용자 이름으로 조직 불러오기
 export const getOrganizationsByUser = async (username) => {
   try {
-    const res = await axios.get(`${BASE_URL}/users/${username}/orgs`);
-    return res.data;
+    const res = await fetchWithToken(`/users/${username}/orgs`);
+    return res;
   } catch (error) {
     console.log("조직 가져오기 실패", error);
   }
@@ -33,12 +31,12 @@ export const useOrganizationList = (username) => {
 export const getOrgsInfo = async (org) => {
   try {
     const [members, repos] = await Promise.all([
-      axios.get(`${BASE_URL}/orgs/${org}/members`),
-      axios.get(`${BASE_URL}/orgs/${org}/repos`),
+      fetchWithToken(`/orgs/${org}/members`),
+      fetchWithToken(`/orgs/${org}/repos`),
     ]);
     return {
-      members: members.data,
-      repos: repos.data,
+      members,
+      repos,
     };
   } catch (error) {
     console.log("조직 정보 가져오기 실패", error);
@@ -64,10 +62,16 @@ export const useOrgsInfo = (org) => {
 // 조직 repo 불러오기
 export const getOrgsRepos = async (orgs, repo) => {
   try {
-    const res = await axios.get(`${BASE_URL}/repos/${orgs}/${repo}/commits`);
-    return res.data;
+    const [commit, pulls] = await Promise.all([
+      fetchWithToken(`/repos/${orgs}/${repo}/commits`),
+      fetchWithToken(`/repos/${orgs}/${repo}/pulls`),
+    ]);
+    return {
+      commit,
+      pulls,
+    };
   } catch (error) {
-    console.log("조직 정보 가져오기 실패", error);
+    console.log("조직 repo 가져오기 실패", error);
   }
 };
 
