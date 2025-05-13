@@ -1,9 +1,8 @@
 import React, { useState, useRef } from "react";
 import { toPng } from "html-to-image";
 
-import "./dev-type-test.css";
+import styles from "./DevTypeTest.module.css";
 
-// 데이터
 const questions = [
   {
     qNumber: "Q1",
@@ -66,6 +65,69 @@ const questions = [
       { text: "커밋 내용마다 분석 태그를 붙여둠", type: "data" },
       { text: "매일 className을 바꾸며 영감을 얻음", type: "artist" },
       { text: "주말에 몰아서 7개 커밋", type: "deadline" },
+    ],
+  },
+  {
+    qNumber: "Q6",
+    q: "협업 중 다른 팀원이 내 코드를 수정했다면?",
+    options: [
+      { text: "스타일 무너졌는지 먼저 확인", type: "pikachu" },
+      { text: "로직 흐름 이상 없는지 diff부터 탐색", type: "backend" },
+      { text: '"이거 왜 바꿨는지 GPT한테 요약 부탁"', type: "gpt" },
+      { text: "수정된 부분 데이터 처리 흐름부터 점검", type: "data" },
+      { text: "함수명 감성 떨어졌는지 확인", type: "artist" },
+      { text: "아직 안 봤고 내일 확인할 예정", type: "deadline" },
+    ],
+  },
+  {
+    qNumber: "Q7",
+    q: "회의 시간, 당신은 어떤 사람?",
+    options: [
+      { text: "컬러 팔레트랑 여백 고민하며 듣는 중", type: "pikachu" },
+      { text: "API 명세 바로 정리하고 있음", type: "backend" },
+      { text: "GPT에 회의 요약시키는 중", type: "gpt" },
+      { text: "말한 내용 실시간으로 표로 정리", type: "data" },
+      { text: "회의 안건에 감성적 네이밍 제안함", type: "artist" },
+      { text: "회의 끝나고 '뭐라 했더라?' 생각 중", type: "deadline" },
+    ],
+  },
+  {
+    qNumber: "Q8",
+    q: "버그가 발생했을 때 당신의 첫 반응은?",
+    options: [
+      { text: "UI 깨졌는지 먼저 확인함", type: "pikachu" },
+      { text: "스택트레이스 로그부터 읽기 시작", type: "backend" },
+      { text: '"GPT야 이 에러 무슨 뜻이야?"', type: "gpt" },
+      { text: "어떤 데이터가 이상했는지 로그 추적", type: "data" },
+      { text: "이 버그 이름 지어줘야겠다고 생각함", type: "artist" },
+      { text: "그냥 새로고침 해봄", type: "deadline" },
+    ],
+  },
+  {
+    qNumber: "Q9",
+    q: "완성한 페이지를 처음 공유할 때 드는 생각은?",
+    options: [
+      { text: "폰트랑 여백이 예쁘게 보일지 걱정", type: "pikachu" },
+      { text: "요청 응답 속도 괜찮나 체크", type: "backend" },
+      { text: "GPT한테 피드백 요약해달라고 할까?", type: "gpt" },
+      { text: "데이터 흐름 설명할 준비 완료", type: "data" },
+      {
+        text: "이름 짓느라 고생한 컴포넌트 보여줄 생각에 설렘",
+        type: "artist",
+      },
+      { text: "테스트 안 해봤는데 괜찮겠지?", type: "deadline" },
+    ],
+  },
+  {
+    qNumber: "Q10",
+    q: "가장 집중 잘 되는 환경은?",
+    options: [
+      { text: "예쁜 UI 참고 자료 띄워놓은 듀얼 모니터", type: "pikachu" },
+      { text: "터미널+코드만 있는 딥다크 모드", type: "backend" },
+      { text: "GPT랑 대화창 켜놓고 진행", type: "gpt" },
+      { text: "쿼리 콘솔과 로그창 열어둔 세팅", type: "data" },
+      { text: "잔잔한 음악 + 색감 조화된 IDE 테마", type: "artist" },
+      { text: "마감 전날의 긴장감", type: "deadline" },
     ],
   },
 ];
@@ -158,107 +220,85 @@ const DevTypeTest = () => {
   const result = topType ? results[topType] : undefined;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-10 transform transition-all duration-500 hover:shadow-3xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-10 text-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient">
-            🧪 GitPulse 개발자 유형 테스트
-          </h1>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <header className={styles.header}>
+          <div>
+            <h2>당신의 개발자 유형은?</h2>
+          </div>
+        </header>
 
-          {!isDone ? (
-            <div className="space-y-8">
-              <div className="w-full bg-gray-200/50 rounded-full h-3">
-                <div
-                  className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-3 rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${((step + 1) / questions.length) * 100}%` }}
-                />
-              </div>
-
-              <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg transform transition-all duration-300 hover:scale-[1.02]">
-                <p
-                  className="text-2xl md:text-3xl font-semibold mb-8 text-gray-800"
-                  id="question-label"
-                >
-                  {questions[step].qNumber}. {questions[step].q}
-                </p>
-                <div
-                  className="grid gap-4"
-                  role="list"
-                  aria-labelledby="question-label"
-                >
-                  {questions[step].options.map((opt, i) => (
-                    <button
-                      key={opt.type + i}
-                      type="button"
-                      tabIndex={0}
-                      aria-label={opt.text}
-                      onClick={() => handleAnswer(opt.type)}
-                      className="btn btn-outline-primary w-full text-left px-6 py-4 rounded-xl"
-                    >
-                      {opt.text}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : result ? (
-            <div className="mt-8">
+        {!isDone ? (
+          <section>
+            <div className={styles.progressBar}>
               <div
-                ref={resultRef}
-                style={{
-                  backgroundColor: result.color,
-                  color:
-                    result.color === "#1b234c" || result.color === "#70578f"
-                      ? "#f0f0f0"
-                      : "#1a202c",
-                }}
-                className="rounded-3xl p-4 shadow-xl transform transition-all duration-500 hover:shadow-2xl"
-                aria-live="polite"
-              >
-                <div className="text-center mb-10">
-                  <img
-                    src={result.character}
-                    alt={`${result.title} 캐릭터`}
-                    className="w-100 h-100 mb-6 block"
-                  />
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight drop-shadow-sm animate-fade-in-up">
-                    🧬 당신의 개발자 유형은?
-                  </h2>
-                  <p className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient drop-shadow-md">
-                    {result.title}
-                  </p>
-                  <p className="text-lg md:text-xl text-gray-800 leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-150">
-                    {result.desc}
-                  </p>
-                </div>
-              </div>
+                className={styles.progressFill}
+                style={{ width: `${((step + 1) / questions.length) * 100}%` }}
+              />
+            </div>
 
-              <div className="mt-10 flex flex-col sm:flex-row justify-center gap-6">
-                <button
-                  type="button"
-                  onClick={handleRestart}
-                  className="btn btn-secondary"
-                >
-                  다시 테스트하기
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDownload}
-                  className="btn btn-primary"
-                >
-                  결과 이미지 저장
-                </button>
+            <div className={styles.questionBox}>
+              <p className={styles.questionTitle}>
+                {questions[step].qNumber}. {questions[step].q}
+              </p>
+              <div className={styles.options}>
+                {questions[step].options.map((opt, i) => (
+                  <button
+                    key={opt.type + i}
+                    onClick={() => handleAnswer(opt.type)}
+                    className={styles.optionButton}
+                  >
+                    {opt.text}
+                  </button>
+                ))}
               </div>
             </div>
-          ) : (
-            <div className="text-center py-16">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-500 mx-auto mb-6"></div>
-              <p className="text-gray-600 text-lg">
-                결과를 가져오고 있는 중입니다...
-              </p>
+          </section>
+        ) : result ? (
+          <section className={styles.resultSection}>
+            <div
+              ref={resultRef}
+              className={styles.resultCard}
+              style={{
+                backgroundColor: result.color,
+                color:
+                  result.color === "#1b234c" || result.color === "#70578f"
+                    ? "#f0f0f0"
+                    : "#1a202c",
+              }}
+            >
+              <img
+                src={result.character}
+                alt={result.title}
+                className={styles.resultImage}
+              />
+              <h3 className={styles.resultTitle}>{result.title}</h3>
+              <p className={styles.resultDesc}>{result.desc}</p>
             </div>
-          )}
-        </div>
+
+            <div className={styles.buttonGroup}>
+              <button onClick={handleRestart} className={styles.retryButton}>
+                다시 테스트하기
+              </button>
+              <button
+                onClick={handleDownload}
+                className={styles.downloadButton}
+              >
+                결과 이미지 저장
+              </button>
+              <a href="/news">
+                <button className={styles.retryButton}>
+                  프론트엔드 IT 뉴스 바로가기
+                </button>
+              </a>
+            </div>
+          </section>
+        ) : (
+          <div className={styles.loading}>
+            <div className={styles.spinner}></div>
+            <p>결과를 가져오고 있어요...</p>
+          </div>
+        )}
       </div>
     </div>
   );

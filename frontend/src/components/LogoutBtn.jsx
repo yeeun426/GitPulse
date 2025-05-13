@@ -14,7 +14,7 @@ const LogoutBtn = ({ user, onLogout }) => {
       >
         프로필 보기
       </a>
-      <a href="/profile">my git pulse 보기</a>
+      <a href="/profile">my gitpulse 보기</a>
       <button className={styles.logoutButton} onClick={onLogout}>
         로그아웃
       </button>
