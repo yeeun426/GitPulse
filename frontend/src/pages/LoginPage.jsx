@@ -27,7 +27,7 @@ const LoginPage = () => {
 
           localStorage.setItem("username", payload.login);
           setSocialUser(payload);
-          navigate("/");
+          navigate("/profile");
         } catch (err) {
           console.error("🚨 JWT 디코딩 실패:", err);
         }

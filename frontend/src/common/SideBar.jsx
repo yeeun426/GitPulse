@@ -50,6 +50,7 @@ const SideBar = () => {
           />
         ))}
         <div className={css.divider}></div>
+        <CustomNavLink to={"/news"} label={"IT News"} icon={"bi-newspaper"} />
         <CustomNavLink
           to={"/test"}
           label={"개발자 유형 테스트"}
