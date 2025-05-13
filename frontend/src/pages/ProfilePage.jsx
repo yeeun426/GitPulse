@@ -1,44 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import css from "./ProfilePage.module.css";
 import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
 import badge2 from "../assets/image 6.svg";
 import badge3 from "../assets/image 7.svg";
-import profile from "../assets/image 6.svg";
+import UserStatCard from "../components/UserStatCard";
+import { getGitHubUserInfo } from "../apis/github";
+import RepoTable from "../components/RepoTable";
 import Header from "../components/Header";
 
 const ProfilePage = () => {
   const username = localStorage.getItem("username");
+  const [userData, setUserData] = useState({
+    followers: 0,
+    following: 0,
+    public_repos: 0,
+    name: "",
+    login: "",
+    avatar_url: "",
+  });
+
+  useEffect(() => {
+    if (username) {
+      getGitHubUserInfo(username).then((data) => setUserData(data));
+    }
+  }, [username]);
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const value = e.target.value.trim();
+      if (value) setGithubId(value);
+    }
+  };
 
   return (
     <div className={css.container}>
       <main className={css.main}>
-        <Header name={username} profile={profile} />
+        {/* 헤더영역 */}
+        <Header
+          name={userData.name || userData.login}
+          profile={userData.avatar_url}
+        />
+
         {/* 카드 영역 */}
         <div className={css.contentContainer}>
           <section className={css.profileStats}>
-            <div className={css.card}>
-              <i className="bi bi-person-fill-check"></i>
-              <div className={css.cardText}>
-                <p className={css.cardLabel}>Followers</p>
-                <p className={css.cardValue}>350</p>
-              </div>
-            </div>
+            <UserStatCard
+              iconClass="bi bi-person-fill-check"
+              label="Followers"
+              value={userData.followers}
+              // value="450"
+            />
 
-            <div className={css.card}>
-              <i className="bi bi-person-heart"></i>
-              <div className={css.cardText}>
-                <p className={css.cardLabel}>Followings</p>
-                <p className={css.cardValue}>450</p>
-              </div>
-            </div>
+            <UserStatCard
+              iconClass="bi bi-person-heart"
+              label="Followings"
+              value={userData.following}
+              // value="450"
+            />
 
-            <div className={css.card}>
-              <i className="bi bi-cloud-check"></i>
-              <div className={css.cardText}>
-                <p className={css.cardLabel}>Public Repos</p>
-                <p className={css.cardValue}>3500</p>
-              </div>
-            </div>
+            <UserStatCard
+              iconClass="bi bi-cloud-check"
+              label="Publoc Repos"
+              value={userData.public_repos}
+              // value="450"
+            />
           </section>
 
           {/* 뱃지 영역 */}
@@ -51,33 +76,18 @@ const ProfilePage = () => {
           {/* 커밋 잔디 영역 */}
           <section className={css.contributions}>
             <h4>History</h4>
-            <div className={css.contributionGraph}>커밋 잔디 그래프 자리</div>
+            <img
+              src={`https://ghchart.rshah.org/${username}`}
+              alt="GitHub Contributions"
+              style={{ width: "100%", height: "auto" }}
+            />
           </section>
 
           {/* repo & 그래프 영역 */}
           <section className={css.bottom}>
             {/* repo table */}
-            <div className={css.repoTable}>
-              <h4>repo</h4>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Review</th>
-                    <th>Recently Commit</th>
-                    <th>Date Created</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>repo-name</td>
-                    <td>32</td>
-                    <td>2025.05.06</td>
-                    <td>2025.03.06</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            {/* <RepoTable repos={repos} /> */}
+            <RepoTable />
 
             {/* graph */}
             <div className={css.commitTimeChart}>

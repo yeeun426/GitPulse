@@ -12,28 +12,30 @@ const LoginPage = () => {
   useEffect(() => {
     const handleMessage = (event) => {
       const token = event.data;
+
       if (typeof token === "string" && token.split(".").length === 3) {
         localStorage.setItem("jwt", token);
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        localStorage.setItem("username", payload.login);
-        setSocialUser(payload);
-        navigate("profile"); // ✅ 추가: 이미 로그인된 사용자면 바로 이동
+
+        try {
+          const base64Url = token.split(".")[1];
+          const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+          const padded = base64.padEnd(
+            base64.length + ((4 - (base64.length % 4)) % 4),
+            "="
+          );
+          const payload = JSON.parse(atob(padded));
+
+          localStorage.setItem("username", payload.login);
+          setSocialUser(payload);
+          navigate("/");
+        } catch (err) {
+          console.error("🚨 JWT 디코딩 실패:", err);
+        }
       }
     };
+
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        setSocialUser(payload);
-      } catch {
-        localStorage.removeItem("jwt");
-      }
-    }
   }, []);
 
   const onClickSocialLogin = async () => {

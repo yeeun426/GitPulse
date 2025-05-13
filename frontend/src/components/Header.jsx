@@ -1,5 +1,6 @@
 import React from "react";
 import css from "./Header.module.css";
+import defaultProfile from "../assets/image 6.svg";
 
 const Header = ({ name, profile }) => {
   return (
@@ -7,7 +8,11 @@ const Header = ({ name, profile }) => {
       <div className={css.header}>
         <div className={css.headerLeft}>
           {profile && (
-            <img src={profile} alt="profile" className={css.profileImage} />
+            <img
+              src={profile || defaultProfile}
+              alt="profile"
+              className={css.profileImage}
+            />
           )}
           <div className={css.textGroup}>
             <h2>
