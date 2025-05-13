@@ -31,7 +31,9 @@ const SideBar = () => {
   return (
     <div className={isOn ? `${css.sideBarCon} ${css.on}` : css.sideBarCon}>
       <div className={css.icon}>
-        <img src="/img/icon_mini.png" />
+        <a href="/profile">
+          <img src="/img/icon_mini.png" />
+        </a>
       </div>
       <div className={css.sideBarList}>
         <CustomNavLink
