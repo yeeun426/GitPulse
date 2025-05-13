@@ -29,7 +29,6 @@
 }
 .sideBarList > a.active {
   color: var(--main-purple);
-  background: #ebeef2;
   transition: 0.5s ease;
   border-radius: 15px;
 }

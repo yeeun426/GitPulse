@@ -7,7 +7,7 @@ const IntroPage = () => {
   const navigate = useNavigate();
 
   const handleStart = () => {
-    navigate("/dev-type-test"); // 테스트 페이지 경로로 이동
+    navigate("/teststart"); // 테스트 페이지 경로로 이동
   };
 
   return (
