@@ -133,6 +133,7 @@
   .commitTimeChart h4 {
     margin-bottom: 1rem;
     font-size: 1rem;
+    text-align :left
   }
   
   .chartBox {

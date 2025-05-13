@@ -106,7 +106,7 @@ const ProfilePage = () => {
 
             {/* graph */}
             <div className={css.commitTimeChart}>
-              <h4>낮/밤</h4>
+              <h4>Commit Time Graph</h4>
               {username && <CommitTimeChart username={username} />}
             </div>
           </section>
