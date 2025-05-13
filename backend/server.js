@@ -134,12 +134,3 @@ app.listen(4000, () => {
 app.get("/", (req, res) => {
   res.send("✅ GitHub OAuth 서버 작동 중");
 });
-
-const res = await axios.get("http://localhost:4000/github/proxy", {
-  params: { path: `/users/${username}` },
-  withCredentials: true,
-});
-
-console.log("전체 한도:", res.headers["x-ratelimit-limit"]);
-console.log("남은 횟수:", res.headers["x-ratelimit-remaining"]);
-console.log("리셋 시각 (초):", res.headers["x-ratelimit-reset"]);
