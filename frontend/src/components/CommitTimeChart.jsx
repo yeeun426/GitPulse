@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-import axios from "axios";
-import { getUserRepos } from "../apis/github";
-import { getCommitTime } from "../utils/commitTime.js";
+import { getUserRepos, getRepoCommits } from "../apis/github";
+import { getCommitTime } from "../utils/commitTime";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f7f"];
 
@@ -10,56 +9,67 @@ const CommitTimeChart = ({ username }) => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const fetchCommits = async () => {
+    const fetchData = async () => {
       try {
-        const allCommitDates = [];
+        // 최신 5개 레포 가져오기
+        const repos = await getUserRepos(username, 1, 5);
+        const allDates = [];
 
-        const repos = await getUserRepos(username, 1, 3); // 최근 3개만
+        // 각 레포에서 30개 커밋 가져와서 날짜만 추출
         for (const repo of repos) {
-          const res = await axios.get(
-            `https://api.github.com/repos/${username}/${repo.name}/commits`,
-            { params: { per_page: 20 } } // 각 레포당 20개
-          );
-
-          const commits = res.data;
-          if (Array.isArray(commits)) {
-            const dates = commits.map((c) => c.commit?.author?.date);
-            allCommitDates.push(...dates);
-          }
+          const commits = await getRepoCommits(username, repo.name, 30);
+          commits
+            .map((c) => c.commit?.author?.date)
+            .filter(Boolean)
+            .forEach((d) => allDates.push(d));
         }
 
-        const timeStats = getCommitTime(allCommitDates);
-        setChartData(timeStats);
+        // 시간대별 집계
+        const stats = getCommitTime(allDates);
+        setChartData(stats);
       } catch (err) {
-        console.error("❌ 차트 데이터 불러오기 실패", err);
+        console.error("차트 데이터 불러오기 실패:", err);
       }
     };
 
-    if (username) fetchCommits();
+    if (username) fetchData();
   }, [username]);
 
+  const total = chartData.reduce((sum, cur) => sum + cur.value, 0);
+
   return (
-    <div>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       {chartData.length > 0 ? (
-        <PieChart width={280} height={280}>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            outerRadius={90}
-            fill="#8884d8"
-            dataKey="value"
-            label
-          >
-            {chartData.map((_, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
+        <>
+          <PieChart width={280} height={280}>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              outerRadius={90}
+              dataKey="value"
+              label
+            >
+              {chartData.map((_, idx) => (
+                <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+          <div style={{ marginTop: 12 }}>
+            {chartData.map((item) => (
+              <p key={item.name} style={{ margin: 4, fontSize: 14 }}>
+                {item.name}:{" "}
+                {total > 0 ? Math.round((item.value / total) * 100) : 0}%
+              </p>
             ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
+          </div>
+        </>
       ) : (
-        <p style={{ textAlign: "center" }}>Loading chart...</p>
+        <p>Loading chart...</p>
       )}
     </div>
   );

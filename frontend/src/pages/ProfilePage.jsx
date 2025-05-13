@@ -4,7 +4,7 @@ import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
 import badge2 from "../assets/image 6.svg";
 import badge3 from "../assets/image 7.svg";
 import UserStatCard from "../components/UserStatCard";
-import { getGitHubUserInfo, getUserRepos } from "../apis/github";
+import { getGitHubUserInfo, getRateLimit, getUserRepos } from "../apis/github";
 import RepoTable from "../components/RepoTable";
 import Header from "../components/Header";
 import CommitTimeChart from "../components/CommitTimeChart";
@@ -21,6 +21,8 @@ const ProfilePage = () => {
   });
   const [repos, setRepos] = useState([]);
 
+  const [rate, setRate] = useState({ limit: 0, remaining: 0 });
+
   useEffect(() => {
     if (username) {
       getGitHubUserInfo(username).then((data) => setUserData(data));
@@ -34,8 +36,23 @@ const ProfilePage = () => {
     }
   }, [username]);
 
+  useEffect(() => {
+    if (username) {
+      getRateLimit()
+        .then((data) => {
+          const core = data.resources.core;
+          setRate({ limit: core.limit, remaining: core.remaining });
+        })
+        .catch((err) => console.error("Rate limit fetch failed", err));
+    }
+  }, [username]);
+
   return (
     <div className={css.container}>
+      <div className={css.rateLimit}>
+        남은 요청: {rate.remaining} / {rate.limit}
+      </div>
+
       <main className={css.main}>
         {/* 헤더영역 */}
         <Header
@@ -90,7 +107,7 @@ const ProfilePage = () => {
             {/* graph */}
             <div className={css.commitTimeChart}>
               <h4>낮/밤</h4>
-              <CommitTimeChart username={username} />
+              {username && <CommitTimeChart username={username} />}
             </div>
           </section>
         </div>

@@ -48,7 +48,7 @@ const RepoTable = ({ username }) => {
         <tbody>
           {repos.map((repo, index) => (
             <tr
-              key={repo.name}
+              key={repo.id}
               ref={index === repos.length - 1 ? lastElementRef : null}
             >
               <td>
