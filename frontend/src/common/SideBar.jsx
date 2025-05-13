@@ -51,7 +51,7 @@ const SideBar = () => {
         ))}
         <div className={css.divider}></div>
         <CustomNavLink
-          to={"/dev-type-test"}
+          to={"/test"}
           label={"개발자 유형 테스트"}
           icon={"bi-emoji-smile"}
         />

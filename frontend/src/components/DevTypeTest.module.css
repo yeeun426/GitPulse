@@ -125,6 +125,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  margin-bottom: 2rem;
 }
 .retryButton,
 .downloadButton {
@@ -151,12 +152,11 @@
 
 /* 다운로드 버튼 (보라색) */
 .downloadButton {
-  background: #7c3aed;
-  color: white;
+  background: #e4ddff;
 }
 
 .downloadButton:hover {
-  background: #6d28d9;
+  background: #d0c7f9;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
