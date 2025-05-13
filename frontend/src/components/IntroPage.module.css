@@ -38,7 +38,7 @@
   background-color: #e4ddff;
   border: none;
   border-radius: 16px;
-  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 8px 10px 12px rgba(167, 167, 167, 0.34);
   cursor: pointer;
   transition: all 0.3s ease;
 }
