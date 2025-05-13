@@ -4,6 +4,16 @@ import css from "./ProfilePage.module.css";
 import orgs from "./OrganizationPage.module.css";
 import Header from "../components/Header";
 import { useOrgsInfo, useOrgsRepos } from "../apis/useOrganizationApi";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const OrganizationPage = () => {
   const { name } = useParams();
@@ -12,7 +22,7 @@ const OrganizationPage = () => {
   const repos = data?.repos;
 
   const [selected, setSelected] = useState("");
-  const [commitCounts, setCommitCounts] = useState({});
+  const [commitCounts, setCommitCounts] = useState([]);
 
   const {
     data: commits,
@@ -60,13 +70,12 @@ const OrganizationPage = () => {
     setCommitCounts(commitCountByDay);
   }, [commits]);
 
-  useEffect(() => {
-    console.log(commitCounts);
-  }, [commitCounts]);
-
   if (isLoading || isRepoLoading) return <p>Loading...</p>;
   if (isError || isRepoError) return <p>에러 발생!</p>;
-
+  const chartData = Object.entries(commitCounts).map(([date, count]) => ({
+    name: date,
+    value: count,
+  }));
   return (
     <div className={css.container}>
       <main className={css.main}>
@@ -115,7 +124,24 @@ const OrganizationPage = () => {
           {/* 커밋 graph 영역 */}
           <section className={css.contributions}>
             <h4>Week</h4>
-            <div className={css.contributionGraph}>커밋 그래프 자리</div>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                data={chartData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#8884d8"
+                  activeDot={{ r: 8 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </section>
 
           {/* repo & 그래프 영역 */}
