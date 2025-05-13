@@ -31,7 +31,9 @@ const SideBar = () => {
   return (
     <div className={isOn ? `${css.sideBarCon} ${css.on}` : css.sideBarCon}>
       <div className={css.icon}>
-        <img src="/img/icon_mini.png" />
+        <a href="/profile">
+          <img src="/img/icon_mini.png" />
+        </a>
       </div>
       <div className={css.sideBarList}>
         <CustomNavLink
@@ -47,6 +49,13 @@ const SideBar = () => {
             icon={"bi-people-fill"}
           />
         ))}
+        <div className={css.divider}></div>
+        <CustomNavLink to={"/news"} label={"IT News"} icon={"bi-newspaper"} />
+        <CustomNavLink
+          to={"/dev-type-test"}
+          label={"개발자 유형 테스트"}
+          icon={"bi-emoji-smile"}
+        />
       </div>
     </div>
   );
