@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import css from "./ProfilePage.module.css";
-import badge1 from "../assets/2025년 5월 9일 오전 09_46_53 1.svg";
-import badge2 from "../assets/image 6.svg";
-import badge3 from "../assets/image 7.svg";
-import badge4 from "../assets/image 7.svg";
 import UserStatCard from "../components/UserStatCard";
 import { getGitHubUserInfo, getRateLimit, getUserRepos } from "../apis/github";
 import RepoTable from "../components/RepoTable";
@@ -13,6 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Badge from "../components/Badges";
 import OneLineComment from "../components/OneLineComment";
+import RewardBadges from "../utils/RewardBadges";
 
 const ProfilePage = () => {
   const username = localStorage.getItem("username");
@@ -28,12 +25,6 @@ const ProfilePage = () => {
 
   const [rate, setRate] = useState({ limit: 0, remaining: 0 });
 
-  const badges = [badge1, badge2, badge3, badge4 /* , badge4, ... */];
-
-  const badgeGroups = [];
-  for (let i = 0; i < badges.length; i += 3) {
-    badgeGroups.push(badges.slice(i, i + 3));
-  }
 
   useEffect(() => {
     if (username) {
@@ -97,7 +88,7 @@ const ProfilePage = () => {
           {/* 뱃지 영역 */}
           <section className={css.badgeSection}>
             <div className={css.badgeCol}>
-              <Badge />
+            <RewardBadges username={username} />
             </div>
             <div className={css.commentCol}>
               <OneLineComment comment="여기에 한 줄 코멘트가 들어갑니다." />
