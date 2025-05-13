@@ -36,8 +36,10 @@ const OrganizationPage = () => {
     }
   }, [repos]);
 
+  const curUserLogin = localStorage.getItem("username");
+
   useEffect(() => {
-    if (!commits) return;
+    if (!commits || !curUserLogin) return;
 
     // 현재 UTC 기준 일요일 날짜 계산
     const today = new Date();
@@ -54,28 +56,39 @@ const OrganizationPage = () => {
 
     // 초기값 0
     const commitCountByDay = dateArray.reduce((acc, dateStr) => {
-      acc[dateStr] = 0;
+      acc[dateStr] = { total: 0, mine: 0 };
       return acc;
     }, {});
 
     // 커밋 수 계산
     commits.forEach((commit) => {
-      const commitDate = new Date(commit.commit.author.date);
-      const dateStr = commitDate.toISOString().split("T")[0];
-      if (Object.prototype.hasOwnProperty.call(commitCountByDay, dateStr)) {
-        commitCountByDay[dateStr] += 1;
+      const dateStr = new Date(commit.commit.author.date)
+        .toISOString()
+        .split("T")[0];
+
+      if (commitCountByDay[dateStr]) {
+        commitCountByDay[dateStr].total += 1;
+
+        const authorLogin = commit.author?.login;
+        if (authorLogin === curUserLogin) {
+          commitCountByDay[dateStr].mine += 1;
+        }
       }
     });
 
     setCommitCounts(commitCountByDay);
-  }, [commits]);
+  }, [commits, curUserLogin]);
 
   if (isLoading || isRepoLoading) return <p>Loading...</p>;
   if (isError || isRepoError) return <p>에러 발생!</p>;
-  const chartData = Object.entries(commitCounts).map(([date, count]) => ({
+
+  const chartData = Object.entries(commitCounts).map(([date, counts]) => ({
     name: date,
-    value: count,
+    total: counts.total,
+    mine: counts.mine,
   }));
+
+  console.log(chartData);
   return (
     <div className={css.container}>
       <main className={css.main}>
@@ -136,9 +149,15 @@ const OrganizationPage = () => {
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="value"
-                  stroke="#8884d8"
-                  activeDot={{ r: 8 }}
+                  dataKey="total"
+                  stroke="#5f41b2"
+                  name="전체 커밋 수"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="mine"
+                  stroke="#545d69"
+                  name="내 커밋 수"
                 />
               </LineChart>
             </ResponsiveContainer>
