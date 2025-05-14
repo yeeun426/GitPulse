@@ -63,7 +63,7 @@ const SideBar = () => {
         />
         <CustomNavLink
           to={"/commitshare"}
-          label={"commit 공유 페이지"}
+          label={"commit 공유 게시판"}
           icon={"bi bi-chat-text"}
         />
         <button className={css.logoutButton} onClick={handleLogout}>
