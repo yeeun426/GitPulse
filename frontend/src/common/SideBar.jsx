@@ -61,6 +61,11 @@ const SideBar = () => {
           label={"개발자 유형 테스트"}
           icon={"bi-emoji-smile"}
         />
+        <CustomNavLink
+          to={"/commitshare"}
+          label={"commit 공유 페이지"}
+          icon={"bi bi-chat-text"}
+        />
         <button className={css.logoutButton} onClick={handleLogout}>
           로그아웃
         </button>
