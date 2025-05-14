@@ -59,6 +59,11 @@ export const getRepoCommits = async (username, repoName, perPage = 30) => {
     });
     return res;
   } catch (err) {
+    const errorMsg = err?.response?.data?.message;
+    if (errorMsg === "Git Repository is empty.") {
+      console.warn(`${repoName}는 비어있는 레포입니다.`);
+      return [];
+    }
     console.error(`${repoName} Commit 불러오기 실패`, err);
     return [];
   }
@@ -122,6 +127,70 @@ export const getLateNightCommitDays = async (username) => {
     return lateNightDays.size;
   } catch (err) {
     console.error("야행성 커밋 계산 실패", err);
+    return 0;
+  }
+};
+
+//100커밋
+export const getUserCommitDates = async (username) => {
+  try {
+    const repos = await getUserRepos(username, 1, 100); // 최대 100개 repo
+    const dateSet = new Set();
+
+    for (const repo of repos) {
+      const commits = await fetchWithToken(
+        `/repos/${username}/${repo.name}/commits`,
+        {
+          author: username,
+          per_page: 100,
+        }
+      );
+
+      commits.forEach((commit) => {
+        if (commit?.commit?.author?.date) {
+          const date = new Date(commit.commit.author.date)
+            .toISOString()
+            .split("T")[0];
+          dateSet.add(date);
+        }
+      });
+    }
+
+    return dateSet.size; // 서로 다른 날짜 수
+  } catch (err) {
+    console.error("100일 커밋 날짜 계산 실패", err);
+    return 0;
+  }
+};
+
+//버그사냥꾼
+export const getUserCreatedExternalIssues = async (username) => {
+  try {
+    let page = 1;
+    let allIssues = [];
+
+    while (true) {
+      const data = await fetchWithToken(`/search/issues`, {
+        q: `author:${username} type:issue`,
+        per_page: 100,
+        page,
+      });
+
+      if (!data.items || data.items.length === 0) break;
+
+      allIssues = allIssues.concat(data.items);
+
+      if (data.items.length < 100) break;
+      page++;
+    }
+
+    const externalIssues = allIssues.filter(
+      (issue) => issue.repository?.owner?.login !== username
+    );
+
+    return externalIssues.length;
+  } catch (err) {
+    console.error("버그 사냥꾼 이슈 검색 실패", err);
     return 0;
   }
 };
