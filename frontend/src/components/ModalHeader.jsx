@@ -16,7 +16,7 @@ const Header = ({ name, profile }) => {
             />
             <div className={css.textGroup}>
               <h2>
-                <span className={css.headerHighlight}>Hi</span> {name},
+                <span className={css.headerHighlight}>{name}</span>'s github
               </h2>
               <p>It's looking like a good day</p>
             </div>
