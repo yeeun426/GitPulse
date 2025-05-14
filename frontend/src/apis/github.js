@@ -195,6 +195,51 @@ export const getUserCreatedExternalIssues = async (username) => {
   }
 };
 
+//커밋 코멘트 계산(커밋 한 날짜 기준 계산하기)
+export const getUserCommitActivity = async (username) => {
+  try {
+    const repos = await getUserRepos(username, 1, 20); // 최대 20개 repo 확인
+    const dateSet = new Set();
+
+    for (const repo of repos) {
+      const commits = await getRepoCommits(username, repo.name, 100);
+      commits.forEach((commit) => {
+        if (commit?.commit?.author?.date) {
+          const dateStr = new Date(commit.commit.author.date)
+            .toISOString()
+            .split("T")[0];
+          dateSet.add(dateStr);
+        }
+      });
+    }
+
+    const today = new Date();
+    const allDates = [...dateSet].map((d) => new Date(d)).sort((a, b) => b - a); // 최신순 정렬
+
+    // streakDays 계산 (오늘부터 역순)
+    let streak = 0;
+    for (let i = 0; i < allDates.length; i++) {
+      const expectedDate = new Date(today);
+      expectedDate.setDate(today.getDate() - i);
+      const expectedStr = expectedDate.toISOString().split("T")[0];
+      if (dateSet.has(expectedStr)) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    // missingDays 계산 (마지막 커밋 이후 경과일)
+    const lastCommitDate = allDates[0];
+    const diff = Math.floor((today - lastCommitDate) / (1000 * 60 * 60 * 24));
+
+    return { streakDays: streak, missingDays: diff };
+  } catch (err) {
+    console.error("커밋 활동 분석 실패", err);
+    return { streakDays: 0, missingDays: 999 };
+  }
+};
+
 //요청 횟수 확인
 export async function getRateLimit() {
   return await fetchWithToken("/rate_limit");
