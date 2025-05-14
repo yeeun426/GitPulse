@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import css from "../pages/ProfilePage.module.css"; // ProfilePage 스타일 재사용
 import { X } from "lucide-react";
-import { getGitHubUserInfo, getRateLimit, getUserRepos } from "../apis/github";
+import { getGitHubUserInfo, getUserRepos } from "../apis/github";
 import UserStatCard from "../components/UserStatCard";
 import Header from "./ModalHeader";
 import RepoTable from "../components/RepoTable";
@@ -13,20 +13,38 @@ const GithubModal = ({ username, onClose }) => {
   const [userData, setUserData] = useState(null);
   const [repos, setRepos] = useState([]);
   const [rate, setRate] = useState({ limit: 0, remaining: 0 });
+  const [error, setError] = useState(null); // ✅ 에러 상태
 
   useEffect(() => {
     if (username) {
-      getGitHubUserInfo(username).then(setUserData);
-      getUserRepos(username).then(setRepos);
-      getRateLimit()
-        .then((data) => {
-          const core = data.resources.core;
-          setRate({ limit: core.limit, remaining: core.remaining });
-        })
-        .catch((err) => console.error("Rate limit fetch failed", err));
+      getGitHubUserInfo(username)
+        .then(setUserData)
+        .catch((err) => {
+          console.error("GitHub 유저 정보 요청 실패:", err);
+          setError("GitHub 유저 정보가 없습니다."); // ✅ 에러 메시지 설정
+        });
+
+      getUserRepos(username)
+        .then(setRepos)
+        .catch(() => {}); // 레포 에러는 무시
     }
   }, [username]);
 
+  // ✅ 에러 발생 시 메시지 출력
+  if (error) {
+    return (
+      <div className={css.modalOverlay}>
+        <div className={css.modal}>
+          <p className={css.errorMessage}>{error}</p>
+          <button className={css.modalCloseButton} onClick={onClose}>
+            <X />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ 로딩 중
   if (!userData) {
     return (
       <div className={css.modalOverlay}>
@@ -36,29 +54,23 @@ const GithubModal = ({ username, onClose }) => {
       </div>
     );
   }
-
   return (
     <div className={css.modalOverlay}>
       <div className={`${css.container} ${css.modalContainer}`}>
-        {/* 닫기 버튼 */}
         <button className={css.modalCloseButton} onClick={onClose}>
           <X />
         </button>
 
-        {/* 요청 제한 */}
-        <div className={css.rateLimit}>
+        {/* <div className={css.rateLimit}>
           남은 요청: {rate.remaining} / {rate.limit}
-        </div>
+        </div> */}
 
         <main className={css.main}>
-          {/* 헤더 */}
           <Header
             name={userData.name || userData.login}
             profile={userData.avatar_url}
           />
-
           <div className={css.contentContainer}>
-            {/* 유저 통계 카드 */}
             <section className={css.profileStats}>
               <UserStatCard
                 iconClass="bi bi-person-fill-check"
@@ -77,7 +89,6 @@ const GithubModal = ({ username, onClose }) => {
               />
             </section>
 
-            {/* 뱃지 & 코멘트 */}
             <section className={css.badgeSection}>
               <div className={css.badgeCol}>
                 <RewardBadges username={username} />
@@ -87,7 +98,6 @@ const GithubModal = ({ username, onClose }) => {
               </div>
             </section>
 
-            {/* 커밋 히스토리 */}
             <section className={css.contributions}>
               <h4>History</h4>
               <img
@@ -97,10 +107,8 @@ const GithubModal = ({ username, onClose }) => {
               />
             </section>
 
-            {/* 레포 & 그래프 */}
             <section className={css.bottom}>
               <RepoTable username={username} />
-
               <div className={css.commitTimeChart}>
                 <h4>Commit Time Graph</h4>
                 <CommitTimeChart username={username} />
