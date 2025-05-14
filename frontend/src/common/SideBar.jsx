@@ -3,10 +3,10 @@ import css from "./SideBar.module.css";
 import { NavLink } from "react-router-dom";
 import { throttle } from "../utils/feature";
 import { useOrganizationList } from "../apis/useOrganizationApi";
-
+import { useNavigate } from "react-router-dom";
 const SideBar = () => {
   const [isOn, setIsOn] = useState(false); // 반응형에 필요 (아직 미적용)
-
+  const navigate = useNavigate();
   const handleResize = throttle(() => {
     if (window.innerWidth > 1100) {
       setIsOn(false);
@@ -24,7 +24,12 @@ const SideBar = () => {
 
   const { data: groupList, isLoading, isError } = useOrganizationList(username);
   console.log(groupList);
-
+  // ✅ 로그아웃 핸들러
+  const handleLogout = () => {
+    localStorage.removeItem("username");
+    localStorage.removeItem("token"); // 필요 시 추가
+    navigate("/"); // 로그인 페이지로 이동
+  };
   isLoading && <p>Loading</p>;
   isError && <p>에러 발생</p>;
 
@@ -56,6 +61,9 @@ const SideBar = () => {
           label={"개발자 유형 테스트"}
           icon={"bi-emoji-smile"}
         />
+        <button className={css.logoutButton} onClick={handleLogout}>
+          로그아웃
+        </button>
       </div>
     </div>
   );
