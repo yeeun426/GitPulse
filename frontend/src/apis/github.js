@@ -59,8 +59,139 @@ export const getRepoCommits = async (username, repoName, perPage = 30) => {
     });
     return res;
   } catch (err) {
+    const errorMsg = err?.response?.data?.message;
+    if (errorMsg === "Git Repository is empty.") {
+      console.warn(`${repoName}는 비어있는 레포입니다.`);
+      return [];
+    }
     console.error(`${repoName} Commit 불러오기 실패`, err);
     return [];
+  }
+};
+
+//PR횟수
+export const getMergedPullRequests = async (username) => {
+  try {
+    const res = await fetchWithToken(`/search/issues`, {
+      q: `author:${username} is:pr is:merged`,
+    });
+    return res.total_count;
+  } catch (err) {
+    console.error("병합된 PR 검색 실패", err);
+    return 0;
+  }
+};
+
+//몇개언어
+export const getLanguageDiversity = async (username) => {
+  try {
+    const repos = await fetchWithToken(`/users/${username}/repos`, {
+      per_page: 100,
+    });
+    const languageSet = new Set();
+    repos.forEach((repo) => {
+      if (repo.language && repo.language !== "JavaScript") {
+        languageSet.add(repo.language);
+      }
+    });
+    return languageSet.size;
+  } catch (err) {
+    console.error("레포 언어 다변성 측정 실패", err);
+    return 0;
+  }
+};
+
+//커밋시간(야행성)
+export const getLateNightCommitDays = async (username) => {
+  try {
+    const repos = await getUserRepos(username, 1, 5); // 최근 5개 repo
+    const lateNightDays = new Set();
+
+    for (const repo of repos) {
+      const commits = await getRepoCommits(username, repo.name, 50);
+      commits.forEach((c) => {
+        const dateStr = c.commit?.author?.date;
+        if (dateStr) {
+          const date = new Date(dateStr);
+          let hour = date.getUTCHours() + 9;
+          if (hour >= 24) hour -= 24;
+          if (hour >= 0 && hour <= 4) {
+            // 0시~4시 사이
+            const dayOnly = dateStr.slice(0, 10);
+            lateNightDays.add(dayOnly);
+          }
+        }
+      });
+    }
+
+    return lateNightDays.size;
+  } catch (err) {
+    console.error("야행성 커밋 계산 실패", err);
+    return 0;
+  }
+};
+
+//100커밋
+export const getUserCommitDates = async (username) => {
+  try {
+    const repos = await getUserRepos(username, 1, 100); // 최대 100개 repo
+    const dateSet = new Set();
+
+    for (const repo of repos) {
+      const commits = await fetchWithToken(
+        `/repos/${username}/${repo.name}/commits`,
+        {
+          author: username,
+          per_page: 100,
+        }
+      );
+
+      commits.forEach((commit) => {
+        if (commit?.commit?.author?.date) {
+          const date = new Date(commit.commit.author.date)
+            .toISOString()
+            .split("T")[0];
+          dateSet.add(date);
+        }
+      });
+    }
+
+    return dateSet.size; // 서로 다른 날짜 수
+  } catch (err) {
+    console.error("100일 커밋 날짜 계산 실패", err);
+    return 0;
+  }
+};
+
+//버그사냥꾼
+export const getUserCreatedExternalIssues = async (username) => {
+  try {
+    let page = 1;
+    let allIssues = [];
+
+    while (true) {
+      const data = await fetchWithToken(`/search/issues`, {
+        q: `author:${username} type:issue`,
+        per_page: 100,
+        page,
+      });
+
+      if (!data.items || data.items.length === 0) break;
+
+      allIssues = allIssues.concat(data.items);
+
+      if (data.items.length < 100) break;
+      page++;
+    }
+
+    const externalIssues = allIssues.filter(
+      (issue) => issue.repository?.owner?.login !== username
+    );
+
+    return externalIssues.length;
+  } catch (err) {
+    console.error("버그 사냥꾼 이슈 검색 실패", err);
+    return 0;
   }
 };
 

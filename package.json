@@ -5,6 +5,8 @@
   "dependencies": {
     "html-to-image": "^1.11.13",
     "react-markdown": "^10.1.0",
-    "recharts": "^2.15.3"
+    "recharts": "^2.15.3",
+    "bootstrap": "^5.3.6",
+    "swiper": "^11.2.6"
   }
 }
