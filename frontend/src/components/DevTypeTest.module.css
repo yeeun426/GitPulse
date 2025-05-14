@@ -59,8 +59,8 @@
 }
 
 .questionTitle {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
@@ -108,7 +108,7 @@
   font-size: 2rem;
   font-weight: bold;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 .resultDesc {
@@ -142,21 +142,23 @@
 
 /* 일반 버튼 (회색) */
 .retryButton {
-  background: #dfdfdf;
+  background: #efefef;
+  width: 400px;
 }
 
 .retryButton:hover {
-  background: #e5e7eb;
+  background: #d8d8d8;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 /* 다운로드 버튼 (보라색) */
 .downloadButton {
-  background: #e4ddff;
+  background: #c7bce4;
+  width: 400px;
 }
 
 .downloadButton:hover {
-  background: #d0c7f9;
+  background: #5f41b2;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
@@ -198,7 +200,7 @@
 
 .desc {
   font-size: 1.1rem;
-  width: 400px;
+  width: 500px;
 }
 
 /* Responsive */
