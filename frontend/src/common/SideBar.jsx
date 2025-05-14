@@ -66,6 +66,13 @@ const SideBar = () => {
           label={"commit 공유 게시판"}
           icon={"bi bi-chat-text"}
         />
+        <CustomNavLink
+          to={"/community"}
+          label={"자유 게시판"}
+          icon={"bi bi-card-list"}
+        />
+
+        <CustomNavLink to={"/study"} label={"스터디"} icon={"bi bi-pencil"} />
         <button className={css.logoutButton} onClick={handleLogout}>
           로그아웃
         </button>

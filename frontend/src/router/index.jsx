@@ -3,12 +3,13 @@ import DefaultLayout from "../common/DefaultLayout";
 import LoginPage from "../pages/LoginPage";
 import OrganizationPage from "../pages/OrganizationPage";
 import ProfilePage from "../pages/ProfilePage";
-
+import Community from "../components/Community";
 import DevTypeTest from "../components/dev-type-test"; // ✅ 파일 이름 주의
 import IntroPage from "../components/IntroPage"; // ✅ 인트로 페이지 추가
-
+import CommitShare from "../components/CommitShare";
 import NewsPage from "../pages/NewsPage";
-
+import Study from "../components/Study";
+import ModalTest from "../components/Githubmodal";
 export const router = createBrowserRouter([
   {
     path: "/", // 로그인 페이지
@@ -38,6 +39,22 @@ export const router = createBrowserRouter([
       {
         path: "news",
         element: <NewsPage />,
+      },
+      {
+        path: "community",
+        element: <Community />,
+      },
+      {
+        path: "commitshare",
+        element: <CommitShare />,
+      },
+      {
+        path: "study",
+        element: <Study />,
+      },
+      {
+        path: "gitmodal",
+        element: <ModalTest />,
       },
     ],
   },
