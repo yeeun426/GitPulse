@@ -14,7 +14,7 @@ const encourage = [
   (day) => `${day}일 쉬어갔다면, 지금이 다시 시작할 타이밍 입니다!`,
   () => `작은 커밋 하나가 다시 루틴을 깨워줄거에요!`,
   () => `이번주에 커밋이 하나도 없어요.. 저를 보기 싫은가요? `,
-  () => `혹시 컴퓨터가 고장나셨나요??`,
+  () => `혹시 컴퓨터가 고장나셨나요?? 왜 커밋이 하나도 없죠?`,
 ];
 
 const neutral = [
@@ -28,19 +28,26 @@ const OneLineComment = ({ username }) => {
   const [color, setColor] = useState("#000");
 
   useEffect(() => {
-    const load = async () => {
+    if (!username) return; // username 없으면 스킵
+    (async () => {
       const { streakDays, missingDays } = await getUserCommitActivity(username);
-      let msgFunc = () => "",
-        chosenColor = "#000";
+      console.log(`streakDays=${streakDays}, missingDays=${missingDays}`);
 
+      let msgFunc, chosenColor;
+
+      //오늘 포함 3일 이상 연속 커밋 → 칭찬
       if (streakDays >= 3) {
         msgFunc = praise[Math.floor(Math.random() * praise.length)];
         chosenColor = "#5F41B2";
-        setComment(msgFunc(streakDays));
-      } else if (missingDays >= 7) {
+        setComment(msgFunc.length === 0 ? msgFunc() : msgFunc(streakDays));
+
+        //커밋 안한지 5일 이상 → 격려
+      } else if (missingDays >= 5) {
         msgFunc = encourage[Math.floor(Math.random() * encourage.length)];
         chosenColor = "#D82700";
-        setComment(msgFunc(missingDays));
+        setComment(msgFunc.length === 0 ? msgFunc() : msgFunc(missingDays));
+
+        //그 외 (1~2일째 커밋 중이거나 평소 연속 커밋 아님) → 중립
       } else {
         msgFunc = neutral[Math.floor(Math.random() * neutral.length)];
         chosenColor = "#000000";
@@ -48,9 +55,7 @@ const OneLineComment = ({ username }) => {
       }
 
       setColor(chosenColor);
-    };
-
-    load();
+    })();
   }, [username]);
 
   return (

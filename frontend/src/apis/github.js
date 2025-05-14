@@ -22,7 +22,7 @@ export const fetchWithToken = async (path, params = {}) => {
 export const getGitHubUserInfo = async (username) => {
   try {
     const res = await fetchWithToken(`/users/${username}`);
-    console.log("GitHub 응답 데이터:", res.data);
+    // console.log("GitHub 응답 데이터:", res);
     const { followers, following, public_repos, login, name, avatar_url } = res;
     return { followers, following, public_repos, login, name, avatar_url };
   } catch (error) {
@@ -38,7 +38,7 @@ export const getUserRepos = async (username, page = 1, perPage = 5) => {
       per_page: perPage,
       sort: "pushed",
     });
-    console.log("GitHub repo 응답 데이터:", res.data);
+    // console.log("GitHub repo 응답 데이터:", res);
     return res.map((repo) => ({
       name: repo.name,
       url: repo.html_url,
@@ -138,13 +138,7 @@ export const getUserCommitDates = async (username) => {
     const dateSet = new Set();
 
     for (const repo of repos) {
-      const commits = await fetchWithToken(
-        `/repos/${username}/${repo.name}/commits`,
-        {
-          author: username,
-          per_page: 100,
-        }
-      );
+      const commits = await getRepoCommits(username, repo.name, 100);
 
       commits.forEach((commit) => {
         if (commit?.commit?.author?.date) {
@@ -195,47 +189,92 @@ export const getUserCreatedExternalIssues = async (username) => {
   }
 };
 
-//커밋 코멘트 계산(커밋 한 날짜 기준 계산하기)
+//코멘트 계산(커밋 한 날짜 기준 계산하기)
 export const getUserCommitActivity = async (username) => {
+  // console.log(`getUserCommitActivity: ${username}`);
   try {
-    const repos = await getUserRepos(username, 1, 20); // 최대 20개 repo 확인
     const dateSet = new Set();
+    const todayKey = (() => {
+      const d = new Date();
+      return [
+        d.getFullYear(),
+        String(d.getMonth() + 1).padStart(2, "0"),
+        String(d.getDate()).padStart(2, "0"),
+      ].join("-");
+    })();
 
-    for (const repo of repos) {
-      const commits = await getRepoCommits(username, repo.name, 100);
-      commits.forEach((commit) => {
-        if (commit?.commit?.author?.date) {
-          const dateStr = new Date(commit.commit.author.date)
-            .toISOString()
-            .split("T")[0];
-          dateSet.add(dateStr);
-        }
+    //최대 3페이지(300개)까지 순회
+    for (let page = 1; page <= 3; page++) {
+      const events = await fetchWithToken(`/users/${username}/events`, {
+        per_page: 100,
+        page,
       });
-    }
+      // console.log(`page ${page} 이벤트 수: ${events.length}`);
+      if (!Array.isArray(events) || events.length === 0) break;
 
-    const today = new Date();
-    const allDates = [...dateSet].map((d) => new Date(d)).sort((a, b) => b - a); // 최신순 정렬
+      //PushEvent만 골라서 로컬 YYYY-MM-DD로 dateSet에 추가
+      for (const e of events) {
+        if (
+          e.type === "PushEvent" ||
+          (e.type === "PullRequestEvent" && e.payload.action === "merged") ||
+          (e.type === "CreateEvent" && e.payload.ref_type === "repository")
+        ) {
+          const dt = new Date(e.created_at);
+          const key = [
+            dt.getFullYear(),
+            String(dt.getMonth() + 1).padStart(2, "0"),
+            String(dt.getDate()).padStart(2, "0"),
+          ].join("-");
+          dateSet.add(key);
+        }
+      }
 
-    // streakDays 계산 (오늘부터 역순)
-    let streak = 0;
-    for (let i = 0; i < allDates.length; i++) {
-      const expectedDate = new Date(today);
-      expectedDate.setDate(today.getDate() - i);
-      const expectedStr = expectedDate.toISOString().split("T")[0];
-      if (dateSet.has(expectedStr)) {
-        streak++;
-      } else {
+      //오늘 이벤트가 dateSet에 들어왔다면 더 이상 페이지 요청 안 함
+      if (dateSet.has(todayKey)) {
+        console.log("오늘 커밋 이벤트 발견, 페이지 순회 종료.");
         break;
       }
     }
 
-    // missingDays 계산 (마지막 커밋 이후 경과일)
-    const lastCommitDate = allDates[0];
-    const diff = Math.floor((today - lastCommitDate) / (1000 * 60 * 60 * 24));
+    // console.log("커밋 날짜들:", [...dateSet].slice(0, 10));
 
-    return { streakDays: streak, missingDays: diff };
+    //커밋 하나도 없으면
+    if (dateSet.size === 0) {
+      console.log("커밋을 하나도 찾지 못함.");
+      return { streakDays: 0, missingDays: 999 };
+    }
+
+    //최신 커밋일 찾아서 정렬
+    const sorted = [...dateSet].sort((a, b) => (a < b ? 1 : -1));
+    // console.log("정렬된 날짜 :", sorted.slice(0, 5));
+
+    //최신 커밋일부터 연속 일수 계산
+    let streak = 0;
+    let cursor = new Date(sorted[0]);
+    while (true) {
+      const key = [
+        cursor.getFullYear(),
+        String(cursor.getMonth() + 1).padStart(2, "0"),
+        String(cursor.getDate()).padStart(2, "0"),
+      ].join("-");
+      const has = dateSet.has(key);
+      // console.log(`streak check ${key}: ${has}`);
+      if (!has) break;
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    // console.log(`streakDays: ${streak}`);
+
+    //마지막 커밋 이후 경과일 계산
+    const lastDate = new Date(sorted[0]);
+    const missing = Math.floor((new Date() - lastDate) / (1000 * 60 * 60 * 24));
+    // console.log(
+    //   `마지막 커밋일: ${sorted[0]}, missingDays: ${missing}`
+    // );
+
+    return { streakDays: streak, missingDays: missing };
   } catch (err) {
-    console.error("커밋 활동 분석 실패", err);
+    console.error("활동 분석 실패:", err);
     return { streakDays: 0, missingDays: 999 };
   }
 };

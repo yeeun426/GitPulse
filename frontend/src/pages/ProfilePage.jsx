@@ -25,7 +25,6 @@ const ProfilePage = () => {
 
   const [rate, setRate] = useState({ limit: 0, remaining: 0 });
 
-
   useEffect(() => {
     if (username) {
       getGitHubUserInfo(username).then((data) => setUserData(data));
@@ -88,10 +87,10 @@ const ProfilePage = () => {
           {/* 뱃지 영역 */}
           <section className={css.badgeSection}>
             <div className={css.badgeCol}>
-            <RewardBadges username={username} />
+              <RewardBadges username={username} />
             </div>
             <div className={css.commentCol}>
-              <OneLineComment comment="여기에 한 줄 코멘트가 들어갑니다." />
+              <OneLineComment username={username} />
             </div>
           </section>
 
