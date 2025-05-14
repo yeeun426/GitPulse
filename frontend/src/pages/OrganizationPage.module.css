@@ -47,12 +47,16 @@
 }
 .RecentPRItem div:nth-child(3) {
   overflow: auto;
-  background: #f9f9fc;
+  background: #f0f0ff;
   color: #000000;
   padding: 1rem;
+  border-radius: 10px;
 }
 .RecentPRItem div:nth-child(3) h2 {
   font-size: 1.5rem;
+}
+.RecentPRItem div:nth-child(3) img {
+  width: 100%;
 }
 .RecentPRItem div:nth-child(3) blockquote {
   margin: 0;

@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import Header from "../components/Header";
+import RepoDetailInfo from "../components/RepoDetailInfo.jsx";
+import CommitDetect from "../components/CommitDetect.jsx";
+import ConventionError from "../components/ConventionError.jsx";
+import PRTable from "../components/PRTable.jsx";
+
 import css from "./ProfilePage.module.css";
 import orgs from "./OrganizationPage.module.css";
-import Header from "../components/Header";
-import { useOrgsInfo, useOrgsRepos } from "../apis/useOrganizationApi";
 import {
   LineChart,
   Line,
@@ -14,9 +19,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+
 import ReactMarkdown from "react-markdown";
-import RepoDetailInfo from "../components/RepoDetailInfo.jsx";
-import PRTable from "../components/PRTable.jsx";
+import { useOrgsInfo, useOrgsRepos } from "../apis/useOrganizationApi";
 
 const OrganizationPage = () => {
   const { name } = useParams();
@@ -32,7 +37,7 @@ const OrganizationPage = () => {
     isRepoLoading,
     isRepoError,
   } = useOrgsRepos(name, selected);
-
+  console.log("---name", name);
   const commit = commits?.commit;
   const pulls = Array.isArray(commits?.pulls) ? commits.pulls[0] : null;
 
@@ -222,6 +227,12 @@ const OrganizationPage = () => {
           <section className={orgs.repoInfoCon}>
             <RepoDetailInfo />
             <PRTable />
+          </section>
+
+          {/* 커밋 허수 감지 / 컨벤션 오류 감지 */}
+          <section className={orgs.DetectorCon}>
+            <CommitDetect commits={commit} name={name} repo={selected} />
+            <ConventionError />
           </section>
         </div>
       </main>
