@@ -15,6 +15,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import ReactMarkdown from "react-markdown";
+import RepoDetailInfo from "../components/RepoDetailInfo.jsx";
+import PRTable from "../components/PRTable.jsx";
 
 const OrganizationPage = () => {
   const { name } = useParams();
@@ -216,30 +218,10 @@ const OrganizationPage = () => {
             </div>
           </section>
 
-          {/* repo & 그래프 영역 */}
-          <section className={css.bottom}>
-            {/* repo table */}
-            <div className={css.repoTable}>
-              <h4>repo</h4>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Review</th>
-                    <th>Recently Commit</th>
-                    <th>Date Created</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>repo-name</td>
-                    <td>32</td>
-                    <td>2025.05.06</td>
-                    <td>2025.03.06</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          {/* repo & PR 영역 */}
+          <section className={orgs.repoInfoCon}>
+            <RepoDetailInfo />
+            <PRTable />
           </section>
         </div>
       </main>
