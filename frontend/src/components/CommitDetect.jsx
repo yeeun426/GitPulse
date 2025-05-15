@@ -19,7 +19,7 @@ const CommitDetect = ({ name, repo }) => {
         <div className={css.iconCon}>
           <i className="bi bi-info-circle" />
           <div className={css.tableDesc}>
-            <h5>✅ 커밋 허수 감지 기준 </h5>
+            <h5>✅ 커밋 허수 감지 기준 (최근 커밋 50개 기준) </h5>
             <ul>
               <li>변경된 파일 수가 너무 적은 경우 - 3점</li>
               <li>커밋 메시지가 6자 미만인 경우 - 3점</li>
