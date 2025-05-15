@@ -92,3 +92,40 @@ export const fetchRepos = async (sort = "stars", page = 1) => {
     throw error;
   }
 };
+
+export const getRegisteredUsers = async () => {
+  try {
+    const token = localStorage.getItem("jwt");
+    const response = await fetch("/api/challenge/registered", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const text = await response.text();
+    console.log("Registered users response text:", text);
+
+    if (!response.ok) throw new Error("Failed to fetch registered users");
+    return JSON.parse(text);
+  } catch (error) {
+    console.error("❌ 등록된 유저 불러오기 실패:", error);
+    return [];
+  }
+};
+
+export const registerUser = async (user) => {
+  try {
+    const token = localStorage.getItem("jwt");
+    const response = await fetch("/api/challenge/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(user),
+    });
+    if (!response.ok) throw new Error("Failed to register user");
+  } catch (error) {
+    console.error("❌ 유저 등록 실패:", error);
+    throw error;
+  }
+};

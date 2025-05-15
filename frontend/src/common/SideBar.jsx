@@ -68,7 +68,7 @@ const SideBar = () => {
         />
         <CustomNavLink
           to={"/challenged"}
-          label={"Challenged"}
+          label={"Challenge"}
           icon={"bi bi-joystick"}
         />
 
