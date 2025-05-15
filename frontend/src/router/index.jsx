@@ -10,6 +10,7 @@ import CommitShare from "../components/CommitShare";
 import NewsPage from "../pages/NewsPage";
 import Study from "../components/Study";
 import ModalTest from "../components/Githubmodal";
+import Challenged from "../components/Challenged";
 export const router = createBrowserRouter([
   {
     path: "/", // 로그인 페이지
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: "study",
         element: <Study />,
+      },
+      {
+        path: "challenged",
+        element: <Challenged />,
       },
       {
         path: "gitmodal",

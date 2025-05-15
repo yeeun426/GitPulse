@@ -67,9 +67,9 @@ const SideBar = () => {
           icon={"bi bi-chat-text"}
         />
         <CustomNavLink
-          to={"/community"}
-          label={"자유 게시판"}
-          icon={"bi bi-card-list"}
+          to={"/challenged"}
+          label={"Challenged"}
+          icon={"bi bi-joystick"}
         />
 
         <CustomNavLink to={"/study"} label={"스터디"} icon={"bi bi-pencil"} />
