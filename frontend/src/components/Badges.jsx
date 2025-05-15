@@ -1,6 +1,5 @@
 import React from "react";
 import css from "./Badges.module.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 const Badges = ({ badges }) => {
   const groups = [];

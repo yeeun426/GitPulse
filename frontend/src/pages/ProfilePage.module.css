@@ -32,7 +32,7 @@
   text-align: center;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   background-color: #fff;
   border-radius: 1rem;
   box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
@@ -81,6 +81,67 @@
   gap: 1.5rem;
   margin: 2rem 0;
   align-items: stretch;
+}
+
+.badge {
+  width: 7rem;
+  object-fit: contain;
+}
+
+/* 커밋 잔디 */
+.contributions {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+}
+
+.contributions h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.contributionGraph {
+  height: 7.5rem;
+  background-color: #f0f0f5;
+  border-radius: 0.5rem;
+}
+
+/* 하단 레이아웃 */
+.bottom {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* 레포 테이블 */
+
+/* 원형 그래프 */
+.commitTimeChart {
+  flex: 1;
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.commitTimeChart h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.chartBox {
+  height: 12.5rem;
+  background-color: #f0f0f5;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.commitCount p {
+  font-size: 0.875rem;
+  color: #444;
+  margin: 0.25rem 0;
 }
 
 /* 왼쪽·오른쪽에 flex 박스 지정 */
