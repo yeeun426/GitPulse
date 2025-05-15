@@ -7,12 +7,12 @@ import Header from "./ModalHeader";
 import RepoTable from "../components/RepoTable";
 import CommitTimeChart from "../components/CommitTimeChart";
 import OneLineComment from "../components/OneLineComment";
-import RewardBadges from "../utils/RewardBadges";
+import RewardBadges from "../hooks/RewardBadges";
 
 const GithubModal = ({ username, onClose }) => {
   const [userData, setUserData] = useState(null);
   const [repos, setRepos] = useState([]);
-  const [rate, setRate] = useState({ limit: 0, remaining: 0 });
+  // const [rate, setRate] = useState({ limit: 0, remaining: 0 });
   const [error, setError] = useState(null); // ✅ 에러 상태
 
   useEffect(() => {

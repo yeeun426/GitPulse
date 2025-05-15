@@ -7,9 +7,8 @@ import Header from "../components/Header";
 import CommitTimeChart from "../components/CommitTimeChart";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import Badge from "../components/Badges";
 import OneLineComment from "../components/OneLineComment";
-import RewardBadges from "../utils/RewardBadges";
+import RewardBadges from "../hooks/RewardBadges";
 
 const ProfilePage = () => {
   const username = localStorage.getItem("username");
@@ -23,7 +22,7 @@ const ProfilePage = () => {
   });
   const [repos, setRepos] = useState([]);
 
-  const [rate, setRate] = useState({ limit: 0, remaining: 0 });
+  // const [rate, setRate] = useState({ limit: 0, remaining: 0 });
 
   useEffect(() => {
     if (username) {
@@ -38,16 +37,16 @@ const ProfilePage = () => {
     }
   }, [username]);
 
-  useEffect(() => {
-    if (username) {
-      getRateLimit()
-        .then((data) => {
-          const core = data.resources.core;
-          setRate({ limit: core.limit, remaining: core.remaining });
-        })
-        .catch((err) => console.error("Rate limit fetch failed", err));
-    }
-  }, [username]);
+  // useEffect(() => {
+  //   if (username) {
+  //     getRateLimit()
+  //       .then((data) => {
+  //         const core = data.resources.core;
+  //         setRate({ limit: core.limit, remaining: core.remaining });
+  //       })
+  //       .catch((err) => console.error("Rate limit fetch failed", err));
+  //   }
+  // }, [username]);
 
   return (
     <div className={css.container}>
