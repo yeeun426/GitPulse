@@ -156,3 +156,9 @@ app.listen(4000, () => {
 app.get("/", (req, res) => {
   res.send("✅ GitHub OAuth 서버 작동 중");
 });
+
+const connectDB = require("./config/db.js");
+connectDB(); // db연결
+
+const challengeRoutes = require("./routes/challengeRoutes");
+app.use("/api/challenge", challengeRoutes);
