@@ -1,6 +1,6 @@
-import styles from "./CommitKing.module.css";
+import styles from "./NeverStopChallenge.module.css";
 
-const CommitKing = () => {
+const NeverStopChallenge = () => {
   return (
     <div className={styles.container}>
       <div className={styles.contentBox}>
@@ -8,7 +8,7 @@ const CommitKing = () => {
 
         <div className={styles.repoListBox}>
           <div>
-            <p className={styles.commitLabel}>Commit’s Challenge</p>
+            <p className={styles.commitLabel}>Never Stop Challenge</p>
           </div>
 
           <ul className={styles.repoList}></ul>
@@ -21,4 +21,4 @@ const CommitKing = () => {
   );
 };
 
-export default CommitKing;
+export default NeverStopChallenge;
