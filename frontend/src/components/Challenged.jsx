@@ -3,6 +3,7 @@ import css from "./Challenged.module.css";
 import RepoRankcopy from "./RepoRankcopy";
 import CommitKing from "./CommitKing";
 import NeverStopChallenge from "./NeverStopChallenge";
+import Challenge from "./Challenge";
 const Challenged = () => {
   return (
     <div className={css.container}>
@@ -12,6 +13,7 @@ const Challenged = () => {
 
         <NeverStopChallenge />
         <RepoRankcopy />
+        <Challenge />
       </div>
     </div>
   );
