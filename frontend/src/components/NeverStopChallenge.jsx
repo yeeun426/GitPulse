@@ -1,11 +1,20 @@
+import { useState } from "react";
 import styles from "./NeverStopChallenge.module.css";
+import challengeImage from "../assets/challenge-visual.png";
 
 const NeverStopChallenge = () => {
+  const [isJoined, setIsJoined] = useState(false);
+
+  const handleJoin = () => {
+    setIsJoined(true);
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.contentBox}>
-        {/* 📦 레포리스트 + 정렬 + 페이지네이션 */}
-
+      {/* 항상 렌더링되며, 참가 전에는 블러 */}
+      <div
+        className={`${styles.contentBox} ${!isJoined ? styles.blurred : ""}`}
+      >
         <div className={styles.repoListBox}>
           <div>
             <p className={styles.commitLabel}>Never Stop Challenge</p>
@@ -17,6 +26,19 @@ const NeverStopChallenge = () => {
           </div>
         </div>
       </div>
+
+      {/* 참가 전에는 contentBox 위에 겹쳐 보이는 오버레이 */}
+      {!isJoined && (
+        <div className={styles.joinOverlay}>
+          <div className={styles.joinBox}>
+            <p className={styles.title}>Never Stop Challenge</p>
+            <img src={challengeImage} alt="챌린지 대표 이미지" />
+            <button className={styles.joinButton} onClick={handleJoin}>
+              참가하기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

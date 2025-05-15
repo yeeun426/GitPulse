@@ -4,86 +4,38 @@
   padding: 24px;
   font-family: "Pretendard", sans-serif;
   width: 30%;
-  position: relative;
+  position: relative; /* joinOverlay 정렬 기준 */
   min-height: 400px;
 }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  border-radius: 1rem;
-  backdrop-filter: blur(4px);
-  padding: 2rem;
-}
-
-.overlay h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #5f41b2;
-}
-
-.overlay p {
-  font-size: 1.2rem;
-  color: #555;
-}
-
-.registerButton {
-  margin-top: 16px;
-  padding: 10px 20px;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.registerButton:hover {
-  background-color: #0059c1;
-}
-
-.sortTabs {
-  display: flex;
-}
-
-.sortButton {
-  padding: 6px 12px;
-  font-size: 14px;
-  border: 0px solid black;
-  background-color: #f3f5f7;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.sortButton:hover {
-  font-weight: bold;
-}
-
-.active {
-  font-weight: bold;
-  border-color: #bbb;
-}
-
+/* 콘텐츠 영역 */
 .contentBox {
   gap: 24px;
+  width: 100%;
 }
 
-.readmeHeader {
-  font-size: 16px;
+/* 흐리게 처리 */
+.blurred {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.3s ease;
+}
+
+/* 저장소 리스트 박스 */
+.repoListBox {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #c7bce4;
+  display: flex;
+  flex-direction: column;
+}
+
+.commitLabel {
+  margin: 0.5rem;
+  text-align: center;
   font-weight: bold;
-  padding: 6px 12px;
+  color: white;
 }
 
 .repoList {
@@ -94,38 +46,6 @@
   background-color: #fff;
 }
 
-.repoItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
-  position: relative;
-}
-
-.repoListBox {
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  background-color: #c7bce4;
-  display: flex;
-  flex-direction: column;
-}
-
-.repoLink {
-  font-weight: bold;
-  text-decoration: none;
-  color: #0366d6;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.empty {
-  margin: 0.9rem;
-}
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -134,63 +54,51 @@
   margin: 0.5rem;
 }
 
-.pagination button {
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
-  min-width: 40px;
-  transition: background-color 0.2s ease;
+.empty {
+  margin: 0.9rem;
 }
 
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+/* 오버레이: contentBox 위에 완전히 겹침 */
+.joinOverlay {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  z-index: 10;
 }
 
-.activePage {
-  background-color: #1976d2;
-  color: #fff;
-}
-
-@media (max-width: 600px) {
-  .pagination {
-    gap: 6px;
-  }
-
-  .pagination button {
-    padding: 8px 10px;
-    font-size: 13px;
-    min-width: 36px;
-  }
+/* 참가 박스 */
+.joinBox {
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
 }
 
 .title {
+  font-size: 1.25rem;
   margin-bottom: 1rem;
-  text-align: center;
+  color: #5f41b2;
+  font-weight: 700;
 }
 
-.commitLabel {
-  margin: 0.5rem;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-}
-
-.sortHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 16px;
-  margin-bottom: 12px;
-}
-
-.commitButton {
-  margin: 0.5rem;
-  text-align: center;
-  font-weight: bold;
+.joinButton {
   background-color: #c7bce4;
   color: white;
   border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.joinButton:hover {
+  background-color: #0056b3;
 }
