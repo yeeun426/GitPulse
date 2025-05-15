@@ -87,3 +87,7 @@
   gap: 3rem;
   margin: 4rem 0;
 }
+.emptyPRItem {
+  text-align: center;
+  font-size: 20px;
+}

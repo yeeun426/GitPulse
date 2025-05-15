@@ -42,6 +42,9 @@
 .colResult {
   width: 45%;
 }
+td.colResult {
+  color: red;
+}
 .colResult button {
   border: none;
   outline: none;

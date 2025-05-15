@@ -194,7 +194,7 @@ const OrganizationPage = () => {
           <section className={orgs.RecentlyCon}>
             <div className={orgs.RecentlyItem}>
               <h3>따끈따끈 PR 소식</h3>
-              {pulls && (
+              {pulls ? (
                 <div className={orgs.RecentPRItem}>
                   <div>{pulls.title}</div>
                   <div>{pulls.user.login}</div>
@@ -203,6 +203,8 @@ const OrganizationPage = () => {
                   </div>
                   <div>{pulls.created_at}</div>
                 </div>
+              ) : (
+                <div className={orgs.emptyPRItem}>최근 PR이 없습니다.</div>
               )}
             </div>
             <div className={orgs.RecentlyItem}>
