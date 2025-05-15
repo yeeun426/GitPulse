@@ -1,0 +1,158 @@
+.container {
+  padding: 40px;
+  background: #f9f9fb;
+}
+
+.tabButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tabButton {
+  padding: 8px 16px;
+  border: 1px solid #5f41b2;
+  background-color: white;
+  color: #5f41b2;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activeTab {
+  background-color: #5f41b2;
+  color: #fff;
+}
+
+.cardSwiper {
+  height: calc(2 * 350px); /* 세로 2줄 기준 */
+  width: calc(3.5 * 400px); /* 가로 4.5개 보여줄 크기 */
+  overflow: hidden;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #fff;
+  height: 100%;
+}
+
+.cardImage {
+  width: 100%;
+  height: 75%;
+  object-fit: contain;
+  background-color: #fff;
+}
+
+.cardContent {
+  padding: 10px;
+}
+
+.cardTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+  text-decoration: none;
+}
+
+.cardDate {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+/* 👉 더보기 슬라이드 베이스 */
+.moreSlideAlt {
+  height: 200%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  box-sizing: border-box;
+
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* 👉 더보기 슬라이드: 등장 */
+.moreSlideVisible {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 1;
+}
+
+/* 👉 더보기 슬라이드: 사라짐 */
+.moreSlideHidden {
+  animation: fadeOutDown 0.5s ease forwards;
+  opacity: 0;
+}
+
+.morebtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+}
+
+.moreTextGroup {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: 6em;
+  font-weight: bold;
+}
+
+.moreText {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+/* 카드 애니메이션 */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.cardAnimated {
+  animation: slideInLeft 0.4s ease both;
+  opacity: 0;
+}
+
+/* 더보기 등장 애니메이션 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 더보기 사라짐 애니메이션 */
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
