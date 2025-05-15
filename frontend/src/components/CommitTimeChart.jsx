@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { getUserRepos, getRepoCommits } from "../apis/github";
 import { getCommitTime } from "../utils/commitTime";
+import css from "./CommitTimeChart.module.css";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f7f"];
 
@@ -38,39 +39,47 @@ const CommitTimeChart = ({ username }) => {
   const total = chartData.reduce((sum, cur) => sum + cur.value, 0);
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      {chartData.length > 0 ? (
-        <>
-          <PieChart width={280} height={280}>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              outerRadius={90}
-              dataKey="value"
-              label
-            >
-              {chartData.map((_, idx) => (
-                <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-          <div style={{ marginTop: 12 }}>
-            {chartData.map((item) => (
-              <p key={item.name} style={{ margin: 4, fontSize: 14 }}>
-                {item.name}:{" "}
-                {total > 0 ? Math.round((item.value / total) * 100) : 0}%
-              </p>
+    <div className={css.chartWrapper}>
+      <div className={css.chartContainer}>
+        <PieChart width={280} height={280}>
+          <Pie
+            data={chartData}
+            cx="50%"
+            cy="50%"
+            outerRadius={90}
+            dataKey="value"
+            label
+          >
+            {chartData.map((_, idx) => (
+              <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
             ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </div>
+
+      {/* 색상 범례: 한 줄 가로 정렬 */}
+      <div className={css.colorLegend}>
+        {chartData.map((item, idx) => (
+          <div key={item.name} className={css.colorLegendItem}>
+            <span
+              className={css.dot}
+              style={{ backgroundColor: COLORS[idx % COLORS.length] }}
+            />
+            <span>{item.name}</span>
           </div>
-        </>
-      ) : (
-        <p>Loading chart...</p>
-      )}
+        ))}
+      </div>
+
+      {/* 퍼센트 리스트: 세로 정렬 */}
+      <div className={css.percentageList}>
+        {chartData.map((item) => (
+          <div key={item.name}>
+            {item.name}:{" "}
+            {total > 0 ? Math.round((item.value / total) * 100) : 0}%
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -77,7 +77,7 @@ app.get("/oauth/github/callback", async (req, res) => {
   }
 });
 
-// 인증 미들웨어
+// 인증 프록시(미들웨어)
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "인증 토큰 없음" });
@@ -95,30 +95,59 @@ function authenticate(req, res, next) {
 // GitHub Proxy (README 자동 디코딩 포함)
 app.get("/github/proxy", authenticate, async (req, res) => {
   const { path, ...params } = req.query;
-  const username = req.user.login;
-  const accessToken = userAccessTokens[username];
-  if (!accessToken)
-    return res.status(404).json({ message: "AccessToken 없음" });
+
+  //클라이언트가 보낸 인코딩된 path를 한 번 디코딩
+  let dp = path;
+  try {
+    dp = decodeURIComponent(dp);
+  } catch (e) {}
+  //혹시 두 번 인코딩된 경우를 대비해 다시 디코딩
+  try {
+    dp = decodeURIComponent(dp);
+  } catch (e) {}
+
+  //fullPath 앞에 슬래시가 없으면 추가
+  const fullPath = dp.startsWith("/") ? dp : `/${dp}`;
+
+  const token = userAccessTokens[req.user.login];
+  if (!token) return res.status(404).json({ message: "AccessToken 없음" });
 
   try {
-    const isReadme = path.includes("/readme");
-    const githubRes = await axios.get(`https://api.github.com${path}`, {
+    const isReadme = fullPath.includes("/readme");
+    const githubRes = await axios.get(`https://api.github.com${fullPath}`, {
       params,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
         Accept: isReadme
           ? "application/vnd.github.v3.raw"
           : "application/vnd.github+json",
       },
       responseType: isReadme ? "text" : "json",
     });
-
     res.send(githubRes.data);
-  } catch (err) {
-    console.error("Proxy 실패:", err.response?.data || err.message);
+  } catch (error) {
+    if (error.response?.status === 409) {
+      console.warn(`Empty repo for path: ${fullPath}`);
+      return res.json([]);
+    }
+    console.error("Proxy 실패:", error.response?.data || error.message);
     res.status(500).json({ message: "GitHub 호출 실패" });
   }
 });
+
+function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: "인증 토큰 없음" });
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (e) {
+    return res.status(401).json({ message: "토큰 검증 실패" });
+  }
+}
 
 app.listen(4000, () => {
   console.log("✅ 백엔드 서버 실행 중 http://localhost:4000");
