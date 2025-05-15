@@ -107,7 +107,7 @@ export const getOrgsDetail = async (orgs, repo) => {
 
 export const useOrgsDetail = (orgs, repo) => {
   return useQuery({
-    queryKey: ["orgsRepo", orgs, repo],
+    queryKey: ["orgsDetail", orgs, repo],
     queryFn: async () => {
       try {
         const data = repo && (await getOrgsDetail(orgs, repo));
@@ -117,6 +117,32 @@ export const useOrgsDetail = (orgs, repo) => {
       }
     },
     staleTime: 1000 * 60 * 30,
+    retry: 1,
+  });
+};
+
+export const getOrgsPR = async (orgs, repo) => {
+  try {
+    const res = await fetchWithToken(`/repos/${orgs}/${repo}/pulls?state=all`);
+    return res;
+  } catch (error) {
+    console.log("PR List 가져오기 실패", error);
+    throw error;
+  }
+};
+
+export const useOrgsPR = (orgs, repo) => {
+  return useQuery({
+    queryKey: ["OrgsPR", repo],
+    queryFn: async () => {
+      try {
+        const data = repo && (await getOrgsPR(orgs, repo));
+        return data;
+      } catch (err) {
+        console.log("", err);
+      }
+    },
+    staleTime: 1000 * 60 * 10,
     retry: 1,
   });
 };

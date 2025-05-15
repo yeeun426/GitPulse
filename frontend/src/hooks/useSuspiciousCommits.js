@@ -12,6 +12,7 @@ export const useSuspiciousCommits = ({ name, repo }) => {
         Date.now() - 14 * 24 * 60 * 60 * 1000
       ).toISOString(); // 2주
 
+      if (!name || !repo) return;
       const commits = await fetchWithToken(
         `/repos/${name}/${repo}/commits?since=${since}`
       );

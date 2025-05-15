@@ -37,11 +37,10 @@ const OrganizationPage = () => {
     isRepoLoading,
     isRepoError,
   } = useOrgsRepos(name, selected);
-  console.log("---name", name);
+
   const commit = commits?.commit;
   const pulls = Array.isArray(commits?.pulls) ? commits.pulls[0] : null;
 
-  console.log(pulls);
   useEffect(() => {
     if (repos && repos.length > 0) {
       setSelected(repos[0].name);
@@ -90,7 +89,7 @@ const OrganizationPage = () => {
         userCommitMap[authorLogin] = (userCommitMap[authorLogin] || 0) + 1;
       }
     });
-    console.log(commitCountByDay);
+
     setCommitCounts(commitCountByDay);
 
     const topCommitter = Object.entries(userCommitMap).reduce(
@@ -226,7 +225,7 @@ const OrganizationPage = () => {
           {/* repo & PR 영역 */}
           <section className={orgs.repoInfoCon}>
             <RepoDetailInfo orgs={name} repo={selected} />
-            <PRTable />
+            <PRTable orgs={name} repo={selected} />
           </section>
 
           {/* 커밋 허수 감지 / 컨벤션 오류 감지 */}
