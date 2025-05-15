@@ -63,8 +63,6 @@ export const companies = [
 
 // RSS 피드 데이터를 불러오는 함수
 export const fetchRssFeeds = async (companies, setFeeds) => {
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
   for (const { name, url } of companies) {
     const rssJsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${url}`;
     try {
