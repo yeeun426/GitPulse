@@ -1,5 +1,6 @@
-.detectTable table {
+.tableWrapper {
   width: 100%;
+  margin-top: 1rem;
   border-collapse: collapse;
   font-size: 0.875rem;
   background-color: white;
@@ -10,7 +11,7 @@
   padding: 1rem;
   table-layout: fixed;
 }
-.detectTable table:hover {
+.tableWrapper:hover {
   transform: translateY(-3px);
 }
 .detectTable th,
@@ -28,4 +29,25 @@
 .detectTable thead th:nth-child(3),
 .detectTable thead th:nth-child(9) {
   width: 210px;
+}
+.tableWrapper {
+  width: 100%;
+  margin-top: 1rem;
+}
+.tableHeader,
+.tableBody {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.scrollBody {
+  max-height: 14rem;
+  overflow-y: auto;
+}
+.tableWrapper th,
+.tableWrapper td {
+  padding: 0.625rem;
+  border-bottom: 1px solid #eee;
+  text-align: center;
 }

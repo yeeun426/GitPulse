@@ -98,7 +98,6 @@ const OrganizationPage = () => {
 
     console.log("일주일간 가장 많이 커밋한 사람:", topCommitter);
     setTopCommit(topCommitter);
-    console.log(commitCountByDay);
     setCommitCounts(commitCountByDay);
   }, [commit, curUserLogin]);
 

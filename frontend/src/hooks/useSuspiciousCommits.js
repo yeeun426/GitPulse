@@ -14,8 +14,12 @@ export const useSuspiciousCommits = ({ name, repo }) => {
 
       if (!name || !repo) return;
       const commits = await fetchWithToken(
-        `/repos/${name}/${repo}/commits?since=${since}`
+        `/repos/${name}/${repo}/commits?since=${since}`,
+        {
+          per_page: 50,
+        }
       );
+
       if (!commits || !commits.length) {
         setLoading(false);
         return;
@@ -50,9 +54,24 @@ export const useSuspiciousCommits = ({ name, repo }) => {
             score += 3;
             reasons.push("파일 1개만 변경");
           }
-          const onlyConsole = files.every((file) =>
-            file.patch?.replace(/\s/g, "").includes("console.log")
-          );
+
+          // 수정된 내용이 콘솔만 있는 경우
+          const onlyConsole = files.every((file) => {
+            if (!file.patch) return false;
+            const patchLines = file.patch.split("\n");
+            const addedLines = patchLines.filter(
+              (line) => line.startsWith("+") && !line.startsWith("+++")
+            );
+            const removedLines = patchLines.filter(
+              (line) => line.startsWith("-") && !line.startsWith("---")
+            );
+            const isOnlyConsole = [...addedLines, ...removedLines].every(
+              (line) => /console\.log/.test(line)
+            );
+
+            return isOnlyConsole;
+          });
+
           if (onlyConsole) {
             score += 10;
             reasons.push("console.log만 수정");
