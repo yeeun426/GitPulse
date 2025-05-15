@@ -1,229 +1,111 @@
-.container {
-  height: 100vh;
-  padding: 3rem 1rem;
-  background: #f9f9fc;
+.main {
   display: flex;
-  justify-content: center;
-  align-items: start;
-}
-
-.card {
-  background: #f9f9fc;
-  border-radius: 24px;
-  padding: 2rem;
-  max-width: 800px;
-  width: 100%;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background-color: #f9f9fc;
+  padding: 2rem 5rem;
 }
 
 .header {
+  width: 100%;
+  margin-bottom: 1.2rem;
+}
+
+.pageTitle {
+  font-size: 3rem;
+  font-weight: 500;
+  color:#000000;
+  margin-top: 20px;
+  margin-bottom: 2rem; 
+}
+
+.progressWrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
-}
-
-.userInfo {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.profileImage {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.highlight {
-  color: #7c3aed;
+  width: 100%;
+  margin-left: 3rem;
+  max-width: 1000px;
+  margin-bottom: 4.5rem;
 }
 
 .progressBar {
+  flex: 1;
+  height: 6px;
   background: #e0e0e0;
-  height: 10px;
   border-radius: 10px;
-  margin-bottom: 1rem;
   overflow: hidden;
 }
 
 .progressFill {
-  background: linear-gradient(to right, #7c3aed, #db2777);
+  background: #D2C4FC;
   height: 100%;
   transition: width 0.3s ease;
 }
 
+.progressText {
+  margin-left: 1rem;
+  font-size: 1.2rem;
+  color: #7c3aed;
+  font-weight: 700;
+}
+
+.section {
+  width: 100%;
+  max-width: 1000px;
+}
+
 .questionBox {
-  background: #fafafa;
-  padding: 1.5rem;
-  border-radius: 16px;
+  width: 100%;
+  background: none;
 }
 
 .questionTitle {
   font-size: 2.5rem;
-  margin-bottom: 2rem;
+  font-weight: 700;
+  color: #2B3A4B;
   text-align: center;
+  margin-bottom: 4rem;
+}
+
+.questionNumber {
+  color: #7c3aed;
+  margin-right: 0.5rem;
+}
+
+.questionTitle span {
+  font-size: 2.5rem;
 }
 
 .options {
-  display: grid;
-  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
 }
 
 .optionButton {
-  padding: 1rem;
-  background: white;
-  border: 2px solid #c4b5fd;
-  border-radius: 12px;
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: none;
+  border-radius: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  text-align: left;
-  transition: background 0.2s;
+  color : #545D69;
+  font-size: 1.4rem;
+  font-weight : 700;
+  transition: 0.4s ease;
 }
 
 .optionButton:hover {
-  background: #ede9fe;
+  background-color: #c1b0f0;
+  color : white;
+  font-weight : 900;
+  transform : translateY(-5px);
 }
 
-.resultSection {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.resultCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 24px;
-}
-
-.resultImage {
-  width: 400px;
-  margin-bottom: 1.5rem;
-  box-sizing: border-box;
-}
-
-.resultTitle {
-  font-size: 2rem;
-  font-weight: bold;
-  width: 100%;
-  max-width: 500px;
-}
-
-.resultDesc {
-  font-size: 1.1rem;
-  margin-top: 1rem;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-}
-
-.buttonGroup {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-.retryButton,
-.downloadButton {
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  width: 280px;
-  max-width: 90%;
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-/* 일반 버튼 (회색) */
-.retryButton {
-  background: #efefef;
-  width: 400px;
-}
-
-.retryButton:hover {
-  background: #d8d8d8;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-/* 다운로드 버튼 (보라색) */
-.downloadButton {
-  background: #c7bce4;
-  width: 400px;
-}
-
-.downloadButton:hover {
-  background: #5f41b2;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-}
-
-.loading {
-  text-align: center;
-  padding: 3rem 1rem;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #c4b5fd;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 1rem;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.main {
-  background-color: #f9f9fc;
-}
-
-.typeheader {
-  margin-top: 2rem;
-  margin-left: 2rem;
-}
-
-.section {
-  margin-top: 2rem;
-  margin-left: 2rem;
-  margin-right: 2rem;
-}
-
-.desc {
-  font-size: 1.1rem;
-  width: 500px;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .optionButton {
-    font-size: 0.9rem;
-    padding: 0.75rem;
-  }
-
-  .resultImage {
-    width: 120px;
-  }
-
-  .resultTitle {
-    font-size: 1.5rem;
-  }
-
-  .resultDesc {
-    font-size: 1rem;
-  }
-
-  .buttonGroup {
-    flex-direction: column;
-    align-items: center;
-  }
-}
+/* 결과 섹션은 그대로 유지 */
+.resultSection { width: 100%; max-width: 1000px; }
