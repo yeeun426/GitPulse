@@ -225,7 +225,7 @@ const OrganizationPage = () => {
 
           {/* repo & PR 영역 */}
           <section className={orgs.repoInfoCon}>
-            <RepoDetailInfo />
+            <RepoDetailInfo orgs={name} repo={selected} />
             <PRTable />
           </section>
 

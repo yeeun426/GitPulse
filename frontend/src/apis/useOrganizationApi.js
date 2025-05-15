@@ -8,6 +8,7 @@ export const getOrganizationsByUser = async (username) => {
     return res;
   } catch (error) {
     console.log("조직 가져오기 실패", error);
+    throw error;
   }
 };
 
@@ -40,6 +41,7 @@ export const getOrgsInfo = async (org) => {
     };
   } catch (error) {
     console.log("조직 정보 가져오기 실패", error);
+    throw error;
   }
 };
 
@@ -72,6 +74,7 @@ export const getOrgsRepos = async (orgs, repo) => {
     };
   } catch (error) {
     console.log("조직 repo 가져오기 실패", error);
+    throw error;
   }
 };
 
@@ -87,6 +90,33 @@ export const useOrgsRepos = (orgs, repo) => {
       }
     },
     staleTime: 1000 * 60 * 10,
+    retry: 1,
+  });
+};
+
+// 조직 repo info 불러오기
+export const getOrgsDetail = async (orgs, repo) => {
+  try {
+    const res = await fetchWithToken(`/repos/${orgs}/${repo}`);
+    return res;
+  } catch (error) {
+    console.log("조직 repo info 가져오기 실패", error);
+    throw error;
+  }
+};
+
+export const useOrgsDetail = (orgs, repo) => {
+  return useQuery({
+    queryKey: ["orgsRepo", orgs, repo],
+    queryFn: async () => {
+      try {
+        const data = repo && (await getOrgsDetail(orgs, repo));
+        return data;
+      } catch (err) {
+        console.log("", err);
+      }
+    },
+    staleTime: 1000 * 60 * 30,
     retry: 1,
   });
 };
