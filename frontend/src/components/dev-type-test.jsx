@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { toPng } from "html-to-image";
-
+import { useNavigate } from "react-router-dom";
 import styles from "./DevTypeTest.module.css";
 
 const questions = [
@@ -33,7 +33,7 @@ const questions = [
   },
   {
     qNumber: "Q3",
-    q: "코드 리뷰를 받았는데, 리뷰어가 '여기 네이밍 다시 고민해보자'라고 했다. 당신은?",
+    q: "코드 리뷰를 받았는데, '여기 네이밍 다시 고민해보자'라고 했다. 당신은?",
     options: [
       { text: "그게 디자인적 맥락에 맞는데...?", type: "pikachu" },
       { text: "바꾸면 호출부 다 망가진다고요", type: "backend" },
@@ -135,45 +135,91 @@ const questions = [
 const results = {
   pikachu: {
     title: "💻 감성 가득 프론트엔드",
-    desc: "디자인 안 예쁘면 커밋 안 해요. border-radius가 안 들어가면 분노 게이지가 차오르고, 협업툴보다 Figma랑 친해요. 말버릇은 '폰트 왜 이래요??'",
-
+    desc: [
+      "디자인 픽셀 하나 어긋나면 혼잣말로",
+      "'이건 아니지...'를 속삭이며 새벽까지 수정을 감행해요.",
+      "border-radius가 빠지면 가시가 돋히고,",
+      "그림자에 진심이라 box-shadow에도 30분 고민해요.",
+      "협업툴? Notion보단 Figma랑 대화가 더 잘 통해요.",
+      "컴포넌트는 곧 친구.",
+      "‘폰트 왜 이래요??’는 거의 입버릇이고,",
+      "시스템 폰트는 절대 못 참아요.",
+    ],
     color: "#d3fbef",
-    character: "/img/pikachu-image.png", // 피카츄 이미지 경로
+    character: "/img/pikachu-image.png",
   },
   backend: {
     title: "⚙️ 고독한 백엔드",
-    desc: "REST? 난 REST할 시간도 없어. 팀에선 조용히 살지만, 서버에선 절대 조용하지 않아요. Git log엔 항상 'fix: 버그 수정'만 남기고, 프론트엔드 요청이 3분 이상이면 '무슨 API를 이렇게 써요?'라고 해요.",
-
+    desc: [
+      "API 문서보다 로그 파일을 더 많이 봐요.",
+      "로그가 내 친구, 오류가 내 적.",
+      "조용한 성격이지만 서버가 터지면 눈빛이 바뀌고,",
+      "침묵은 코드로 말해요.",
+      "커밋 메시지는 거의 자동완성",
+      "'fix: 버그 수정', 'hotfix: 서버 장애'만 반복돼요.",
+      "3분 이상 걸리는 API?",
+      "그건 이미 전쟁 선포. 최적화 없이는 못 살아남아요.",
+    ],
     color: "#1b234c",
-    character: "/img/werewolf-image.png", // 늑대인간 이미지 경로
+    character: "/img/werewolf-image.png",
   },
   gpt: {
     title: "🤖 GPT 영혼 합체 AI 개발자",
-    desc: "사실 이 기능은 내가 안 짰는데... 코드보다 프롬프트에 진심이고, 디버깅할 때 GPT랑 대화가 60줄이에요. 프론트, 백 상관없이 GPT가 다 해주죠.",
-
+    desc: [
+      "내가 짰다고 말했지만,",
+      "사실 그 코드... GPT가 도와줬어요.",
+      "거의 공동 저자 수준.",
+      "프롬프트 작성에 진심이고,",
+      "'이걸 어떻게 물어보지?'에 하루를 써요.",
+      "디버깅할 때 GPT 대화창에 소설을 써놓고,",
+      "'이제 GPT가 고쳐줄 거야'라는 믿음을 갖고 있죠.",
+      "프론트든 백이든 'GPT한테 물어보자'가 기본이에요.",
+    ],
     color: "#c2f0fe",
-    character: "/img/robot-image.png", // 로봇 이미지 경로
+    character: "/img/robot-image.png",
   },
   data: {
     title: "📊 숫자 덕후 데이터 집착러",
-    desc: "사람보다 그래프가 더 솔직해요. 커밋보다 Recharts가 먼저고, 팀원들 이름 외우기보다 컬럼명 먼저 외워요. 코드 리뷰보다 SQL 튜닝이 더 재밌죠.",
-
+    desc: [
+      "엑셀보다 SQL이 편하고,",
+      "팀원들 감정보다 그래프 기울기에 더 민감해요.",
+      "Recharts로 시각화된 데이터만 보면 괜히 흐뭇해지고, 그래프에 혼을 불어넣어요.",
+      "컬럼명 외우는 속도는 팀원 얼굴 외우는 속도의 3배.",
+      "DB schema가 뇌리에 새겨져 있어요.",
+      "코드 리뷰? 그것보다 인덱스 튜닝이 더 흥미롭고,",
+      "옵티마이저가 친구예요.",
+    ],
     color: "#ffe9bb",
-    character: "/img/data-analyst-image.png", // 데이터 분석가 이미지 경로
+    character: "/img/data-analyst-image.png",
   },
   artist: {
     title: "🎨 클래스명 예술가",
-    desc: "이 div에 영혼을 담았습니다. div 하나에도 스토리가 있고, className='soul-container emotion-center' 같은 걸 써요. 협업 시 팀원이 클래스명 보고 철학 질문을 하죠.",
-
+    desc: [
+      "클래스명을 지을 때 10분은 기본.",
+      "‘이 div에는 어떤 의미가 담겨야 하지?’라는 고민을 해요.",
+      "그저 배치가 아닌, div마다 서사가 있고,",
+      "마진은 감정선 조절이에요.",
+      "tailwind 쓰면서도 철학을 담고,",
+      "클래스명 하나에 감정을 표현하려 해요.",
+      "팀원이 내 코드를 보고",
+      "'이 div 왜 이래요?'라며 존재론적 질문을 해요.",
+    ],
     color: "#fee7ff",
-    character: "/img/artist-image.png", // 예술가 이미지 경로
+    character: "/img/artist-image.png",
   },
   deadline: {
     title: "⌛ 마감형 괴물 커밋러",
-    desc: "마감 1시간 전이면 1주일 분량 가능해요. 잔디밭은 주말에 몰아서 조성하고, 매일은 못 해도 몰아서 폭주하는 열정 폭탄이에요. 커밋 메시지 시간은 항상 23:59죠.",
-
+    desc: [
+      "마감 전 1시간이면 무아지경.",
+      "그동안 뭐 했냐는 말에 ‘지금 집중하면 돼’라고 말해요.",
+      "주중엔 잔디가 비어 있지만,",
+      "주말엔 커밋 폭탄으로 서버를 흔들어요.",
+      "슬슬 해야지 하다가 D-1에 광속 입력 시작.",
+      "집중력은 그제야 터져요.",
+      "커밋 시간은 항상 23:59. 시간은 나를 이기지 못해요.",
+    ],
     color: "#70578f",
-    character: "/img/monster-image.png", // 괴물 이미지 경로
+    character: "/img/monster-image.png",
   },
 };
 
@@ -198,7 +244,9 @@ const DevTypeTest = () => {
   const handleDownload = async () => {
     if (!resultRef.current) return;
     try {
-      const dataUrl = await toPng(resultRef.current);
+      const dataUrl = await toPng(resultRef.current, {
+        backgroundColor: "#ffffff", // 흰색 배경 추가
+      });
       const a = document.createElement("a");
       a.href = dataUrl;
       a.download = "dev-type-result.png";
@@ -218,18 +266,18 @@ const DevTypeTest = () => {
   const sortedScores = getSortedScores(scores);
   const topType = sortedScores[0]?.[0];
   const result = topType ? results[topType] : undefined;
-
+  const navigate = useNavigate();
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
+    <div className={styles.main}>
+      <div>
         <header className={styles.header}>
-          <div>
-            <h2>당신의 개발자 유형은?</h2>
+          <div className={styles.typeheader}>
+            <h1>당신의 개발자 유형은?</h1>
           </div>
         </header>
 
         {!isDone ? (
-          <section>
+          <section className={styles.section}>
             <div className={styles.progressBar}>
               <div
                 className={styles.progressFill}
@@ -256,25 +304,23 @@ const DevTypeTest = () => {
           </section>
         ) : result ? (
           <section className={styles.resultSection}>
-            <div
-              ref={resultRef}
-              className={styles.resultCard}
-              style={{
-                backgroundColor: result.color,
-                color:
-                  result.color === "#1b234c" || result.color === "#70578f"
-                    ? "#f0f0f0"
-                    : "#1a202c",
-              }}
-            >
+            <div ref={resultRef} className={styles.resultCard}>
               <h3 className={styles.resultTitle}>{result.title}</h3>
               <img
                 src={result.character}
                 alt={result.title}
                 className={styles.resultImage}
               />
-
-              <p className={styles.resultDesc}>{result.desc}</p>
+              <div style={{ textAlign: "center" }} className={styles.desc}>
+                {Array.isArray(result.desc)
+                  ? result.desc.map((line, idx) => (
+                      <React.Fragment key={idx}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))
+                  : result.desc}
+              </div>
             </div>
 
             <div className={styles.buttonGroup}>
@@ -287,11 +333,13 @@ const DevTypeTest = () => {
               >
                 결과 이미지 저장
               </button>
-              <a href="/news">
-                <button className={styles.retryButton}>
-                  프론트엔드 IT 뉴스 바로가기
-                </button>
-              </a>
+
+              <button
+                className={styles.downloadButton}
+                onClick={() => navigate("/news")}
+              >
+                프론트엔드 IT 뉴스 바로가기
+              </button>
             </div>
           </section>
         ) : (

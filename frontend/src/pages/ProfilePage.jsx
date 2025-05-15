@@ -51,9 +51,9 @@ const ProfilePage = () => {
 
   return (
     <div className={css.container}>
-      <div className={css.rateLimit}>
+      {/* <div className={css.rateLimit}>
         남은 요청: {rate.remaining} / {rate.limit}
-      </div>
+      </div> */}
 
       <main className={css.main}>
         {/* 헤더영역 */}
