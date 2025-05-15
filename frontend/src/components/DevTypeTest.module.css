@@ -1,14 +1,14 @@
 .container {
-  min-height: 100vh;
+  height: 100vh;
   padding: 3rem 1rem;
-  background: linear-gradient(to bottom right, #f3f0ff, #fff0f6);
+  background: #f9f9fc;
   display: flex;
   justify-content: center;
   align-items: start;
 }
 
 .card {
-  background: white;
+  background: #f9f9fc;
   border-radius: 24px;
   padding: 2rem;
   max-width: 800px;
@@ -59,8 +59,8 @@
 }
 
 .questionTitle {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
@@ -89,32 +89,44 @@
 }
 
 .resultCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 1rem;
   border-radius: 24px;
-  padding: 2rem;
 }
 
 .resultImage {
-  width: 160px;
+  width: 400px;
   margin-bottom: 1.5rem;
+  box-sizing: border-box;
 }
 
 .resultTitle {
   font-size: 2rem;
   font-weight: bold;
+  width: 100%;
+  max-width: 500px;
 }
 
 .resultDesc {
-  margin-top: 1rem;
   font-size: 1.1rem;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
 .buttonGroup {
   margin-top: 2rem;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
+  margin-bottom: 2rem;
 }
-
 .retryButton,
 .downloadButton {
   padding: 0.75rem 1.5rem;
@@ -122,15 +134,32 @@
   font-weight: 600;
   cursor: pointer;
   border: none;
+  width: 280px;
+  max-width: 90%;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
 }
 
+/* 일반 버튼 (회색) */
 .retryButton {
-  background: #f3f4f6;
+  background: #efefef;
+  width: 400px;
 }
 
+.retryButton:hover {
+  background: #d8d8d8;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* 다운로드 버튼 (보라색) */
 .downloadButton {
-  background: #7c3aed;
-  color: white;
+  background: #c7bce4;
+  width: 400px;
+}
+
+.downloadButton:hover {
+  background: #5f41b2;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .loading {
@@ -151,5 +180,50 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.main {
+  background-color: #f9f9fc;
+}
+
+.typeheader {
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+.section {
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.desc {
+  font-size: 1.1rem;
+  width: 500px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .optionButton {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  .resultImage {
+    width: 120px;
+  }
+
+  .resultTitle {
+    font-size: 1.5rem;
+  }
+
+  .resultDesc {
+    font-size: 1rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    align-items: center;
   }
 }

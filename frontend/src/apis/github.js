@@ -22,8 +22,16 @@ export const fetchWithToken = async (path, params = {}) => {
 export const getGitHubUserInfo = async (username) => {
   try {
     const res = await fetchWithToken(`/users/${username}`);
-    // console.log("GitHub 응답 데이터:", res);
-    const { followers, following, public_repos, login, name, avatar_url } = res;
+
+    // Axios 기반이므로 res.data가 있을 수 있음
+    const data = res.data || res;
+
+    if (!data || data.message === "Not Found") {
+      throw new Error("User not found");
+    }
+
+    const { followers, following, public_repos, login, name, avatar_url } =
+      data;
     return { followers, following, public_repos, login, name, avatar_url };
   } catch (error) {
     console.error("GitHub 유저 정보 요청 실패:", error);
