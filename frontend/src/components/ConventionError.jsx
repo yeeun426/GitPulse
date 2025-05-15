@@ -11,7 +11,9 @@ const ConventionError = ({ commits }) => {
 
   return (
     <div className={css.conventionErrorCon}>
-      <h3>커밋 메세지 컨벤션 오류</h3>
+      <h3>
+        커밋 메세지 <strong>컨벤션 오류</strong>
+      </h3>
       <ConventionErrTable commitMsgList={commitMsgList} />
     </div>
   );

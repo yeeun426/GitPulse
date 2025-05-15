@@ -180,7 +180,7 @@ const OrganizationPage = () => {
                 <Line
                   type="monotone"
                   dataKey="mine"
-                  stroke="#DADEE3"
+                  stroke="#545d69"
                   name="내 커밋 수"
                 />
               </LineChart>
@@ -190,7 +190,9 @@ const OrganizationPage = () => {
           {/* 최근 PR, 최근 commit */}
           <section className={orgs.RecentlyCon}>
             <div className={orgs.RecentlyItem}>
-              <h3>따끈따끈 PR 소식</h3>
+              <h3>
+                따끈따끈 <strong>PR</strong> 소식
+              </h3>
               {pulls ? (
                 <div className={orgs.RecentPRItem}>
                   <div>{pulls.title}</div>
@@ -205,7 +207,9 @@ const OrganizationPage = () => {
               )}
             </div>
             <div className={orgs.RecentlyItem}>
-              <h3>이번 주 MVP</h3>
+              <h3>
+                이번 주 <strong>MVP</strong>
+              </h3>
               <div className={orgs.RankingItem}>
                 {topCommit && (
                   <>

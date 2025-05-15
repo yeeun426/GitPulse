@@ -78,6 +78,7 @@
 .RankingItem div:nth-child(1) {
   font-size: 25px;
   font-weight: bold;
+  color: var(--main-purple);
 }
 .RankingItem div strong {
   font-size: 23px;
@@ -90,4 +91,10 @@
 .emptyPRItem {
   text-align: center;
   font-size: 20px;
+}
+h3 > strong {
+  font-weight: 500;
+}
+strong {
+  color: var(--main-purple);
 }
