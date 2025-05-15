@@ -2,11 +2,15 @@
 import React from "react";
 import RepoRank from "../components/RepoRank";
 import css from "./newsPage.module.css";
+import ITblog from "../components/ITblog";
 const NewsPage = () => {
   return (
     <div className={css.container}>
-      <h2>Open Repositories</h2>
-      <RepoRank />
+      <div className={css.box}>
+        <ITblog />
+
+        <RepoRank />
+      </div>
     </div>
   );
 };
