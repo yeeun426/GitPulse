@@ -40,6 +40,7 @@ const RepoRank = () => {
 
   return (
     <div className={styles.container}>
+      <h2>Open Repositories</h2>
       <div className={styles.contentBox}>
         {/* 📦 레포리스트 + 정렬 + 페이지네이션 */}
 
