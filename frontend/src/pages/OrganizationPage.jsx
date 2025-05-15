@@ -56,7 +56,7 @@ const OrganizationPage = () => {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0); // 시간 초기화
 
-    // 일요일 ~ 토요일 배열
+    // 요일 배열
     const dateArray = [...Array(7)].map((_, i) => {
       const d = new Date(today);
       d.setUTCDate(today.getUTCDate() - (6 - i));
@@ -69,7 +69,7 @@ const OrganizationPage = () => {
       return acc;
     }, {});
 
-    const userCommitMap = {}; // 💡 사용자별 커밋 수
+    const userCommitMap = {}; // 사용자별 커밋 수
 
     // 커밋 수 계산
     commit.forEach((commit) => {
@@ -80,14 +80,11 @@ const OrganizationPage = () => {
       const authorLogin =
         commit.author?.login || commit.commit.author?.name || "anonymous";
 
-      if (commitCountByDay[dateStr]) {
-        commitCountByDay[dateStr].total += 1;
-
-        if (authorLogin === curUserLogin) {
-          commitCountByDay[dateStr].mine += 1;
-        }
-        userCommitMap[authorLogin] = (userCommitMap[authorLogin] || 0) + 1;
+      commitCountByDay[dateStr].total += 1;
+      if (authorLogin === curUserLogin) {
+        commitCountByDay[dateStr].mine += 1;
       }
+      userCommitMap[authorLogin] = (userCommitMap[authorLogin] || 0) + 1;
     });
 
     setCommitCounts(commitCountByDay);
@@ -101,7 +98,7 @@ const OrganizationPage = () => {
 
     console.log("일주일간 가장 많이 커밋한 사람:", topCommitter);
     setTopCommit(topCommitter);
-
+    console.log(commitCountByDay);
     setCommitCounts(commitCountByDay);
   }, [commit, curUserLogin]);
 

@@ -4,7 +4,6 @@ import { useOrgsPR } from "../apis/useOrganizationApi";
 
 const RepoTable = ({ orgs, repo }) => {
   const { data: PRList, isLoading, isError } = useOrgsPR(orgs, repo);
-  console.log(PRList);
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생!</p>;
 
