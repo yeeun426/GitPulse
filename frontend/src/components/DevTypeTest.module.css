@@ -107,5 +107,83 @@
   transform : translateY(-5px);
 }
 
-/* 결과 섹션은 그대로 유지 */
-.resultSection { width: 100%; max-width: 1000px; }
+
+/* 결과 */
+.resultContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto; /* 상단 여백 증가 */
+  text-align: center;
+}
+
+.resultHeader {
+  margin-bottom: 2rem;
+}
+
+.resultSubtitle {
+  font-size: 2rem;
+  color: #545D69;
+  margin-bottom: 0.5rem;
+}
+
+.resultHeading {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.resultImageLarge {
+  width: 100%;
+  max-width: 500px;
+  margin: 1rem 0;
+  border-radius: 20px;
+}
+
+.resultDescBox {
+  padding : 2rem;
+  border-radius: 12px;
+  white-space: pre-line;
+  color: #2B3A4B;
+  margin: 0 auto 1.5rem;
+  max-width : 700px;
+  font-weight : 500;
+  font-size : 1.2rem;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.primaryButton {
+  background: #C7BCE4;
+  color: #545D69;
+  border: none;
+  border-radius: 24px;
+  padding: 0.75rem;
+  font-weight : 550;
+  transition: 0.3s ease;
+}
+
+.outlinedButton {
+  background: #fff;
+  color: #545D69;
+  border: 2px solid #D2C4FC;
+  border-radius: 24px;
+  padding: 0.75rem;
+  font-weight : 550;
+  transition: 0.3s ease;
+}
+
+
+
+.outlinedButton:hover,
+.primaryButton:hover {
+  background: #5F41B2;
+  color: #fff;
+  transform : translateY(-5px);
+  font-weight : 700;
+}

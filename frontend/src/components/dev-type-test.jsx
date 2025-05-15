@@ -269,12 +269,12 @@ const DevTypeTest = () => {
   const navigate = useNavigate();
   return (
     <div className={css.main}>
-      <div className={css.header}>
-        <h1 className={css.pageTitle}>개발자 유형 TEST</h1>
-      </div>
-
+      {/* 변경: 질문화면과 결과화면을 분리하는 최상위 div 구조 */}
       {!isDone ? (
         <>
+          <div className={css.header}>
+            <h1 className={css.pageTitle}>개발자 유형 TEST</h1>
+          </div>
           <div className={css.progressWrapper}>
             <div className={css.progressBar}>
               <div
@@ -286,19 +286,15 @@ const DevTypeTest = () => {
               {step + 1}/{questions.length}
             </div>
           </div>
-
           <section className={css.section}>
             <div className={css.questionBox}>
               <p className={css.questionTitle}>
-                <span className={css.questionNumber}>
-                  {questions[step].qNumber}.
-                </span>{" "}
-                {questions[step].q}
+                <span className={css.questionNumber}>{questions[step].qNumber}.</span> {questions[step].q}
               </p>
               <div className={css.options}>
                 {questions[step].options.map((opt, idx) => (
                   <button
-                    key={opt.type + idx}
+                    key={idx}
                     onClick={() => handleAnswer(opt.type)}
                     className={css.optionButton}
                   >
@@ -309,47 +305,27 @@ const DevTypeTest = () => {
             </div>
           </section>
         </>
-      ) : result ? (
-        <section className={css.resultSection}>
-          <div ref={resultRef} className={css.resultCard}>
-            <h2 className={css.resultTitle}>{result.title}</h2>
-            <img
-              src={result.character}
-              alt="결과 캐릭터"
-              className={css.resultImage}
-            />
-            <div className={css.desc}>
-              {result.desc.map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-          <div className={css.buttonGroup}>
-            <button className={css.retryButton} onClick={handleRestart}>
-              다시 테스트하기
-            </button>
-            <button className={css.downloadButton} onClick={handleDownload}>
-              결과 이미지 저장
-            </button>
-            <button
-              className={css.downloadButton}
-              onClick={() => navigate("/news")}
-            >
-              IT 뉴스 보기
-            </button>
-          </div>
-        </section>
       ) : (
-        <div className={css.loading}>
-          <div className={css.spinner} />
-          <p>결과를 불러오는 중...</p>
+        <div className={css.resultContainer}> {/* 변경: 결과 전용 컨테이너 */}
+          <div className={css.resultHeader}>
+            <p className={css.resultSubtitle}>나의 개발자 유형은</p>
+            <h2 className={css.resultHeading}>{result.title}</h2>
+          </div>
+          <img
+            src={result.character}
+            alt={result.title}
+            className={css.resultImageLarge}
+            ref={resultRef} // 변경: 이미지 ref로 결과 저장용 타겟
+          />
+          <div className={css.resultDescBox}>{result.desc.join("\n")}</div>
+          <div className={css.buttonGroup}>
+            <button className={css.primaryButton} onClick={() => navigate("/news")}>프론트엔드 IT 뉴스 바로가기</button>
+            <button className={css.outlinedButton} onClick={handleDownload}>결과 이미지 저장하기</button>
+            <button className={css.primaryButton} onClick={handleRestart}>테스트 다시하기</button>
+          </div>
         </div>
       )}
     </div>
   );
 };
-
 export default DevTypeTest;
