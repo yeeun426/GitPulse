@@ -47,7 +47,7 @@
 }
 .tableTitle {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: anchor-center;
 }
 .tableTitle h3 {
@@ -56,4 +56,43 @@
 .tableTitle > p {
   color: #898989;
   font-size: 15px;
+}
+.tableTitle i {
+  cursor: pointer;
+  font-size: 19px;
+  color: #898989;
+  position: relative;
+}
+.iconCon {
+  position: relative;
+  display: inline-block;
+}
+.tableDesc {
+  position: absolute;
+  left: 21rem;
+  bottom: 0rem;
+  transform: translateX(-50%);
+  background: rgba(60, 60, 60, 0.9);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+
+  padding: 1rem;
+}
+
+.iconCon:hover .tableDesc {
+  opacity: 1;
+}
+.iconCon .tableDesc ul {
+  font-size: 15px;
+}
+
+.iconCon .tableDesc p {
+  font-size: 17px;
 }

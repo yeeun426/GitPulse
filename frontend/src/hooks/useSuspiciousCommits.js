@@ -42,13 +42,17 @@ export const useSuspiciousCommits = ({ name, repo }) => {
           const reasons = [];
           let score = 0;
 
+          if (message.length < 6) {
+            score += 3;
+            reasons.push("커밋 메세지가 너무 짧습니다.");
+          }
           if (additions + deletions < 10) {
             score += 10;
-            reasons.push("변경량 적음");
+            reasons.push("변경량이 적습니다.");
           }
           if (files.length <= 1) {
             score += 3;
-            reasons.push("파일 1개만 변경");
+            reasons.push("파일 1개만 변경되었습니다.");
           }
 
           // 수정된 내용이 콘솔만 있는 경우
@@ -70,7 +74,7 @@ export const useSuspiciousCommits = ({ name, repo }) => {
 
           if (onlyConsole) {
             score += 10;
-            reasons.push("console.log만 수정");
+            reasons.push("console.log만 수정되었습니다.");
           }
 
           const nonCodeFilesOnly = files.every(
@@ -80,7 +84,7 @@ export const useSuspiciousCommits = ({ name, repo }) => {
           );
           if (nonCodeFilesOnly) {
             score += 10;
-            reasons.push("코드 파일 아님");
+            reasons.push("코드 파일 아님이 아닙니다.");
           }
 
           if (score >= 5) {
