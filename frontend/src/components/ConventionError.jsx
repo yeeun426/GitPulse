@@ -56,9 +56,13 @@ const ConventionError = ({ commits }) => {
 
   return (
     <div className={css.conventionErrorCon}>
-      <h3>
-        커밋 메세지 <strong>컨벤션 오류</strong>
-      </h3>
+      <div className={css.tableTitle}>
+        <h3>
+          커밋 메세지 <strong>컨벤션 오류</strong>
+        </h3>
+        <p>팀원 간 협업을 위해 커밋 메시지도 표준을 지켜야죠!</p>
+      </div>
+
       <ConventionErrTable commitMsgList={filteredList} />
     </div>
   );

@@ -42,11 +42,7 @@ export const useSuspiciousCommits = ({ name, repo }) => {
           const reasons = [];
           let score = 0;
 
-          if (message.length < 6) {
-            score += 3;
-            reasons.push("짧은 커밋 메세지");
-          }
-          if (additions + deletions < 10 || additions < 5 || deletions < 5) {
+          if (additions + deletions < 10) {
             score += 10;
             reasons.push("변경량 적음");
           }
