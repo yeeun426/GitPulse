@@ -7,34 +7,42 @@ const RepoTable = ({ orgs, repo }) => {
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생!</p>;
-  console.log(PRList);
+
   return (
-    <div className={css.repoTable}>
-      <h4>PR List</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Stars</th>
-            <th>Created At</th>
-            <th>Review</th>
-          </tr>
-        </thead>
-        <tbody>
-          {PRList?.map((PR, index) => (
-            <tr key={index}>
-              <td>
-                <a className={css.repoLink}>{PR.title}</a>
-              </td>
-              <td>{PR.user.login}</td>
-              <td>{PR.created_at}</td>
-              <td>
-                <button>Review</button>
-              </td>
+    <div className={css.prTable}>
+      <h5>PR List</h5>
+      <div className={css.tableWrapper}>
+        <table className={css.tableHeader}>
+          <thead>
+            <tr>
+              <th className={css.colTitle}>Title</th>
+              <th className={css.colStars}>User</th>
+              <th className={css.colCreated}>Created At</th>
+              <th className={css.colReview}>Review</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+        </table>
+        <div className={css.scrollBody}>
+          <table className={css.tableBody}>
+            <tbody>
+              {PRList?.map((PR, index) => (
+                <tr key={index}>
+                  <td className={css.colTitle}>
+                    <a className={css.prLink}>{PR.title}</a>
+                  </td>
+                  <td className={css.colStars}>{PR.user.login}</td>
+                  <td className={css.colCreated}>
+                    {PR.created_at.split("T")[0]}
+                  </td>
+                  <td className={css.colReview}>
+                    <button>Review</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

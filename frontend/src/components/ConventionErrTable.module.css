@@ -1,15 +1,14 @@
-.prTable {
+.tableWrapper {
+  width: 100%;
   background-color: white;
   border-radius: 0.75rem;
   box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
-  padding: 1rem;
+  transition: transform 0.2s ease;
   box-sizing: border-box;
-  max-height: 14rem;
-  flex: 1.4;
-}
-.tableWrapper {
-  width: 100%;
   margin-top: 1rem;
+}
+.tableWrapper:hover {
+  transform: translateY(-3px);
 }
 .tableHeader,
 .tableBody {
@@ -19,7 +18,7 @@
   font-size: 0.875rem;
 }
 .scrollBody {
-  max-height: 8rem;
+  max-height: 14rem;
   overflow-y: auto;
 }
 .tableWrapper th,
@@ -28,32 +27,25 @@
   border-bottom: 1px solid #eee;
   text-align: center;
 }
+.colCreated {
+  width: 15%;
+}
 .colTitle {
-  width: 35%;
+  width: 25%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.colStars {
-  width: 20%;
-}
-.colCreated {
-  width: 30%;
-}
-.colReview {
+.colUser {
   width: 15%;
 }
-.colReview button {
+.colResult {
+  width: 45%;
+}
+.colResult button {
   border: none;
   outline: none;
   background: #f2f2f2;
   padding: 0.3rem 0.6rem;
   border-radius: 10px;
-}
-.prLink {
-  color: inherit;
-  text-decoration: none;
-}
-.prLink:hover {
-  text-decoration: underline;
 }

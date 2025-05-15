@@ -10,7 +10,7 @@ const CommitDetect = ({ name, repo }) => {
 
   return (
     <div className={css.detectTable}>
-      <h3>커밋허수잡기</h3>
+      <h3>커밋 허수 잡기</h3>
       {loading && <div>로딩 중...</div>}
 
       <table>

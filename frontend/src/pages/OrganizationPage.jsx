@@ -231,7 +231,7 @@ const OrganizationPage = () => {
           {/* 커밋 허수 감지 / 컨벤션 오류 감지 */}
           <section className={orgs.DetectorCon}>
             <CommitDetect commits={commit} name={name} repo={selected} />
-            <ConventionError />
+            <ConventionError commits={commit} />
           </section>
         </div>
       </main>
