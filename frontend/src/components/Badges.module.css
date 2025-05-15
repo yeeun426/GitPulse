@@ -5,7 +5,12 @@
     justify-content: center;
     box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
     border-radius: 0.5rem;
+    transition : 0.2s ease;
   }
+
+.carouselWrapper:hover{
+  transform : translateY(-3px);
+}
   
   .carouselCard {
     display: flex;

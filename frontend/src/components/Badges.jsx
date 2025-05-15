@@ -1,9 +1,8 @@
 import React from "react";
-
 import css from "./Badges.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const Badges = ({badges}) => {
+const Badges = ({ badges }) => {
   const groups = [];
   for (let i = 0; i < badges.length; i += 3) {
     groups.push(badges.slice(i, i + 3));

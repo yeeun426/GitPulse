@@ -1,0 +1,68 @@
+.modalTitle{
+    color : #5F41B2
+}
+
+.badgesWrapper {
+    cursor: pointer;
+  }
+  
+.modalBody {
+    padding-top: 1rem;
+  }
+  
+.badgeList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+.badgeItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+/* 아이콘, 제목 영역 */
+.badgeIconContainer {
+    width: 8rem;
+    text-align: center;
+  }
+  
+.badgeIcon {
+    width: 8rem;
+    object-fit: cover;
+  }
+  
+.badgeTitle {
+    font-weight: bold;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+/* 설명 */
+.badgeInfo {
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .badgeDesc {
+    font-size: 0.9rem;
+    color: black;
+    line-height: 1.4;
+    margin-top : 0.25rem;
+  }
+  
+  .badgeCondition {
+    font-size: 0.8rem;
+    color: black;
+    /* margin-top: 0.25rem; */
+  }
+  
+/* 잠긴(미획득) 뱃지 블러 */
+.locked {
+    filter: blur(2px);
+    opacity: 0.4;
+  }
+  
