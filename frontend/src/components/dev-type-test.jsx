@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { toPng } from "html-to-image";
 import { useNavigate } from "react-router-dom";
-import styles from "./DevTypeTest.module.css";
+import css from "./DevTypeTest.module.css";
 
 const questions = [
   {
@@ -268,33 +268,35 @@ const DevTypeTest = () => {
   const result = topType ? results[topType] : undefined;
   const navigate = useNavigate();
   return (
-    <div className={styles.main}>
-      <div>
-        <header className={styles.header}>
-          <div className={styles.typeheader}>
-            <h1>당신의 개발자 유형은?</h1>
+    <div className={css.main}>
+      {/* 변경: 질문화면과 결과화면을 분리하는 최상위 div 구조 */}
+      {!isDone ? (
+        <>
+          <div className={css.header}>
+            <h1 className={css.pageTitle}>개발자 유형 TEST</h1>
           </div>
-        </header>
-
-        {!isDone ? (
-          <section className={styles.section}>
-            <div className={styles.progressBar}>
+          <div className={css.progressWrapper}>
+            <div className={css.progressBar}>
               <div
-                className={styles.progressFill}
+                className={css.progressFill}
                 style={{ width: `${((step + 1) / questions.length) * 100}%` }}
               />
             </div>
-
-            <div className={styles.questionBox}>
-              <p className={styles.questionTitle}>
-                {questions[step].qNumber}. {questions[step].q}
+            <div className={css.progressText}>
+              {step + 1}/{questions.length}
+            </div>
+          </div>
+          <section className={css.section}>
+            <div className={css.questionBox}>
+              <p className={css.questionTitle}>
+                <span className={css.questionNumber}>{questions[step].qNumber}.</span> {questions[step].q}
               </p>
-              <div className={styles.options}>
-                {questions[step].options.map((opt, i) => (
+              <div className={css.options}>
+                {questions[step].options.map((opt, idx) => (
                   <button
-                    key={opt.type + i}
+                    key={idx}
                     onClick={() => handleAnswer(opt.type)}
-                    className={styles.optionButton}
+                    className={css.optionButton}
                   >
                     {opt.text}
                   </button>
@@ -302,55 +304,28 @@ const DevTypeTest = () => {
               </div>
             </div>
           </section>
-        ) : result ? (
-          <section className={styles.resultSection}>
-            <div ref={resultRef} className={styles.resultCard}>
-              <h3 className={styles.resultTitle}>{result.title}</h3>
-              <img
-                src={result.character}
-                alt={result.title}
-                className={styles.resultImage}
-              />
-              <div style={{ textAlign: "center" }} className={styles.desc}>
-                {Array.isArray(result.desc)
-                  ? result.desc.map((line, idx) => (
-                      <React.Fragment key={idx}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    ))
-                  : result.desc}
-              </div>
-            </div>
-
-            <div className={styles.buttonGroup}>
-              <button onClick={handleRestart} className={styles.retryButton}>
-                다시 테스트하기
-              </button>
-              <button
-                onClick={handleDownload}
-                className={styles.downloadButton}
-              >
-                결과 이미지 저장
-              </button>
-
-              <button
-                className={styles.downloadButton}
-                onClick={() => navigate("/news")}
-              >
-                프론트엔드 IT 뉴스 바로가기
-              </button>
-            </div>
-          </section>
-        ) : (
-          <div className={styles.loading}>
-            <div className={styles.spinner}></div>
-            <p>결과를 가져오고 있어요...</p>
+        </>
+      ) : (
+        <div className={css.resultContainer}> {/* 변경: 결과 전용 컨테이너 */}
+          <div className={css.resultHeader}>
+            <p className={css.resultSubtitle}>나의 개발자 유형은</p>
+            <h2 className={css.resultHeading}>{result.title}</h2>
           </div>
-        )}
-      </div>
+          <img
+            src={result.character}
+            alt={result.title}
+            className={css.resultImageLarge}
+            ref={resultRef} // 변경: 이미지 ref로 결과 저장용 타겟
+          />
+          <div className={css.resultDescBox}>{result.desc.join("\n")}</div>
+          <div className={css.buttonGroup}>
+            <button className={css.primaryButton} onClick={() => navigate("/news")}>프론트엔드 IT 뉴스 바로가기</button>
+            <button className={css.outlinedButton} onClick={handleDownload}>결과 이미지 저장하기</button>
+            <button className={css.primaryButton} onClick={handleRestart}>테스트 다시하기</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
 export default DevTypeTest;
