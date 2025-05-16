@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CommitKing.module.css";
 import challengeImage from "../assets/challenge-visual.png";
 import goldmedal from "../assets/gold.png";
@@ -11,8 +11,9 @@ import {
   getUserFromJWT,
 } from "../apis/Challenge.js";
 import { getMonthlyCommitCount } from "../apis/github";
+import RepoRankcopy from "./RepoRankcopy";
 
-const CommitKingOnly = () => {
+const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
   const [isJoined, setIsJoined] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -59,6 +60,10 @@ const CommitKingOnly = () => {
     load();
   }, []);
 
+  const handleUserClick = (githubId) => {
+    setSelectedUser(githubId);
+  };
+
   const handleJoin = async () => {
     const user = getUserFromJWT();
     if (!user) {
@@ -81,7 +86,11 @@ const CommitKingOnly = () => {
         })
       );
 
-      const updatedList = [...othersWithCounts, newUser];
+      const updatedList = [
+        ...othersWithCounts.filter((p) => p.githubId !== user.login),
+        newUser,
+      ];
+
       const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
       const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
 
@@ -114,14 +123,20 @@ const CommitKingOnly = () => {
         })
       );
 
-      setParticipants(withCommitCounts);
+      const updatedList = withCommitCounts.filter(
+        (p) => p.githubId !== user.login
+      );
+
+      const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
+
+      setParticipants(sorted);
       setIsJoined(false);
       setCurrentUser(null);
       setCurrentUserRank(null);
-      setTopCommitUser(
-        withCommitCounts.sort((a, b) => b.commitCount - a.commitCount)[0]
-      );
+      setTopCommitUser(sorted[0] ?? null);
+      setSelectedUser(null);
     } catch (e) {
+      console.error(e);
       alert("❌ 참여 취소 실패");
     }
   };
@@ -137,7 +152,7 @@ const CommitKingOnly = () => {
       >
         <div className={styles.repoListBox}>
           <div>
-            <p className={styles.commitLabel}>Commit King</p>
+            <p className={styles.commitLabel}>Commit's Challenge</p>
           </div>
 
           <ul className={styles.repoList}>
@@ -160,7 +175,7 @@ const CommitKingOnly = () => {
                   <>
                     <img
                       src={silvermedal}
-                      alt="1위"
+                      alt="2위"
                       style={{
                         width: "24px",
                         verticalAlign: "middle",
@@ -173,7 +188,7 @@ const CommitKingOnly = () => {
                   <>
                     <img
                       src={bronzemedal}
-                      alt="1위"
+                      alt="3위"
                       style={{
                         width: "24px",
                         verticalAlign: "middle",
