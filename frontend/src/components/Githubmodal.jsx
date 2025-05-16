@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import css from "../pages/ProfilePage.module.css"; // ProfilePage 스타일 재사용
+import css from "../pages/ProfilePage.module.css";
+import modalStyle from "./GithubModal.module.css";
 import { X } from "lucide-react";
 import { getGitHubUserInfo, getUserRepos } from "../apis/github";
 import UserStatCard from "../components/UserStatCard";
@@ -30,34 +31,51 @@ const GithubModal = ({ username, onClose }) => {
     }
   }, [username]);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   // ✅ 에러 발생 시 메시지 출력
   if (error) {
     return (
-      <div className={css.modalOverlay}>
-        <div className={css.modal}>
-          <p className={css.errorMessage}>{error}</p>
-          <button className={css.modalCloseButton} onClick={onClose}>
+      <div className={modalStyle.modalOverlay}>
+        <div className={modalStyle.modalContainer}>
+          <button className={modalStyle.modalCloseButton} onClick={onClose}>
             <X />
           </button>
+          <div className={modalStyle.noResultWrapper}>
+            <img
+              src={"/img/NoSearch.svg"}
+              alt="No user found"
+              className={modalStyle.noResultImage}
+            />
+            <p className={modalStyle.noResultText}>
+            찾으시는 User가 존재하지 않습니다.<br/>
+            대신 귀여운 보노보노를 드립니다.
+            
+            </p>
+          </div>
         </div>
       </div>
     );
   }
-
   // ✅ 로딩 중
   if (!userData) {
     return (
-      <div className={css.modalOverlay}>
-        <div className={css.modal}>
+      <div className={modalStyle.modalOverlay}>
+        <div className={modalStyle.modal}>
           <p>Loading...</p>
         </div>
       </div>
     );
   }
   return (
-    <div className={css.modalOverlay}>
-      <div className={`${css.container} ${css.modalContainer}`}>
-        <button className={css.modalCloseButton} onClick={onClose}>
+    <div className={modalStyle.modalOverlay}>
+      <div className={`${css.container} ${modalStyle.modalContainer}`}>
+        <button className={modalStyle.modalCloseButton} onClick={onClose}>
           <X />
         </button>
 
@@ -65,7 +83,7 @@ const GithubModal = ({ username, onClose }) => {
           남은 요청: {rate.remaining} / {rate.limit}
         </div> */}
 
-        <main className={css.main}>
+        <main className={`${css.main} ${modalStyle.modalMain}`}>
           <Header
             name={userData.name || userData.login}
             profile={userData.avatar_url}
