@@ -21,13 +21,6 @@ export const fetchWithToken = async (path, params = {}) => {
 
 export const postWithToken = async (path, data = {}) => {
   const token = localStorage.getItem("jwt");
-
-  // 경로가 이미 full이면 그대로 쓰고, 아니면 프록시 경로로
-  // const isDirect = path.startsWith("/repos/"); // POST용 direct path 구분
-  // const fullPath = isDirect
-  //   ? `${API_BASE}/github${path}` // 예: /github/repos/:owner/:repo/...
-  //   : `${API_BASE}/github/proxy${path}`; // 프록시 GET용
-
   const res = await axios.post(`${API_BASE}/github/proxy${path}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,7 +28,6 @@ export const postWithToken = async (path, data = {}) => {
     },
     withCredentials: true,
   });
-
   return res.data;
 };
 

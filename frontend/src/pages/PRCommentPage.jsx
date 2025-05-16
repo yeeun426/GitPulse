@@ -28,14 +28,17 @@ const PRCommentPage = () => {
     setCommentTargets((prev) => ({ ...prev, [key]: value }));
   };
 
-  const getPositionInPatch = (patch, targetLineIndex) => {
+  const getPositionInPatch = (patch, targetIndex) => {
     const lines = patch.split("\n");
     let position = 0;
 
-    for (let i = 0; i <= targetLineIndex; i++) {
-      if (!lines[i].startsWith("@@")) {
-        position++;
-      }
+    for (let i = 0; i <= targetIndex; i++) {
+      const line = lines[i];
+      if (line.startsWith("@@")) continue;
+      if (line.startsWith("+++")) continue;
+      if (line.startsWith("---")) continue;
+
+      position++;
     }
 
     return position;
@@ -125,7 +128,6 @@ const PRCommentPage = () => {
                                 );
                                 return;
                               }
-
                               postReviewComment(
                                 orgs,
                                 repo,
@@ -135,7 +137,6 @@ const PRCommentPage = () => {
                                 file.filename,
                                 position
                               );
-
                               handleCommentChange(key, undefined);
                             }}
                           >

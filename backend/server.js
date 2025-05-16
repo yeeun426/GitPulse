@@ -24,7 +24,7 @@ const userAccessTokens = {};
 // OAuth URL 발급
 app.get("/oauth/github", (req, res) => {
   const redirectUri = "http://localhost:4000/oauth/github/callback";
-  const url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}`;
+  const url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=repo`;
   res.json({ url });
 });
 
@@ -134,7 +134,6 @@ app.get("/github/proxy", authenticate, async (req, res) => {
     res.status(500).json({ message: "GitHub 호출 실패" });
   }
 });
-
 app.post(
   "/github/proxy/repos/:owner/:repo/pulls/:number/comments",
   authenticate,
@@ -143,9 +142,7 @@ app.post(
     const { body, commit_id, path, position } = req.body;
 
     const token = userAccessTokens[req.user.login];
-    if (!token) {
-      return res.status(404).json({ message: "AccessToken 없음" });
-    }
+    if (!token) return res.status(404).json({ message: "AccessToken 없음" });
 
     try {
       const response = await axios.post(
@@ -163,7 +160,6 @@ app.post(
           },
         }
       );
-
       res.json(response.data);
     } catch (error) {
       console.error("리뷰 코멘트 실패:", error.response?.data || error.message);

@@ -39,16 +39,15 @@ export const postReviewComment = async (
   body,
   commitId,
   path,
-  line
+  position
 ) => {
   try {
-    console.log(owner, repo, pullNumber, body, commitId, path, line);
+    console.log(owner, repo, pullNumber, body, commitId, path, position);
     console.log({
       body,
       commit_id: commitId,
       path,
-      side: "RIGHT",
-      position: line, // <- 이거! 반드시 "diff에서의 줄 번호"
+      position,
     });
     const res = await postWithToken(
       `/repos/${owner}/${repo}/pulls/${pullNumber}/comments`,
@@ -56,8 +55,7 @@ export const postReviewComment = async (
         body,
         commit_id: commitId,
         path,
-        side: "RIGHT",
-        position: line, // <- 이거! 반드시 "diff에서의 줄 번호"
+        position: position, // diff에서의 줄 번호
       }
     );
     return res;
