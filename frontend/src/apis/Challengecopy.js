@@ -1,0 +1,51 @@
+import axios from "axios";
+
+const API_BASE = "http://localhost:4000/api/challenge";
+
+// 챌린지 참여 요청
+export const joinChallenge2 = async ({ githubId, type }) => {
+  try {
+    const res = await axios.post(`${API_BASE}/join`, {
+      githubId,
+      type, // "commit" 또는 "continue"
+    });
+    return res.data;
+  } catch (err) {
+    console.error("❌ 챌린지 참여 실패:", err.response?.data || err.message);
+    throw err;
+  }
+};
+
+// 전체 참여자 조회
+export const getAllParticipants2 = async () => {
+  try {
+    const res = await axios.get(`${API_BASE}/all`);
+    return res.data; // 참여자 배열
+  } catch (err) {
+    console.error("❌ 참여자 조회 실패:", err.response?.data || err.message);
+    throw err;
+  }
+};
+
+export const getUserFromJWT2 = () => {
+  const token = localStorage.getItem("jwt");
+  if (!token) return null;
+  try {
+    const payloadBase64 = token.split(".")[1];
+    const decoded = JSON.parse(atob(payloadBase64));
+    return decoded; // { login, name, avatar_url }
+  } catch (e) {
+    console.error("JWT decode 실패", e);
+    return null;
+  }
+};
+
+export const leaveChallenge2 = async (githubId) => {
+  try {
+    const res = await axios.delete(`${API_BASE}/leave/${githubId}`);
+    return res.data;
+  } catch (err) {
+    console.error("❌ 챌린지 취소 실패:", err.response?.data || err.message);
+    throw err;
+  }
+};
