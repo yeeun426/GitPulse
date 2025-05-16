@@ -1,6 +1,7 @@
 .container {
   display: flex;
   min-height: 90vh;
+  width : 100vw;
   background-color: #f9f9fc;
   border-radius: 16px;
 }
@@ -10,7 +11,7 @@
   flex: 1;
   padding: 2rem;
   width: 100%;
-  margin: 0 auto;
+  margin-left : 16%;
 }
 
 .contentContainer {
@@ -241,11 +242,17 @@
   cursor: pointer;
 }
 .errorMessage {
-  color: #ff4d4f; /* 붉은색 계열 */
+  color: #ff4d4f;
   font-weight: bold;
   font-size: 1.2rem;
   margin: 5rem;
   text-align: center;
   background-color: yellow;
   border-radius: 0.25rem;
+}
+
+@media (max-width: 1410px) {
+  .main {
+    margin: 0 auto;
+  }
 }

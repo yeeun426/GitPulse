@@ -3,7 +3,6 @@ import css from "./SideBar.module.css";
 import { NavLink } from "react-router-dom";
 import { throttle } from "../utils/feature";
 import { useOrganizationList } from "../apis/useOrganizationApi";
-import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
   const [isOn, setIsOn] = useState(false);
@@ -21,7 +20,7 @@ const SideBar = () => {
 
   useEffect(() => {
     setIsOn(false);
-  }, [location.pathname]);
+  }, []);
 
   const username = localStorage.getItem("username");
   const { data: groupList, isLoading, isError } = useOrganizationList(username);
