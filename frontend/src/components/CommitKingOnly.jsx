@@ -137,9 +137,7 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
       setCurrentUserRank(null);
       setTopCommitUser(sorted[0] ?? null);
       setSelectedUser(null);
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) {}
   };
 
   const commitParticipants = [...participants]
