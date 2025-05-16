@@ -63,9 +63,7 @@ const CommitKing = () => {
       const updated = await getAllParticipants2();
       setParticipants2(updated);
       setIsJoined2(false);
-    } catch (e) {
-      alert("❌ 참여 취소 실패");
-    }
+    } catch (e) {}
   };
 
   return (

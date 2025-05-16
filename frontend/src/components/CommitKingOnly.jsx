@@ -139,7 +139,6 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
       setSelectedUser(null);
     } catch (e) {
       console.error(e);
-      alert("❌ 참여 취소 실패");
     }
   };
 

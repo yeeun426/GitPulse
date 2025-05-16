@@ -1,5 +1,7 @@
 .container {
+  margin-left: 18%;
   background-color: #f9f9fc;
+  width: 100vw;
 }
 
 .container h2 {

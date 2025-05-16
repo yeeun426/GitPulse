@@ -10,11 +10,12 @@ import {
   leaveChallenge,
   getUserFromJWT,
 } from "../apis/Challenge.js";
-import { getMonthlyCommitDays } from "../apis/github"; // ✅ 변경됨
+import { getMonthlyCommitDays } from "../apis/github";
 import RepoRankcopy from "./RepoRankcopy";
 
 const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
   const [isJoined, setIsJoined] = useState(false);
+  const [isJoinedContinue, setIsJoinedContinue] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserRank, setCurrentUserRank] = useState(null);
@@ -28,8 +29,8 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
 
         const withCommitCounts = await Promise.all(
           data.map(async (p) => {
-            const dayCount = await getMonthlyCommitDays(p.githubId); // ✅ 변경됨
-            return { ...p, commitCount: dayCount }; // 이름은 유지
+            const dayCount = await getMonthlyCommitDays(p.githubId);
+            return { ...p, commitCount: dayCount };
           })
         );
 
@@ -40,6 +41,11 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
             (p) => p.githubId === user.login
           );
           setIsJoined(isUserJoined);
+
+          const isContinueJoined = data.find(
+            (p) => p.githubId === user.login && p.continue
+          );
+          setIsJoinedContinue(!!isContinueJoined);
 
           const sorted = [...withCommitCounts].sort(
             (a, b) => b.commitCount - a.commitCount
@@ -75,13 +81,13 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
       await joinChallenge({ githubId: user.login, type: "commit" });
       alert("✅ 커밋왕 참여 완료!");
 
-      const userCommitCount = await getMonthlyCommitDays(user.login); // ✅ 변경됨
+      const userCommitCount = await getMonthlyCommitDays(user.login);
       const newUser = { githubId: user.login, commitCount: userCommitCount };
 
       const existing = await getAllParticipants();
       const othersWithCounts = await Promise.all(
         existing.map(async (p) => {
-          const count = await getMonthlyCommitDays(p.githubId); // ✅ 변경됨
+          const count = await getMonthlyCommitDays(p.githubId);
           return { ...p, commitCount: count };
         })
       );
@@ -106,7 +112,7 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
     }
   };
 
-  const handleLeave = async () => {
+  const handleLeave = async (type) => {
     const user = getUserFromJWT();
     if (!user) {
       alert("🔐 로그인 후만 가능합니다.");
@@ -114,13 +120,13 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
     }
 
     try {
-      await leaveChallenge(user.login, "commit");
+      await leaveChallenge(user.login, type);
       alert("참여 취소 완료!");
 
       const data = await getAllParticipants();
       const withCommitCounts = await Promise.all(
         data.map(async (p) => {
-          const count = await getMonthlyCommitDays(p.githubId); // ✅ 변경됨
+          const count = await getMonthlyCommitDays(p.githubId);
           return { ...p, commitCount: count };
         })
       );
@@ -132,14 +138,21 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
       const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
 
       setParticipants(sorted);
-      setIsJoined(false);
-      setCurrentUser(null);
-      setCurrentUserRank(null);
-      setTopCommitUser(sorted[0] ?? null);
-      setSelectedUser(null);
+
+      if (type === "commit") {
+        setIsJoined(false);
+        setCurrentUser(null);
+        setCurrentUserRank(null);
+        setTopCommitUser(sorted[0] ?? null);
+        setSelectedUser(null);
+      } else if (type === "continue") {
+        const isStillJoined = data.find(
+          (p) => p.githubId === user.login && p.continue
+        );
+        setIsJoinedContinue(!!isStillJoined);
+      }
     } catch (e) {
       console.error(e);
-      alert("❌ 참여 취소 실패");
     }
   };
 
@@ -228,8 +241,22 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
 
       {isJoined && (
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
-          <button className={styles.joinButton} onClick={handleLeave}>
+          <button
+            className={styles.joinButton}
+            onClick={() => handleLeave("commit")}
+          >
             참여 취소
+          </button>
+        </div>
+      )}
+
+      {isJoinedContinue && (
+        <div style={{ textAlign: "center", marginTop: "1rem" }}>
+          <button
+            className={styles.joinButton}
+            onClick={() => handleLeave("continue")}
+          >
+            📭 꾸준왕 취소
           </button>
         </div>
       )}
