@@ -31,9 +31,8 @@
   border: none;
   cursor: pointer;
   z-index: 101;
-  font-size : 1.5rem;
+  font-size: 1.5rem;
 }
-
 
 .closeButton {
   display: none;
@@ -45,7 +44,7 @@
   font-size: 2rem;
   cursor: pointer;
   z-index: 102;
-  color : var(--main-purple);
+  color: var(--main-purple);
 }
 
 .icon img {
@@ -73,7 +72,7 @@
   color: var(--main-purple);
   transition: 0.5s ease;
   border-radius: 20rem;
-  background-color : #EFEFEF;
+  background-color: #efefef;
 }
 .sideBarList > a > i {
   font-size: 25px;
@@ -93,9 +92,7 @@
   margin: 1rem 0;
 }
 
-
 @media (max-width: 1410px) {
-
   .sideBarCon {
     transform: translateX(-100%);
     width: 33.333vw;
@@ -111,9 +108,9 @@
   }
 
   .closeButton {
-    display: block;              /* 작은 화면에서 닫기 버튼 표시 */
+    display: block; /* 작은 화면에서 닫기 버튼 표시 */
   }
   .icon img {
-    margin-left: 1rem;          /* 변경: 로고 왼쪽으로 이동 */
+    margin-left: 1rem; /* 변경: 로고 왼쪽으로 이동 */
   }
 }
