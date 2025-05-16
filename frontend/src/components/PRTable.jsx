@@ -10,8 +10,10 @@ const PRTable = ({ orgId, orgs, repo }) => {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생!</p>;
 
-  const handlePrComment = (id) => {
-    navigate(`/org/${orgId}/${orgs}/${id}`);
+  const handlePrComment = (number, url) => {
+    navigate(`/org/${orgId}/${orgs}/${number}`, {
+      state: { url },
+    });
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -45,7 +47,9 @@ const PRTable = ({ orgId, orgs, repo }) => {
                         {PR.created_at.split("T")[0]}
                       </td>
                       <td className={css.colReview}>
-                        <button onClick={() => handlePrComment(PR.id)}>
+                        <button
+                          onClick={() => handlePrComment(PR.number, PR.url)}
+                        >
                           Review
                         </button>
                       </td>

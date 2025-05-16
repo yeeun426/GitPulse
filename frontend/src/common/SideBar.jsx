@@ -24,7 +24,6 @@ const SideBar = () => {
   const username = localStorage.getItem("username");
 
   const { data: groupList, isLoading, isError } = useOrganizationList(username);
-  console.log(groupList);
 
   const handleLogout = () => {
     localStorage.removeItem("username");
