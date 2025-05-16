@@ -24,9 +24,7 @@ const ConventionErrTable = ({ commitMsgList }) => {
                 </td>
                 <td className={css.colTitle}>{commitMsg.message}</td>
                 <td className={css.colUser}>{commitMsg.author}</td>
-                <td className={css.colResult}>
-                  ❗️어쩌구저쩌구 컨벤션을 지켜주세요
-                </td>
+                <td className={css.colResult}>🚨{commitMsg.result}</td>
               </tr>
             ))}
           </tbody>
