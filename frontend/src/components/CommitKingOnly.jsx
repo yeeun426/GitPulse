@@ -1,31 +1,57 @@
 import { useEffect, useState } from "react";
 import styles from "./CommitKing.module.css";
 import challengeImage from "../assets/challenge-visual.png";
+import goldmedal from "../assets/gold.png";
+import silvermedal from "../assets/silver.png";
+import bronzemedal from "../assets/bronze.png";
 import {
   getAllParticipants,
   joinChallenge,
   leaveChallenge,
   getUserFromJWT,
 } from "../apis/Challenge.js";
+import { getMonthlyCommitCount } from "../apis/github";
 
 const CommitKingOnly = () => {
   const [isJoined, setIsJoined] = useState(false);
   const [participants, setParticipants] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserRank, setCurrentUserRank] = useState(null);
+  const [topCommitUser, setTopCommitUser] = useState(null);
 
   useEffect(() => {
     const load = async () => {
       try {
         const data = await getAllParticipants();
-        setParticipants(data);
-
         const user = getUserFromJWT();
+
+        const withCommitCounts = await Promise.all(
+          data.map(async (p) => {
+            const count = await getMonthlyCommitCount(p.githubId);
+            return { ...p, commitCount: count };
+          })
+        );
+
+        setParticipants(withCommitCounts);
+
         if (user) {
-          const userData = data.find((p) => p.githubId === user.login);
-          if (userData?.commit) {
-            setIsJoined(true);
-          }
+          const isUserJoined = withCommitCounts.some(
+            (p) => p.githubId === user.login
+          );
+          setIsJoined(isUserJoined);
+
+          const sorted = [...withCommitCounts].sort(
+            (a, b) => b.commitCount - a.commitCount
+          );
+          const current = sorted.find((p) => p.githubId === user.login);
+          const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
+
+          setCurrentUser(current);
+          setCurrentUserRank(rank);
+          setTopCommitUser(sorted[0]);
         }
       } catch (e) {
+        console.error(e);
         alert("❌ 참여자 목록 불러오기 실패");
       }
     };
@@ -43,9 +69,27 @@ const CommitKingOnly = () => {
     try {
       await joinChallenge({ githubId: user.login, type: "commit" });
       alert("✅ 커밋왕 참여 완료!");
-      const updated = await getAllParticipants();
-      setParticipants(updated);
+
+      const userCommitCount = await getMonthlyCommitCount(user.login);
+      const newUser = { githubId: user.login, commitCount: userCommitCount };
+
+      const existing = await getAllParticipants();
+      const othersWithCounts = await Promise.all(
+        existing.map(async (p) => {
+          const count = await getMonthlyCommitCount(p.githubId);
+          return { ...p, commitCount: count };
+        })
+      );
+
+      const updatedList = [...othersWithCounts, newUser];
+      const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
+      const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
+
+      setParticipants(sorted);
       setIsJoined(true);
+      setCurrentUser(newUser);
+      setCurrentUserRank(rank);
+      setTopCommitUser(sorted[0]);
     } catch (e) {
       alert("⚠️ 이미 참여했거나 오류가 발생했습니다.");
     }
@@ -61,15 +105,30 @@ const CommitKingOnly = () => {
     try {
       await leaveChallenge(user.login, "commit");
       alert("🚫 커밋왕 참여 취소 완료!");
-      const updated = await getAllParticipants();
-      setParticipants(updated);
+
+      const data = await getAllParticipants();
+      const withCommitCounts = await Promise.all(
+        data.map(async (p) => {
+          const count = await getMonthlyCommitCount(p.githubId);
+          return { ...p, commitCount: count };
+        })
+      );
+
+      setParticipants(withCommitCounts);
       setIsJoined(false);
+      setCurrentUser(null);
+      setCurrentUserRank(null);
+      setTopCommitUser(
+        withCommitCounts.sort((a, b) => b.commitCount - a.commitCount)[0]
+      );
     } catch (e) {
       alert("❌ 참여 취소 실패");
     }
   };
 
-  const commitParticipants = participants.filter((p) => p.commit);
+  const commitParticipants = [...participants]
+    .filter((p) => p.commitCount > 0)
+    .sort((a, b) => b.commitCount - a.commitCount);
 
   return (
     <div className={styles.container}>
@@ -82,8 +141,53 @@ const CommitKingOnly = () => {
           </div>
 
           <ul className={styles.repoList}>
-            {commitParticipants.map((p) => (
-              <li key={p.githubId}>{p.githubId}</li>
+            {commitParticipants.map((p, index) => (
+              <li key={p.githubId}>
+                {index === 0 ? (
+                  <>
+                    <img
+                      src={goldmedal}
+                      alt="1위"
+                      style={{
+                        width: "24px",
+                        verticalAlign: "middle",
+                        marginRight: "6px",
+                      }}
+                    />
+                    {p.githubId} ({p.commitCount ?? 0} commits)
+                  </>
+                ) : index === 1 ? (
+                  <>
+                    <img
+                      src={silvermedal}
+                      alt="1위"
+                      style={{
+                        width: "24px",
+                        verticalAlign: "middle",
+                        marginRight: "6px",
+                      }}
+                    />
+                    {p.githubId} ({p.commitCount ?? 0} commits)
+                  </>
+                ) : index === 2 ? (
+                  <>
+                    <img
+                      src={bronzemedal}
+                      alt="1위"
+                      style={{
+                        width: "24px",
+                        verticalAlign: "middle",
+                        marginRight: "6px",
+                      }}
+                    />
+                    {p.githubId} ({p.commitCount ?? 0} commits)
+                  </>
+                ) : (
+                  <>
+                    {index + 1}위 - {p.githubId} ({p.commitCount ?? 0} commits)
+                  </>
+                )}
+              </li>
             ))}
           </ul>
 

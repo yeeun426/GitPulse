@@ -291,3 +291,43 @@ export const getUserCommitActivity = async (username) => {
 export async function getRateLimit() {
   return await fetchWithToken("/rate_limit");
 }
+export const getMonthlyCommitCount = async (username) => {
+  try {
+    const since = new Date();
+    since.setMonth(since.getMonth() - 1);
+    const sinceISOString = since.toISOString();
+
+    const events = [];
+    for (let page = 1; page <= 3; page++) {
+      const res = await fetchWithToken(`/users/${username}/events`, {
+        per_page: 100,
+        page,
+      });
+
+      if (!Array.isArray(res) || res.length === 0) break;
+
+      res.forEach((event) => {
+        if (
+          event.type === "PushEvent" &&
+          new Date(event.created_at) >= new Date(sinceISOString)
+        ) {
+          events.push(event);
+        }
+      });
+
+      if (res.length < 100) break;
+    }
+
+    let commitCount = 0;
+    events.forEach((e) => {
+      if (e.payload?.commits) {
+        commitCount += e.payload.commits.length;
+      }
+    });
+
+    return commitCount;
+  } catch (err) {
+    console.error("월간 커밋 수 계산 실패:", err);
+    return 0;
+  }
+};
