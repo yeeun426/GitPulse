@@ -42,16 +42,26 @@ const GithubModal = ({ username, onClose }) => {
   if (error) {
     return (
       <div className={modalStyle.modalOverlay}>
-        <div className={modalStyle.modal}>
-          <p className={modalStyle.errorMessage}>{error}</p>
+        <div className={modalStyle.modalContainer}>
           <button className={modalStyle.modalCloseButton} onClick={onClose}>
             <X />
           </button>
+          <div className={modalStyle.noResultWrapper}>
+            <img
+              src={"/img/NoSearch.svg"}
+              alt="No user found"
+              className={modalStyle.noResultImage}
+            />
+            <p className={modalStyle.noResultText}>
+            찾으시는 User가 존재하지 않습니다.<br/>
+            대신 귀여운 보노보노를 드립니다.
+            
+            </p>
+          </div>
         </div>
       </div>
     );
   }
-
   // ✅ 로딩 중
   if (!userData) {
     return (
