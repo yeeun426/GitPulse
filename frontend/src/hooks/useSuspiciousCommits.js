@@ -46,7 +46,7 @@ export const useSuspiciousCommits = ({ name, repo }) => {
             score += 3;
             reasons.push("커밋 메세지가 너무 짧습니다.");
           }
-          if (additions + deletions < 10) {
+          if (additions + deletions < 6) {
             score += 10;
             reasons.push("변경량이 적습니다.");
           }
@@ -80,7 +80,7 @@ export const useSuspiciousCommits = ({ name, repo }) => {
           const nonCodeFilesOnly = files.every(
             (file) =>
               /\.(md|json|yml|lock|env|txt)$/i.test(file.filename) ||
-              !/\.(js|ts|jsx|tsx|java|py|go|cpp|cs)$/i.test(file.filename)
+              !/\.(js|ts|jsx|tsx|java|py|go|cpp|cs|css)$/i.test(file.filename)
           );
           if (nonCodeFilesOnly) {
             score += 10;

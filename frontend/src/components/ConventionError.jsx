@@ -6,6 +6,7 @@ const ConventionError = ({ commits }) => {
   const allowedPrefixes = [
     "feat",
     "fix",
+    "bug",
     "style",
     "refactor",
     "test",
