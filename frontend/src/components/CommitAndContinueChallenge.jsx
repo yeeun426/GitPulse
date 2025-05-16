@@ -240,7 +240,7 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
                       textAlign: "right",
                     }}
                   >
-                    ({p.commitCount ?? 0} days)
+                    {p.commitCount ?? 0}일
                   </div>
                 </li>
               );
