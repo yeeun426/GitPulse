@@ -47,13 +47,27 @@
 .icon img {
   height: 90px;
 }
+
 .sideBarList {
   display: flex;
   flex-direction: column;
   gap: 15px;
   margin-top: 15px;
-  
+  overflow-x: hidden;
 }
+
+.sideBarList>a:hover{
+  background-color: #efefef;
+  border-radius: 20rem;
+}
+
+.scrollableArea {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px); /* 아이콘과 로그아웃 제외한 영역 */
+  padding-bottom: 1rem;
+  overflow-x: hidden;
+}
+
 .sideBarList > a {
   color: var(--main-dark-gray);
   padding: 10px 20px 10px 30px;
@@ -65,6 +79,7 @@
   font-family: inter;
   font-size: 18px;
   text-decoration: none;
+  transition : 0.3s ease;
 }
 .sideBarList > a.active {
   color: var(--main-purple);
@@ -114,7 +129,8 @@
     transition: transform 0.3s ease;
   }
   .sideBarCon.on {
-    transform: translateX(0);
+    
+    transform : left;
   }
 
   .hamburger {

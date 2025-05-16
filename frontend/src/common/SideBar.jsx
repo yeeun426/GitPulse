@@ -59,6 +59,7 @@ const SideBar = () => {
             <img src="/img/icon_mini.png" alt="logo" />
           </a>
         </div>
+        <div className={css.scrollableArea}>
         <div className={css.sideBarList}>
           <CustomNavLink
             to="/profile"
@@ -75,7 +76,9 @@ const SideBar = () => {
               onClick={handleNavClick}
             />
           ))}
+          </div>
           <div className={css.divider}></div>
+          <div className={css.sideBarList}>
           <CustomNavLink
             to="/news"
             label="IT News"
@@ -101,6 +104,7 @@ const SideBar = () => {
             onClick={handleNavClick}
           />
           <CustomNavLink to="/study" label="스터디" icon="bi-pencil" />
+          </div>
           <button className={css.logoutButton} onClick={handleLogout}>
             로그아웃
           </button>
