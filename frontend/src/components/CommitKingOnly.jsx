@@ -171,12 +171,22 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: "8px",
+                    justifyContent: "center",
+                    padding: "8px 0",
+                    position: "relative",
                   }}
                 >
                   {/* 왼쪽: 메달 or 등수 */}
-                  <div style={{ width: "40px", textAlign: "left" }}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100px",
+                      justifyContent: "flex-start",
+                    }}
+                  >
                     {medal ? (
                       <img
                         src={medal}
@@ -189,12 +199,25 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
                   </div>
 
                   {/* 가운데: GitHub ID */}
-                  <div style={{ flex: 1, textAlign: "center" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      minWidth: "200px",
+                    }}
+                  >
                     {p.githubId}
                   </div>
 
                   {/* 오른쪽: 커밋 수 */}
-                  <div style={{ width: "120px", textAlign: "right" }}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      width: "100px",
+                      textAlign: "right",
+                    }}
+                  >
                     {p.commitCount ?? 0}회
                   </div>
                 </li>

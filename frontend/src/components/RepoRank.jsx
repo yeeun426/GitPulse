@@ -40,29 +40,12 @@ const RepoRank = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.containertitle}>Open Repositories</h2>
+      <h2 className={styles.containertitle}>Commits</h2>
       <div className={styles.contentBox}>
         {/* 📦 레포리스트 + 정렬 + 페이지네이션 */}
 
-        <div className={styles.repoListBox}>
-          <div className={styles.sortTabs}>
-            {["stars", "created", "updated"].map((type) => (
-              <button
-                key={type}
-                onClick={() => {
-                  setSortType(type);
-                  setPage(1);
-                }}
-                className={`${styles.sortButton} ${
-                  sortType === type ? styles.active : ""
-                }`}
-              >
-                {type === "stars" && "인기순"}
-                {type === "created" && "최근 생성"}
-                {type === "updated" && "최근 수정"}
-              </button>
-            ))}
-          </div>
+        <div className={styles.readmeViewer}>
+          <h3 className={styles.readmeHeader}> CONTENT</h3>
 
           <ul className={styles.repoList}>
             {repos.map((repo, idx) => (
@@ -110,13 +93,13 @@ const RepoRank = () => {
 
         {/* 📘 README 뷰어 */}
         <div className={styles.readmeViewer}>
-          <h3 className={styles.readmeHeader}> README</h3>
+          <h3 className={styles.readmeHeader}> CONTENT</h3>
           <div className={styles.readmeScrollable}>
             {selectedReadme ? (
               <ReactMarkdown>{selectedReadme}</ReactMarkdown>
             ) : (
               <div className={styles.emptyPlaceholder}>
-                📄 README를 선택하세요
+                📄 commit를 선택하세요
               </div>
             )}
           </div>

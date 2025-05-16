@@ -193,12 +193,22 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
                     padding: "8px 0",
+                    position: "relative",
                   }}
                 >
-                  {/* 왼쪽: 등수 or 메달 */}
-                  <div style={{ width: "40px", textAlign: "left" }}>
+                  {/* 왼쪽: 등수 또는 메달 */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100px",
+                      justifyContent: "flex-start",
+                    }}
+                  >
                     {medal ? (
                       <img
                         src={medal}
@@ -211,13 +221,26 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
                   </div>
 
                   {/* 가운데: GitHub ID */}
-                  <div style={{ flex: 1, textAlign: "center" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      minWidth: "200px",
+                    }}
+                  >
                     {p.githubId}
                   </div>
 
                   {/* 오른쪽: commit 일수 */}
-                  <div style={{ width: "100px", textAlign: "right" }}>
-                    {p.commitCount ?? 0}일
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      width: "100px",
+                      textAlign: "right",
+                    }}
+                  >
+                    ({p.commitCount ?? 0} days)
                   </div>
                 </li>
               );
