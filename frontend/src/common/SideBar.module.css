@@ -6,7 +6,49 @@
   border-right: 1px solid #b4b6c573;
   height: calc(100vh - 4rem);
   margin: 2rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #fff;
+  transition: transform 0.3s ease;
+  z-index: 100;
 }
+
+/* 오버레이 */
+.sideBarCon.on {
+  transform: translateX(0);
+}
+
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 101;
+  font-size : 1.5rem;
+}
+
+
+.closeButton {
+  display: none;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 102;
+  color : var(--main-purple);
+}
+
 .icon img {
   height: 90px;
 }
@@ -26,11 +68,13 @@
   font-weight: 400;
   font-family: inter;
   font-size: 18px;
+  text-decoration: none;
 }
 .sideBarList > a.active {
   color: var(--main-purple);
   transition: 0.5s ease;
-  border-radius: 15px;
+  border-radius: 20rem;
+  background-color : #EFEFEF;
 }
 .sideBarList > a > i {
   font-size: 25px;
@@ -43,4 +87,34 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+.divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 1rem 0;
+}
+
+
+@media (max-width: 1410px) {
+
+  .sideBarCon {
+    transform: translateX(-100%);
+    width: 33.333vw;
+    height: 100vh;
+    margin: 0;
+  }
+  .sideBarCon.on {
+    transform: translateX(0);
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .closeButton {
+    display: block;              /* 작은 화면에서 닫기 버튼 표시 */
+  }
+  .icon img {
+    margin-left: 1rem;          /* 변경: 로고 왼쪽으로 이동 */
+  }
 }

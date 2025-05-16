@@ -4,88 +4,95 @@ import { NavLink } from "react-router-dom";
 import { throttle } from "../utils/feature";
 import { useOrganizationList } from "../apis/useOrganizationApi";
 import { useNavigate } from "react-router-dom";
+
 const SideBar = () => {
-  const [isOn, setIsOn] = useState(false); // 반응형에 필요 (아직 미적용)
-  const navigate = useNavigate();
+  const [isOn, setIsOn] = useState(false);
+
   const handleResize = throttle(() => {
-    if (window.innerWidth > 1100) {
+    if (window.innerWidth > 1410) {
       setIsOn(false);
     }
-  }, 1000);
+  }, 200);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [handleResize]);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    setIsOn(false);
+  }, [location.pathname]);
 
   const username = localStorage.getItem("username");
-
   const { data: groupList, isLoading, isError } = useOrganizationList(username);
-  console.log(groupList);
-  // ✅ 로그아웃 핸들러
+
   const handleLogout = () => {
     localStorage.removeItem("username");
-    localStorage.removeItem("token"); // 필요 시 추가
-    navigate("/"); // 로그인 페이지로 이동
+    localStorage.removeItem("token");
+    navigate("/");
   };
-  isLoading && <p>Loading</p>;
-  isError && <p>에러 발생</p>;
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>에러 발생</p>;
 
   return (
-    <div className={isOn ? `${css.sideBarCon} ${css.on}` : css.sideBarCon}>
-      <div className={css.icon}>
-        <a href="/profile">
-          <img src="/img/icon_mini.png" />
-        </a>
-      </div>
-      <div className={css.sideBarList}>
-        <CustomNavLink
-          to={"/profile"}
-          label={"My Git"}
-          icon={"bi-person-fill"}
-        />
-        {groupList?.map((group) => (
-          <CustomNavLink
-            key={group.id}
-            to={`/org/${group.id}/${group.login}`}
-            label={group.login}
-            icon={"bi-people-fill"}
-          />
-        ))}
-        <div className={css.divider}></div>
-        <CustomNavLink to={"/news"} label={"IT News"} icon={"bi-newspaper"} />
-        <CustomNavLink
-          to={"/test"}
-          label={"개발자 유형 테스트"}
-          icon={"bi-emoji-smile"}
-        />
-        <CustomNavLink
-          to={"/commitshare"}
-          label={"commit 공유 게시판"}
-          icon={"bi bi-chat-text"}
-        />
-        <CustomNavLink
-          to={"/challenged"}
-          label={"Challenged"}
-          icon={"bi bi-joystick"}
-        />
-
-        <CustomNavLink to={"/study"} label={"스터디"} icon={"bi bi-pencil"} />
-        <button className={css.logoutButton} onClick={handleLogout}>
-          로그아웃
+    <>
+      {!isOn && (
+        <button className={css.hamburger} onClick={() => setIsOn(!isOn)}>
+          <i className="bi bi-list" aria-label="Open sidebar"></i>
         </button>
+      )}
+
+      <div className={`${css.sideBarCon} ${isOn ? css.on : ""}`}>
+        {isOn && (
+          <button className={css.closeButton} onClick={() => setIsOn(false)}>
+            <i className="bi bi-x" aria-label="Close sidebar" />
+          </button>
+        )}
+        <div className={css.icon}>
+          <a href="/profile">
+            <img src="/img/icon_mini.png" alt="logo" />
+          </a>
+        </div>
+        <div className={css.sideBarList}>
+          <CustomNavLink to="/profile" label="My Git" icon="bi-person-fill" />
+          {groupList?.map((group) => (
+            <CustomNavLink
+              key={group.id}
+              to={`/org/${group.id}/${group.login}`}
+              label={group.login}
+              icon="bi-people-fill"
+            />
+          ))}
+          <div className={css.divider}></div>
+          <CustomNavLink to="/news" label="IT News" icon="bi-newspaper" />
+          <CustomNavLink
+            to="/test"
+            label="개발자 유형 테스트"
+            icon="bi-emoji-smile"
+          />
+          <CustomNavLink
+            to="/commitshare"
+            label="commit 공유 게시판"
+            icon="bi-chat-text"
+          />
+          <CustomNavLink
+            to="/challenged"
+            label="Challenged"
+            icon="bi-joystick"
+          />
+          <CustomNavLink to="/study" label="스터디" icon="bi-pencil" />
+          <button className={css.logoutButton} onClick={handleLogout}>
+            로그아웃
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
 const CustomNavLink = ({ to, label, icon }) => (
-  <NavLink
-    className={({ isActive }) => (isActive ? `${css.active}` : "")}
-    to={to}
-  >
+  <NavLink className={({ isActive }) => (isActive ? css.active : "")} to={to}>
     <i className={`bi ${icon}`}></i>
     <p> {label}</p>
   </NavLink>

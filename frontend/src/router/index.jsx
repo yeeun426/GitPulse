@@ -57,10 +57,6 @@ export const router = createBrowserRouter([
         path: "challenged",
         element: <Challenged />,
       },
-      {
-        path: "gitmodal",
-        element: <ModalTest />,
-      },
     ],
   },
 ]);

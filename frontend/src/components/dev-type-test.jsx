@@ -288,9 +288,10 @@ const DevTypeTest = () => {
           </div>
           <section className={css.section}>
             <div className={css.questionBox}>
-              <p className={css.questionTitle}>
-                <span className={css.questionNumber}>{questions[step].qNumber}.</span> {questions[step].q}
-              </p>
+              <div className={css.questionTitle}>
+                <p className={css.questionNumber}>{questions[step].qNumber}.</p>
+                <p className={css.questionText}>{questions[step].q}</p>
+              </div>
               <div className={css.options}>
                 {questions[step].options.map((opt, idx) => (
                   <button
@@ -306,7 +307,9 @@ const DevTypeTest = () => {
           </section>
         </>
       ) : (
-        <div className={css.resultContainer}> {/* 변경: 결과 전용 컨테이너 */}
+        <div className={css.resultContainer}>
+          {" "}
+          {/* 변경: 결과 전용 컨테이너 */}
           <div className={css.resultHeader}>
             <p className={css.resultSubtitle}>나의 개발자 유형은</p>
             <h2 className={css.resultHeading}>{result.title}</h2>
@@ -319,9 +322,18 @@ const DevTypeTest = () => {
           />
           <div className={css.resultDescBox}>{result.desc.join("\n")}</div>
           <div className={css.buttonGroup}>
-            <button className={css.primaryButton} onClick={() => navigate("/news")}>프론트엔드 IT 뉴스 바로가기</button>
-            <button className={css.outlinedButton} onClick={handleDownload}>결과 이미지 저장하기</button>
-            <button className={css.primaryButton} onClick={handleRestart}>테스트 다시하기</button>
+            <button
+              className={css.primaryButton}
+              onClick={() => navigate("/news")}
+            >
+              프론트엔드 IT 뉴스 바로가기
+            </button>
+            <button className={css.outlinedButton} onClick={handleDownload}>
+              결과 이미지 저장하기
+            </button>
+            <button className={css.primaryButton} onClick={handleRestart}>
+              테스트 다시하기
+            </button>
           </div>
         </div>
       )}
