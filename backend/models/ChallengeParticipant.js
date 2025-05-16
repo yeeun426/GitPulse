@@ -10,7 +10,7 @@ const challengeParticipantSchema = new mongoose.Schema({
   commit: { type: Boolean, default: false },
 
   // 꾸준왕 챌린지 기준 시작일 (참여한 날짜)
-  continue: { type: Date, required: true },
+  continue: { type: Date },
 });
 
 // 'ChallengeParticipant' 라는 이름으로 모델을 등록 및 내보내기

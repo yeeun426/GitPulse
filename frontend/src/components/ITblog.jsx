@@ -12,6 +12,8 @@ import {
   defaultImageMap,
   fetchRssFeeds,
 } from "../apis/ItBlogapi.js";
+import CustomScrollbar from "./CustomScrollbar"; // ✅ 추가
+import Challenge from "./Challenge.jsx";
 
 const extractImage = (html) => {
   const match = html?.match(/<img.*?src=["'](.*?)['"]/);
@@ -143,6 +145,9 @@ const ITblog = () => {
           </div>
         </SwiperSlide>
       </Swiper>
+
+      {/* ✅ 커스텀 스크롤바 표시 */}
+      {swiperRef.current && <CustomScrollbar swiper={swiperRef.current} />}
     </div>
   );
 };

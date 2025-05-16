@@ -40,9 +40,11 @@ export const getUserFromJWT = () => {
   }
 };
 
-export const leaveChallenge = async (githubId) => {
+export const leaveChallenge = async (githubId, type) => {
   try {
-    const res = await axios.delete(`${API_BASE}/leave/${githubId}`);
+    const res = await axios.delete(
+      `${API_BASE}/leave/${githubId}?type=${type}`
+    );
     return res.data;
   } catch (err) {
     console.error("❌ 챌린지 취소 실패:", err.response?.data || err.message);
