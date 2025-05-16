@@ -11,15 +11,16 @@ import {
   getUserFromJWT,
 } from "../apis/Challenge.js";
 import { getMonthlyCommitDays } from "../apis/github";
-import RepoRankcopy from "./RepoRankcopy";
+import RepoRankcopy from "./RepoRankcopy"; // RepoRankcopy를 사용
 
-const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
+const CommitAndContinueChallenge = () => {
   const [isJoined, setIsJoined] = useState(false);
   const [isJoinedContinue, setIsJoinedContinue] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserRank, setCurrentUserRank] = useState(null);
   const [topCommitUser, setTopCommitUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // 추가
 
   useEffect(() => {
     const load = async () => {
@@ -222,7 +223,13 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
                       textAlign: "center",
                       fontWeight: "bold",
                       minWidth: "200px",
+                      cursor: "pointer",
+                      color:
+                        selectedUser === p.githubId ? "#1976d2" : "inherit",
+                      textDecoration:
+                        selectedUser === p.githubId ? "underline" : "none",
                     }}
+                    onClick={() => setSelectedUser(p.githubId)}
                   >
                     {p.githubId}
                   </div>
@@ -249,6 +256,13 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
         </div>
       </div>
 
+      {/* 아래에 RepoRankcopy 추가 */}
+      {selectedUser && (
+        <div style={{ marginTop: 40 }}>
+          <RepoRankcopy selectedUser={selectedUser} />
+        </div>
+      )}
+
       {/* 정리된 꾸준왕 참여/취소 버튼 */}
       {!isJoinedContinue && (
         <div className={styles.joinOverlay}>
@@ -269,7 +283,10 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <button
             className={styles.joinButton}
-            onClick={() => handleLeave("continue")}
+            onClick={() => {
+              handleLeave("continue");
+              setSelectedUser(null);
+            }}
           >
             참여 취소
           </button>

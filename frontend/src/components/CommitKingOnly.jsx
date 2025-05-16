@@ -13,12 +13,13 @@ import {
 import { getMonthlyCommitCount } from "../apis/github";
 import RepoRankcopy from "./RepoRankcopy";
 
-const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
+const CommitKingOnly = () => {
   const [isJoined, setIsJoined] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserRank, setCurrentUserRank] = useState(null);
   const [topCommitUser, setTopCommitUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // 추가
 
   useEffect(() => {
     const load = async () => {
@@ -136,7 +137,7 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
       setCurrentUser(null);
       setCurrentUserRank(null);
       setTopCommitUser(sorted[0] ?? null);
-      setSelectedUser(null);
+      setSelectedUser(null); // 참여취소 시 RepoRankcopy 안보이게
     } catch (e) {}
   };
 
@@ -204,7 +205,13 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
                       textAlign: "center",
                       fontWeight: "bold",
                       minWidth: "200px",
+                      cursor: "pointer",
+                      color:
+                        selectedUser === p.githubId ? "#1976d2" : "inherit",
+                      textDecoration:
+                        selectedUser === p.githubId ? "underline" : "none",
                     }}
+                    onClick={() => handleUserClick(p.githubId)}
                   >
                     {p.githubId}
                   </div>
@@ -230,6 +237,13 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
           </div>
         </div>
       </div>
+
+      {/* 아래에 RepoRankcopy 추가 */}
+      {selectedUser && (
+        <div style={{ marginTop: 40 }}>
+          <RepoRankcopy selectedUser={selectedUser} />
+        </div>
+      )}
 
       {!isJoined && (
         <div className={styles.joinOverlay}>

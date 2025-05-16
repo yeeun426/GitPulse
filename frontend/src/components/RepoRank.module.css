@@ -1,8 +1,78 @@
+/* RepoRank.module.css */
+
 .container {
+  width: 80vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 24px;
+  box-sizing: border-box;
   font-family: "Pretendard", sans-serif;
+}
+
+.containertitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+.contentBox {
+  display: flex;
+  flex: 1;
+  gap: 24px;
+  height: 100%;
+}
+
+.readmeViewer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  width: 100vw;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #f3f5f7;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+.readmeHeader {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 6px 12px;
+  background-color: #c7bce4;
+  margin-bottom: 8px;
+}
+
+.readmeScrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background-color: white;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  border-radius: 4px;
+}
+
+.emptyPlaceholder {
+  color: #888;
+  padding: 8px;
+  text-align: center;
+}
+
+.repoButton {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 14px 0;
+  width: 100%;
+  background-color: #0366d6;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .sortTabs {
@@ -12,16 +82,13 @@
 .sortButton {
   padding: 6px 12px;
   font-size: 14px;
-  border: 0px solid black;
-  background-color: f3f5f7;
+  border: none;
+  background-color: #f3f5f7;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
-.boxbutton {
-  margin: 0.2rem;
-  border: none;
-}
+
 .sortButton:hover {
   font-weight: bold;
 }
@@ -31,23 +98,15 @@
   border-color: #bbb;
 }
 
-.contentBox {
-  display: flex;
-  gap: 24px;
-}
-
-.readmeHeader {
-  font-size: 16px;
-  font-weight: bold;
-  padding: 6px 12px;
-  background-color: #c7bce4;
+.boxbutton {
+  margin: 0.2rem;
+  border: none;
 }
 
 .repoList {
   width: 100%;
   list-style: none;
   padding: 22px;
-
   margin: 0;
   background-color: #fff;
 }
@@ -61,6 +120,7 @@
   border-bottom: 1px solid #eee;
   position: relative;
 }
+
 .repoListBox {
   width: 40%;
   border: 1px solid #e0e0e0;
@@ -96,19 +156,6 @@
   opacity: 1;
 }
 
-.readmeViewer {
-  width: 50%;
-  max-height: 600px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background-color: #f3f5f7;
-  font-size: 14px;
-  line-height: 1.6;
-  overflow: hidden; /* ✅ 스크롤 제거 */
-}
-
 .fadeOverlay {
   position: sticky;
   background: linear-gradient(to bottom, rgba(250, 250, 250, 0), #fafafa);
@@ -121,29 +168,10 @@
   display: block;
 }
 
-.repoButton {
-  display: block;
-  width: 100%;
-  text-align: center;
-  background-color: #e8ebf0;
-  color: #555;
-  font-weight: bold;
-  text-decoration: none;
-  padding: 14px 0;
-}
-.readmeScrollable {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  background-color: white;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
 .pagination {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* ✅ 줄바꿈 허용 */
+  flex-wrap: wrap;
   gap: 8px;
   margin: 16px 0;
 }
@@ -178,9 +206,7 @@
 }
 
 .activePage {
-  background-color: #1976d2;
-  color: #fff;
-}
-.containertitle {
-  margin-bottom: 3rem;
+  background-color: #007bff !important;
+  color: white !important;
+  font-weight: bold;
 }
