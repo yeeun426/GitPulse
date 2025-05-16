@@ -31,6 +31,12 @@ const SideBar = () => {
     navigate("/");
   };
 
+  const handleNavClick = () => {
+    if (window.innerWidth <= 1410) {
+      setIsOn(false);
+    }
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생</p>;
 
@@ -54,31 +60,45 @@ const SideBar = () => {
           </a>
         </div>
         <div className={css.sideBarList}>
-          <CustomNavLink to="/profile" label="My Git" icon="bi-person-fill" />
+          <CustomNavLink
+            to="/profile"
+            label="My Git"
+            icon="bi-person-fill"
+            onClick={handleNavClick}
+          />
           {groupList?.map((group) => (
             <CustomNavLink
               key={group.id}
               to={`/org/${group.id}/${group.login}`}
               label={group.login}
               icon="bi-people-fill"
+              onClick={handleNavClick}
             />
           ))}
           <div className={css.divider}></div>
-          <CustomNavLink to="/news" label="IT News" icon="bi-newspaper" />
+          <CustomNavLink
+            to="/news"
+            label="IT News"
+            icon="bi-newspaper"
+            onClick={handleNavClick}
+          />
           <CustomNavLink
             to="/test"
             label="개발자 유형 테스트"
             icon="bi-emoji-smile"
+            onClick={handleNavClick}
           />
           <CustomNavLink
             to="/commitshare"
             label="commit 공유 게시판"
             icon="bi-chat-text"
+            onClick={handleNavClick}
           />
           <CustomNavLink
             to="/challenged"
             label="Challenged"
             icon="bi-joystick"
+            onClick={handleNavClick}
           />
           <CustomNavLink to="/study" label="스터디" icon="bi-pencil" />
           <button className={css.logoutButton} onClick={handleLogout}>
@@ -90,8 +110,12 @@ const SideBar = () => {
   );
 };
 
-const CustomNavLink = ({ to, label, icon }) => (
-  <NavLink className={({ isActive }) => (isActive ? css.active : "")} to={to}>
+const CustomNavLink = ({ to, label, icon, onClick }) => (
+  <NavLink
+    className={({ isActive }) => (isActive ? css.active : "")}
+    to={to}
+    onClick={onClick}
+  >
     <i className={`bi ${icon}`}></i>
     <p> {label}</p>
   </NavLink>
