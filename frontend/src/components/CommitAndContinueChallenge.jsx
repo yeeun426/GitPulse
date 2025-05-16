@@ -256,13 +256,6 @@ const CommitAndContinueChallenge = () => {
         </div>
       </div>
 
-      {/* 아래에 RepoRankcopy 추가 */}
-      {selectedUser && (
-        <div style={{ marginTop: 40 }}>
-          <RepoRankcopy selectedUser={selectedUser} />
-        </div>
-      )}
-
       {/* 정리된 꾸준왕 참여/취소 버튼 */}
       {!isJoinedContinue && (
         <div className={styles.joinOverlay}>
@@ -290,6 +283,12 @@ const CommitAndContinueChallenge = () => {
           >
             참여 취소
           </button>
+        </div>
+      )}
+      {/* 아래에 RepoRankcopy 추가 */}
+      {selectedUser && (
+        <div style={{ marginTop: 40 }}>
+          <RepoRankcopy selectedUser={selectedUser} />
         </div>
       )}
     </div>

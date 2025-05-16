@@ -21,14 +21,14 @@
   display: flex;
   flex: 1;
   gap: 24px;
-  height: 100%;
+  height: 100vh;
 }
 
 .readmeViewer {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 600px;
+  height: 85vh;
   width: 100vw;
   border: 1px solid #ddd;
   border-radius: 12px;

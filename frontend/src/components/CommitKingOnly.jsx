@@ -238,13 +238,6 @@ const CommitKingOnly = () => {
         </div>
       </div>
 
-      {/* 아래에 RepoRankcopy 추가 */}
-      {selectedUser && (
-        <div style={{ marginTop: 40 }}>
-          <RepoRankcopy selectedUser={selectedUser} />
-        </div>
-      )}
-
       {!isJoined && (
         <div className={styles.joinOverlay}>
           <div className={styles.joinBox}>
@@ -262,6 +255,13 @@ const CommitKingOnly = () => {
           <button className={styles.joinButton} onClick={handleLeave}>
             참여 취소
           </button>
+        </div>
+      )}
+
+      {/* 아래에 RepoRankcopy 추가 */}
+      {selectedUser && (
+        <div style={{ marginTop: 40 }}>
+          <RepoRankcopy selectedUser={selectedUser} />
         </div>
       )}
     </div>
