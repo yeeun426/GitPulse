@@ -53,9 +53,9 @@ const GithubModal = ({ username, onClose }) => {
               className={modalStyle.noResultImage}
             />
             <p className={modalStyle.noResultText}>
-            찾으시는 User가 존재하지 않습니다.<br/>
-            대신 귀여운 보노보노를 드립니다.
-            
+              찾으시는 User가 존재하지 않습니다.
+              <br />
+              대신 귀여운 보노보노를 드립니다.
             </p>
           </div>
         </div>
@@ -112,7 +112,7 @@ const GithubModal = ({ username, onClose }) => {
                 <RewardBadges username={username} />
               </div>
               <div className={css.commentCol}>
-                <OneLineComment comment="여기에 한 줄 코멘트가 들어갑니다." />
+                <OneLineComment username={username} />
               </div>
             </section>
 
