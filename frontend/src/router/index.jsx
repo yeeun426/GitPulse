@@ -3,14 +3,12 @@ import DefaultLayout from "../common/DefaultLayout";
 import LoginPage from "../pages/LoginPage";
 import OrganizationPage from "../pages/OrganizationPage";
 import ProfilePage from "../pages/ProfilePage";
-import Community from "../components/Community";
-import DevTypeTest from "../components/dev-type-test"; // ✅ 파일 이름 주의
-import IntroPage from "../components/IntroPage"; // ✅ 인트로 페이지 추가
-import CommitShare from "../components/CommitShare";
+import DevTypeTest from "../components/dev-type-test";
+import IntroPage from "../components/IntroPage";
 import NewsPage from "../pages/NewsPage";
-import Study from "../components/Study";
-import ModalTest from "../components/Githubmodal";
 import Challenged from "../components/Challenged";
+import PRCommentPage from "../pages/PRCommentPage.jsx";
+
 export const router = createBrowserRouter([
   {
     path: "/", // 로그인 페이지
@@ -26,32 +24,24 @@ export const router = createBrowserRouter([
         element: <OrganizationPage />,
       },
       {
+        path: "/org/:id/:name/:prid",
+        element: <PRCommentPage />,
+      },
+      {
         path: "profile",
         element: <ProfilePage />,
       },
       {
-        path: "test", // ✅ 인트로 페이지 경로
+        path: "test",
         element: <IntroPage />,
       },
       {
-        path: "teststart", // ✅ 실제 테스트 시작 페이지
-        element: <DevTypeTest />, // 중복되지만 경로 분기 가능
+        path: "teststart",
+        element: <DevTypeTest />,
       },
       {
         path: "news",
         element: <NewsPage />,
-      },
-      {
-        path: "community",
-        element: <Community />,
-      },
-      {
-        path: "commitshare",
-        element: <CommitShare />,
-      },
-      {
-        path: "study",
-        element: <Study />,
       },
       {
         path: "challenged",
