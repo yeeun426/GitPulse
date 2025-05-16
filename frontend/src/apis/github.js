@@ -19,6 +19,19 @@ export const fetchWithToken = async (path, params = {}) => {
   return res.data; // 결과 데이터 리턴
 };
 
+export const postWithToken = async (path, data = {}) => {
+  const token = localStorage.getItem("jwt");
+  const res = await axios.post(`${API_BASE}/github/proxy${path}`, data, {
+    // params: { path },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+  return res.data;
+};
+
 export const getGitHubUserInfo = async (username) => {
   try {
     const res = await fetchWithToken(`/users/${username}`);
