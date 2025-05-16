@@ -86,10 +86,12 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
         })
       );
 
-      const updatedList = [
-        ...othersWithCounts.filter((p) => p.githubId !== user.login),
-        newUser,
-      ];
+      const alreadyExists = othersWithCounts.some(
+        (p) => p.githubId === user.login
+      );
+      const updatedList = alreadyExists
+        ? othersWithCounts
+        : [...othersWithCounts, newUser];
 
       const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
       const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
