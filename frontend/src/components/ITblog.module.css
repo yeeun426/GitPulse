@@ -27,7 +27,7 @@
 
 .cardSwiper {
   height: calc(2 * 350px); /* 세로 2줄 기준 */
-  width: calc(3.5 * 400px); /* 가로 4.5개 보여줄 크기 */
+  width: calc(3.5 * 450px); /* 가로 4.5개 보여줄 크기 */
   overflow: hidden;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .cardTitle {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 4px;
   color: #333;
