@@ -149,7 +149,7 @@ const OrganizationPage = () => {
             </div>
 
             <div className={css.card}>
-              <i className="bi bi-person-heart"></i>
+              <i className="bi bi-cloud-check"></i>
               <div className={css.cardText}>
                 <p className={css.cardLabel}>Public Repos</p>
                 <p className={css.cardValue}>{repos?.length}</p>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import css from "./SideBar.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { throttle } from "../utils/feature";
 import { useOrganizationList } from "../apis/useOrganizationApi";
 
 const SideBar = () => {
   const [isOn, setIsOn] = useState(false);
+  const navigate = useNavigate();
 
   const handleResize = throttle(() => {
     if (window.innerWidth > 1410) {
@@ -60,50 +61,50 @@ const SideBar = () => {
           </a>
         </div>
         <div className={css.scrollableArea}>
-        <div className={css.sideBarList}>
-          <CustomNavLink
-            to="/profile"
-            label="My Git"
-            icon="bi-person-fill"
-            onClick={handleNavClick}
-          />
-          {groupList?.map((group) => (
+          <div className={css.sideBarList}>
             <CustomNavLink
-              key={group.id}
-              to={`/org/${group.id}/${group.login}`}
-              label={group.login}
-              icon="bi-people-fill"
+              to="/profile"
+              label="My Git"
+              icon="bi-person-fill"
               onClick={handleNavClick}
             />
-          ))}
+            {groupList?.map((group) => (
+              <CustomNavLink
+                key={group.id}
+                to={`/org/${group.id}/${group.login}`}
+                label={group.login}
+                icon="bi-people-fill"
+                onClick={handleNavClick}
+              />
+            ))}
           </div>
           <div className={css.divider}></div>
           <div className={css.sideBarList}>
-          <CustomNavLink
-            to="/news"
-            label="IT News"
-            icon="bi-newspaper"
-            onClick={handleNavClick}
-          />
-          <CustomNavLink
-            to="/test"
-            label="개발자 유형 테스트"
-            icon="bi-emoji-smile"
-            onClick={handleNavClick}
-          />
-          <CustomNavLink
-            to="/commitshare"
-            label="commit 공유 게시판"
-            icon="bi-chat-text"
-            onClick={handleNavClick}
-          />
-          <CustomNavLink
-            to="/challenged"
-            label="Challenged"
-            icon="bi-joystick"
-            onClick={handleNavClick}
-          />
-          <CustomNavLink to="/study" label="스터디" icon="bi-pencil" />
+            <CustomNavLink
+              to="/news"
+              label="IT News"
+              icon="bi-newspaper"
+              onClick={handleNavClick}
+            />
+            <CustomNavLink
+              to="/test"
+              label="개발자 유형 테스트"
+              icon="bi-emoji-smile"
+              onClick={handleNavClick}
+            />
+            <CustomNavLink
+              to="/commitshare"
+              label="commit 공유 게시판"
+              icon="bi-chat-text"
+              onClick={handleNavClick}
+            />
+            <CustomNavLink
+              to="/challenged"
+              label="Challenged"
+              icon="bi-joystick"
+              onClick={handleNavClick}
+            />
+            <CustomNavLink to="/study" label="스터디" icon="bi-pencil" />
           </div>
           <button className={css.logoutButton} onClick={handleLogout}>
             로그아웃

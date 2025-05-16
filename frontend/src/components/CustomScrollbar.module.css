@@ -4,7 +4,7 @@
 }
 
 .track {
-  width: 90%;
+  width: 85%;
   height: 6px;
   margin-top: 40px;
   background: #eee;
@@ -15,7 +15,7 @@
 
 .thumb {
   height: 100%;
-  background: #5f41b2;
+  background: #c7bce4;
   border-radius: 3px;
   transition: transform 0.2s ease, width 0.2s ease;
 }
@@ -28,18 +28,18 @@
   }
 
   .thumb {
-    background: #7a63d2;
+    background: #c7bce4;
   }
 }
 
 @media (max-width: 1600px) {
   .track {
     height: 4px;
-    width: 100%;
+    width: 90%;
   }
 
   .thumb {
-    background: #7a63d2;
+    background: #c7bce4;
   }
 }
 
