@@ -8,7 +8,9 @@ import {
 
 const Challenge = () => {
   const [participants, setParticipants] = useState([]);
-  const [alreadyJoined, setAlreadyJoined] = useState(false);
+  const [user, setUser] = useState(null);
+  const [joinedCommit, setJoinedCommit] = useState(false);
+  const [joinedContinue, setJoinedContinue] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -16,10 +18,15 @@ const Challenge = () => {
         const data = await getAllParticipants();
         setParticipants(data);
 
-        const user = getUserFromJWT();
-        if (user) {
-          const isJoined = data.some((p) => p.githubId === user.login);
-          setAlreadyJoined(isJoined);
+        const u = getUserFromJWT();
+        setUser(u);
+
+        if (u) {
+          const userData = data.find((p) => p.githubId === u.login);
+          if (userData) {
+            setJoinedCommit(!!userData.commit);
+            setJoinedContinue(!!userData.continue);
+          }
         }
       } catch (e) {
         alert("❌ 참여자 목록 불러오기 실패");
@@ -28,61 +35,104 @@ const Challenge = () => {
     load();
   }, []);
 
-  const handleJoin = async () => {
-    const user = getUserFromJWT();
+  const handleJoin = async (type) => {
     if (!user) {
       alert("🔐 로그인 후 참여 가능합니다.");
       return;
     }
 
     try {
-      await joinChallenge({ githubId: user.login, type: "commit" });
+      await joinChallenge({ githubId: user.login, type });
       alert("✅ 챌린지 참여 완료!");
+
       const updated = await getAllParticipants();
       setParticipants(updated);
-      setAlreadyJoined(true);
+      const userData = updated.find((p) => p.githubId === user.login);
+      setJoinedCommit(!!userData?.commit);
+      setJoinedContinue(!!userData?.continue);
     } catch (e) {
       alert("⚠️ 이미 참여했거나 오류가 발생했습니다.");
     }
   };
 
-  const handleLeave = async () => {
-    const user = getUserFromJWT();
+  const handleLeave = async (type) => {
     if (!user) {
       alert("🔐 로그인 후만 가능합니다.");
       return;
     }
 
     try {
-      await leaveChallenge(user.login);
-      alert("🚫 챌린지 참여 취소 완료!");
+      await leaveChallenge(user.login, type);
+      alert(`🚫 ${type === "commit" ? "커밋왕" : "꾸준왕"} 취소 완료`);
 
       const updated = await getAllParticipants();
       setParticipants(updated);
-      setAlreadyJoined(false);
+      const userData = updated.find((p) => p.githubId === user.login);
+      setJoinedCommit(!!userData?.commit);
+      setJoinedContinue(!!userData?.continue);
     } catch (e) {
       alert("❌ 참여 취소 실패");
     }
   };
 
+  const commitParticipants = participants.filter((p) => p.commit);
+  const continueParticipants = participants.filter((p) => p.continue);
+
   return (
     <div style={{ padding: "20px" }}>
-      <h2>🔥 커밋 챌린지 참가자</h2>
-      <button onClick={handleJoin} disabled={alreadyJoined}>
-        {alreadyJoined ? "✅ 이미 참여함" : "챌린지 참여하기"}
-      </button>
+      <h2>🔥 커밋왕 & 꾸준왕 챌린지</h2>
 
-      {alreadyJoined && (
-        <button onClick={handleLeave} style={{ marginLeft: "10px" }}>
-          🚫 챌린지 취소
+      <div style={{ marginBottom: "10px" }}>
+        <button onClick={() => handleJoin("commit")} disabled={joinedCommit}>
+          {joinedCommit ? "✅ 커밋왕 참여중" : "💪 커밋왕 참여하기"}
         </button>
-      )}
 
-      <ul style={{ marginTop: "20px" }}>
-        {participants.map((p) => (
-          <li key={p.githubId}>{p.githubId}</li>
-        ))}
-      </ul>
+        <button
+          onClick={() => handleJoin("continue")}
+          disabled={joinedContinue}
+          style={{ marginLeft: "10px" }}
+        >
+          {joinedContinue ? "✅ 꾸준왕 참여중" : "📅 꾸준왕 참여하기"}
+        </button>
+
+        {joinedCommit && (
+          <button
+            onClick={() => handleLeave("commit")}
+            style={{ marginLeft: "10px" }}
+          >
+            🚫 커밋왕 취소
+          </button>
+        )}
+
+        {joinedContinue && (
+          <button
+            onClick={() => handleLeave("continue")}
+            style={{ marginLeft: "10px" }}
+          >
+            📭 꾸준왕 취소
+          </button>
+        )}
+      </div>
+
+      <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
+        <div>
+          <h4>💪 커밋왕 참가자</h4>
+          <ul>
+            {commitParticipants.map((p) => (
+              <li key={p.githubId}>{p.githubId}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4>📅 꾸준왕 참가자</h4>
+          <ul>
+            {continueParticipants.map((p) => (
+              <li key={p.githubId}>{p.githubId}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

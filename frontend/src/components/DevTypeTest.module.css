@@ -6,6 +6,8 @@
   min-height: 100vh;
   background-color: #f9f9fc;
   padding: 2rem 5rem;
+  width : 100vw;
+  margin-left : 15%;
 }
 
 .header {
@@ -74,7 +76,7 @@
   margin-right: 0.5rem;
 }
 
-.questionTitle span {
+.questionTitle {
   font-size: 2.5rem;
 }
 
@@ -112,7 +114,7 @@
 .resultContainer {
   width: 100%;
   max-width: 800px;
-  margin: 2rem auto; /* 상단 여백 증가 */
+  margin: 2rem auto;
   text-align: center;
 }
 
@@ -186,4 +188,11 @@
   color: #fff;
   transform : translateY(-5px);
   font-weight : 700;
+}
+
+
+@media (max-width: 1410px) {
+  .main {
+    margin-left: 0;
+  }
 }

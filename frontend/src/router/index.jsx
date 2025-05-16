@@ -3,8 +3,7 @@ import DefaultLayout from "../common/DefaultLayout";
 import LoginPage from "../pages/LoginPage";
 import OrganizationPage from "../pages/OrganizationPage";
 import ProfilePage from "../pages/ProfilePage";
-import DevTypeTest from "../components/dev-type-test";
-import IntroPage from "../components/IntroPage";
+import DevTypeTest from "../pages/DevTestPage.jsx";
 import NewsPage from "../pages/NewsPage";
 import Challenged from "../components/Challenged";
 import PRCommentPage from "../pages/PRCommentPage.jsx";
@@ -31,12 +30,9 @@ export const router = createBrowserRouter([
         path: "profile",
         element: <ProfilePage />,
       },
+
       {
         path: "test",
-        element: <IntroPage />,
-      },
-      {
-        path: "teststart",
         element: <DevTypeTest />,
       },
       {
