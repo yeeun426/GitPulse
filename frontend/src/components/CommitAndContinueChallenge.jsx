@@ -66,10 +66,6 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
     load();
   }, []);
 
-  const handleUserClick = (githubId) => {
-    setSelectedUser(githubId);
-  };
-
   const handleJoin = async (type = "commit") => {
     const user = getUserFromJWT();
     if (!user) {

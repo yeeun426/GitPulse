@@ -47,27 +47,6 @@ const RepoRank = () => {
         <div className={styles.readmeViewer}>
           <h3 className={styles.readmeHeader}> CONTENT</h3>
 
-          <ul className={styles.repoList}>
-            {repos.map((repo, idx) => (
-              <li key={repo.id} className={styles.repoItem}>
-                <a
-                  href={repo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.repoLink}
-                >
-                  {idx + 1 + (page - 1) * 10}. {repo.full_name}
-                </a>
-                <button
-                  onClick={() => handlePreview(repo)}
-                  className={styles.previewButton}
-                >
-                  미리보기
-                </button>
-              </li>
-            ))}
-          </ul>
-
           {/* ⏪ 숫자형 페이지네이션 */}
           <div className={styles.pagination}>
             <button onClick={() => setPage(1)} disabled={page === 1}>
