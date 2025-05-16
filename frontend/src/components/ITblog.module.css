@@ -192,7 +192,21 @@
 
 @media (max-width: 1620px) {
   .cardSwiper {
-    width: calc(2.8 * 450px); /* 3개보다 살짝 작게 */
+    width: calc(2.5 * 450px); /* 3개보다 살짝 작게 */
+  }
+
+  .moreTextGroup {
+    font-size: 4.5em;
+  }
+
+  .moreText {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .cardSwiper {
+    width: calc(2.3 * 450px); /* 3개보다 살짝 작게 */
   }
 
   .moreTextGroup {
