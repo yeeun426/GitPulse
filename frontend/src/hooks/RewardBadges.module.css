@@ -47,14 +47,14 @@
     justify-content: center;
   }
   
-  .badgeDesc {
+.badgeDesc {
     font-size: 0.9rem;
     color: black;
     line-height: 1.4;
     margin-top : 0.25rem;
   }
   
-  .badgeCondition {
+.badgeCondition {
     font-size: 0.8rem;
     color: black;
   }
@@ -72,6 +72,9 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.05);
 }
 
 .loadingImage {
