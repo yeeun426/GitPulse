@@ -66,6 +66,9 @@ const BADGE_CONFIG = {
 const RewardBadges = ({ username }) => {
   const [earnedBadges, setEarnedBadges] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  // 모달에 그릴 전체 뱃지 배열
+  const allKeys = Object.keys(BADGE_CONFIG);
 
   useEffect(() => {
     const load = async () => {
@@ -103,21 +106,30 @@ const RewardBadges = ({ username }) => {
       }
 
       setEarnedBadges(earned);
+      setIsLoading(false);
     };
     load();
   }, [username]);
 
-  // 모달에 그릴 전체 뱃지 배열
-  const allKeys = Object.keys(BADGE_CONFIG);
-
   return (
     <>
-      {/* ① 클릭하면 모달이 뜹니다 */}
+      {/*클릭하면 모달 */}
       <div className={css.badgesWrapper} onClick={() => setShowModal(true)}>
-        <Badges badges={earnedBadges.map((key) => BADGE_CONFIG[key].src)} />
+        {isLoading ? (
+          <div className={css.loadingBox}>
+            <img
+              src="/img/BadgeWaiting.png"
+              alt="로딩 중"
+              className={css.loadingImage}
+            />
+            <p className={css.loadingText}>뱃지를 가져오는 중입니다!</p>
+          </div>
+        ) : (
+          <Badges badges={earnedBadges.map((key) => BADGE_CONFIG[key].src)} />
+        )}
       </div>
 
-      {/* ② 모달 */}
+      {/* 모달 */}
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}

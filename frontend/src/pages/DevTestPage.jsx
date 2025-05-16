@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useState } from "react";
+import IntroPage from "../components/IntroPage";
+import DevTypeTest from "../components/dev-type-test";
 
 const DevTestPage = () => {
-  const [started, setStarted]
-  return (
-    <div>DevTestPage</div>
-  )
-}
+  const [started, setStarted] = useState(false);
 
-export default DevTestPage
+  return (
+    <>
+      {!started ? (
+        <IntroPage
+          onStart={() => {
+            setStarted(true);
+          }}
+        />
+      ) : (
+        <DevTypeTest />
+      )}
+    </>
+  );
+};
+
+export default DevTestPage;

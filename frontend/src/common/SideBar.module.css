@@ -4,7 +4,7 @@
   min-width: 300px;
   width: 27%;
   border-right: 1px solid #b4b6c573;
-  height: calc(100vh - 4rem);
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
