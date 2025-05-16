@@ -43,6 +43,13 @@ export const postReviewComment = async (
 ) => {
   try {
     console.log(owner, repo, pullNumber, body, commitId, path, line);
+    console.log({
+      body,
+      commit_id: commitId,
+      path,
+      side: "RIGHT",
+      position: line, // <- 이거! 반드시 "diff에서의 줄 번호"
+    });
     const res = await postWithToken(
       `/repos/${owner}/${repo}/pulls/${pullNumber}/comments`,
       {
@@ -50,7 +57,7 @@ export const postReviewComment = async (
         commit_id: commitId,
         path,
         side: "RIGHT",
-        line,
+        position: line, // <- 이거! 반드시 "diff에서의 줄 번호"
       }
     );
     return res;

@@ -1,5 +1,7 @@
 .prCommentCon {
   background: #f9f9fc;
+  width: 100%;
+  margin-left: 15%;
 }
 .prCommentCon header,
 .prCommentCon main {

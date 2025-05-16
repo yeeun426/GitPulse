@@ -24,10 +24,21 @@ const PRCommentPage = () => {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생!</p>;
 
-  console.log(prComment, prFiles);
-
   const handleCommentChange = (key, value) => {
     setCommentTargets((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const getPositionInPatch = (patch, targetLineIndex) => {
+    const lines = patch.split("\n");
+    let position = 0;
+
+    for (let i = 0; i <= targetLineIndex; i++) {
+      if (!lines[i].startsWith("@@")) {
+        position++;
+      }
+    }
+
+    return position;
   };
 
   return (
@@ -49,13 +60,19 @@ const PRCommentPage = () => {
                   const key = `${file.filename}-${lineIndex}`;
                   let bgColor = "";
                   let color = "";
-                  if (line.startsWith("+") && !line.startsWith("+++")) {
+                  const isAddedLine =
+                    line.startsWith("+") && !line.startsWith("+++");
+                  const isRemovedLine =
+                    line.startsWith("-") && !line.startsWith("---");
+                  const isMetaLine = line.startsWith("@@");
+
+                  if (isAddedLine) {
                     bgColor = "#e6ffed";
                     color = "#22863a";
-                  } else if (line.startsWith("-") && !line.startsWith("---")) {
+                  } else if (isRemovedLine) {
                     bgColor = "#ffeef0";
                     color = "#cb2431";
-                  } else if (line.startsWith("@@")) {
+                  } else if (isMetaLine) {
                     bgColor = "#f0f0f0";
                     color = "#6a737d";
                   }
@@ -72,10 +89,14 @@ const PRCommentPage = () => {
                       }}
                     >
                       <div
-                        onClick={() =>
-                          handleCommentChange(key, commentTargets[key] || "")
-                        }
-                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          if (isAddedLine) {
+                            handleCommentChange(key, commentTargets[key] || "");
+                          }
+                        }}
+                        style={{
+                          cursor: isAddedLine ? "pointer" : "default",
+                        }}
                       >
                         {line}
                       </div>
@@ -93,14 +114,14 @@ const PRCommentPage = () => {
                           <button
                             onClick={() => {
                               const body = commentTargets[key];
-                              const displayLine = extractLineNumberFromPatch(
+                              const position = getPositionInPatch(
                                 file.patch,
                                 lineIndex
                               );
 
-                              if (!commitId || displayLine === null) {
+                              if (!commitId || position === null) {
                                 alert(
-                                  "커밋 ID 또는 줄 번호가 유효하지 않습니다."
+                                  "커밋 ID 또는 position이 유효하지 않습니다."
                                 );
                                 return;
                               }
@@ -112,7 +133,7 @@ const PRCommentPage = () => {
                                 body,
                                 commitId,
                                 file.filename,
-                                displayLine
+                                position
                               );
 
                               handleCommentChange(key, undefined);
@@ -152,33 +173,4 @@ const PRCommentPage = () => {
   );
 };
 
-const extractLineNumberFromPatch = (patch, targetLineIndex) => {
-  const lines = patch.split("\n");
-  let actualLine = null;
-
-  for (let i = 0, prLineNum = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    // Hunk 시작 (@@ +10,7 @@ 형태)
-    if (line.startsWith("@@")) {
-      const match = line.match(/\+(\d+),?/);
-      if (match) {
-        prLineNum = parseInt(match[1], 10) - 1; // +라인에서 시작점
-      }
-      continue;
-    }
-    if (i === targetLineIndex) {
-      actualLine = prLineNum;
-      break;
-    }
-    // - 삭제된 줄은 PR에 없음, 줄 번호 증가 안 함
-    if (line.startsWith("-") && !line.startsWith("---")) {
-      continue;
-    }
-    // 나머지 줄은 PR에서 존재하는 줄 → PR 줄 번호 증가
-    prLineNum++;
-  }
-
-  return actualLine;
-};
 export default PRCommentPage;
