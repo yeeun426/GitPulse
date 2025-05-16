@@ -99,10 +99,19 @@
 
 @media (max-width: 1410px) {
   .sideBarCon {
-    transform: translateX(-100%);
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 33.333vw;
     height: 100vh;
-    margin: 0;
+    background-color: white;
+    z-index: 1000;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    border-right: 1px solid #ddd;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transform : translateX(-100%);
+    transition: transform 0.3s ease;
   }
   .sideBarCon.on {
     transform: translateX(0);

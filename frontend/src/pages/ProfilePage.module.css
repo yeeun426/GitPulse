@@ -253,28 +253,31 @@
 }
 
 @media (max-width: 1410px) {
+  .container {
+    flex-direction: column;
+    width: 100vw;
+  }
   .main {
-    margin-left: 0;
+    width: 100%;
+    margin: 0;
     padding: 1.5rem;
   }
-
   .contentContainer {
-    max-width: 90%;
+    max-width: 95%;
+    width: 100%;
   }
-
   .profileStats {
     flex-wrap: wrap;
     justify-content: center;
   }
-
   .bottom {
     flex-direction: column;
   }
-
   .badgeSection {
     flex-direction: column;
   }
 }
+
 
 @media (max-width: 768px) {
   .container {
