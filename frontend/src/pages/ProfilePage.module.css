@@ -1,9 +1,11 @@
 .container {
   display: flex;
   min-height: 90vh;
-  width : 100vw;
+  width: 100vw;
   background-color: #f9f9fc;
   border-radius: 16px;
+
+  overflow-x: hidden;
 }
 
 /* 메인 컨텐츠 */
@@ -11,7 +13,7 @@
   flex: 1;
   padding: 2rem;
   width: 100%;
-  margin-left : 16%;
+  margin-left: 16%;
 }
 
 .contentContainer {
@@ -253,6 +255,79 @@
 
 @media (max-width: 1410px) {
   .main {
-    margin: 0 auto;
+    margin-left: 0;
+    padding: 1.5rem;
   }
+
+  .contentContainer {
+    max-width: 90%;
+  }
+
+  .profileStats {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .bottom {
+    flex-direction: column;
+  }
+
+  .badgeSection {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .contentContainer {
+    max-width: 100%;
+  }
+
+  .profileStats {
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 1rem;
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .badgeSection {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .bottom {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .commitTimeChart {
+    padding: 1rem;
+  }
+
+  .modalContainer {
+    max-width: 95vw;
+    max-height: 90vh;
+    border-radius: 20px;
+  }
+
+  .errorMessage {
+    font-size: 1rem;
+    margin: 2rem;
+  }
+}
+
+@media (max-width: 1100px) {
 }
