@@ -272,9 +272,7 @@ const DevTypeTest = () => {
       {/* 변경: 질문화면과 결과화면을 분리하는 최상위 div 구조 */}
       {!isDone ? (
         <>
-          <div className={css.header}>
-            <h1 className={css.pageTitle}>개발자 유형 TEST</h1>
-          </div>
+          <div className={css.header}></div>
           <div className={css.progressWrapper}>
             <div className={css.progressBar}>
               <div

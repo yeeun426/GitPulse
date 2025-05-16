@@ -6,21 +6,21 @@
   min-height: 100vh;
   background-color: #f9f9fc;
   padding: 2rem 5rem;
-  width : 100vw;
-  margin-left : 15%;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .header {
   width: 100%;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .pageTitle {
   font-size: 3rem;
   font-weight: 500;
-  color:#000000;
+  color: #000000;
   margin-top: 20px;
-  margin-bottom: 2rem; 
+  margin-bottom: 2rem;
 }
 
 .progressWrapper {
@@ -29,7 +29,7 @@
   width: 100%;
   margin-left: 3rem;
   max-width: 1000px;
-  margin-bottom: 4.5rem;
+  margin-bottom: 3;
 }
 
 .progressBar {
@@ -41,7 +41,7 @@
 }
 
 .progressFill {
-  background: #D2C4FC;
+  background: #d2c4fc;
   height: 100%;
   transition: width 0.3s ease;
 }
@@ -66,9 +66,9 @@
 .questionTitle {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2B3A4B;
+  color: #2b3a4b;
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .questionNumber {
@@ -83,7 +83,7 @@
 .options {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
   align-items: center;
 }
 
@@ -96,19 +96,18 @@
   border-radius: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  color : #545D69;
+  color: #545d69;
   font-size: 1.4rem;
-  font-weight : 700;
+  font-weight: 700;
   transition: 0.4s ease;
 }
 
 .optionButton:hover {
   background-color: #c1b0f0;
-  color : white;
-  font-weight : 900;
-  transform : translateY(-5px);
+  color: white;
+  font-weight: 900;
+  transform: translateY(-5px);
 }
-
 
 /* 결과 */
 .resultContainer {
@@ -124,7 +123,7 @@
 
 .resultSubtitle {
   font-size: 2rem;
-  color: #545D69;
+  color: #545d69;
   margin-bottom: 0.5rem;
 }
 
@@ -142,14 +141,14 @@
 }
 
 .resultDescBox {
-  padding : 2rem;
+  padding: 2rem;
   border-radius: 12px;
   white-space: pre-line;
-  color: #2B3A4B;
+  color: #2b3a4b;
   margin: 0 auto 1.5rem;
-  max-width : 700px;
-  font-weight : 500;
-  font-size : 1.2rem;
+  max-width: 700px;
+  font-weight: 500;
+  font-size: 1.2rem;
 }
 
 .buttonGroup {
@@ -161,35 +160,32 @@
 }
 
 .primaryButton {
-  background: #C7BCE4;
-  color: #545D69;
+  background: #c7bce4;
+  color: #545d69;
   border: none;
   border-radius: 24px;
   padding: 0.75rem;
-  font-weight : 550;
+  font-weight: 550;
   transition: 0.3s ease;
 }
 
 .outlinedButton {
   background: #fff;
-  color: #545D69;
-  border: 2px solid #D2C4FC;
+  color: #545d69;
+  border: 2px solid #d2c4fc;
   border-radius: 24px;
   padding: 0.75rem;
-  font-weight : 550;
+  font-weight: 550;
   transition: 0.3s ease;
 }
 
-
-
 .outlinedButton:hover,
 .primaryButton:hover {
-  background: #5F41B2;
+  background: #5f41b2;
   color: #fff;
-  transform : translateY(-5px);
-  font-weight : 700;
+  transform: translateY(-5px);
+  font-weight: 700;
 }
-
 
 @media (max-width: 1410px) {
   .main {

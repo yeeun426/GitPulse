@@ -1,3 +1,4 @@
+/* ---------- 공통 스타일 ---------- */
 .container {
   padding: 40px;
   background: #f9f9fb;
@@ -26,8 +27,8 @@
 }
 
 .cardSwiper {
-  height: calc(2 * 350px); /* 세로 2줄 기준 */
-  width: calc(3.5 * 450px); /* 가로 4.5개 보여줄 크기 */
+  height: calc(2 * 350px);
+  width: calc(3.5 * 450px);
   overflow: hidden;
 }
 
@@ -66,7 +67,6 @@
   color: #888;
 }
 
-/* 👉 더보기 슬라이드 베이스 */
 .moreSlideAlt {
   height: 200%;
   width: 100%;
@@ -79,13 +79,11 @@
   transition: all 0.3s ease;
 }
 
-/* 👉 더보기 슬라이드: 등장 */
 .moreSlideVisible {
   animation: fadeInUp 0.5s ease forwards;
   opacity: 1;
 }
 
-/* 👉 더보기 슬라이드: 사라짐 */
 .moreSlideHidden {
   animation: fadeOutDown 0.5s ease forwards;
   opacity: 0;
@@ -96,7 +94,6 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-
   box-sizing: border-box;
   text-align: center;
   cursor: pointer;
@@ -115,7 +112,7 @@
   font-size: 2rem;
 }
 
-/* 카드 애니메이션 */
+/* ---------- 애니메이션 ---------- */
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -132,7 +129,6 @@
   opacity: 0;
 }
 
-/* 더보기 등장 애니메이션 */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -144,7 +140,6 @@
   }
 }
 
-/* 더보기 사라짐 애니메이션 */
 @keyframes fadeOutDown {
   from {
     opacity: 1;
@@ -155,17 +150,71 @@
     transform: translateY(20px);
   }
 }
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 1890px) {
+  .cardSwiper {
+    width: calc(3 * 450px); /* 기존보다 0.5개 감소 */
+  }
+
+  .moreTextGroup {
+    font-size: 5em;
+  }
+
+  .moreText {
+    font-size: 1.8rem;
+  }
+}
+
 @media (max-width: 1410px) {
   .cardSwiper {
     width: 100%;
   }
-
   .moreTextGroup {
     font-size: 4em;
   }
-
   .moreText {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .tabButtons {
+    gap: 6px;
+  }
+
+  .tabButton {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 1620px) {
+  .cardSwiper {
+    width: calc(2.5 * 450px); /* 3개보다 살짝 작게 */
+  }
+
+  .moreTextGroup {
+    font-size: 4.5em;
+  }
+
+  .moreText {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .cardSwiper {
+    width: calc(2.3 * 450px); /* 3개보다 살짝 작게 */
+  }
+
+  .moreTextGroup {
+    font-size: 4.5em;
+  }
+
+  .moreText {
+    font-size: 1.6rem;
   }
 }
 
@@ -182,53 +231,14 @@
     font-size: 0.7rem;
   }
 
-  .moreTextGroup {
-    font-size: 3em;
+  .cardSwiper {
+    height: calc(2 * 400px);
+    width: calc(2 * 300px);
   }
 
-  .moreText {
-    font-size: 1.2rem;
-  }
-
-  .moreSlideAlt {
-    height: 200%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: center;
-    box-sizing: border-box;
-    text-align: center;
-
-    transition: all 0.3s ease;
-  }
-  .morebtn {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    cursor: pointer;
-  }
-}
-
-/* ✅ 반응형 조절 */
-@media (max-width: 1410px) {
-  .moreTextGroup {
-    font-size: 4em;
-  }
-
-  .moreText {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
   .moreTextGroup {
     font-size: 2.5em;
+    margin-top: 10px;
   }
 
   .moreText {
@@ -237,5 +247,7 @@
 
   .morebtn {
     gap: 6px;
+    height: 100%;
+    width: 100%;
   }
 }
