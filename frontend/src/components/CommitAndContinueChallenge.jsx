@@ -177,54 +177,51 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
           </div>
 
           <ul className={styles.repoList}>
-            {commitParticipants.map((p, index) => (
-              <li key={p.githubId}>
-                {index === 0 ? (
-                  <>
-                    <img
-                      src={goldmedal}
-                      alt="1위"
-                      style={{
-                        width: "24px",
-                        verticalAlign: "middle",
-                        marginRight: "6px",
-                      }}
-                    />
-                    {p.githubId} ({p.commitCount ?? 0} days)
-                  </>
-                ) : index === 1 ? (
-                  <>
-                    <img
-                      src={silvermedal}
-                      alt="2위"
-                      style={{
-                        width: "24px",
-                        verticalAlign: "middle",
-                        marginRight: "6px",
-                      }}
-                    />
-                    {p.githubId} ({p.commitCount ?? 0} days)
-                  </>
-                ) : index === 2 ? (
-                  <>
-                    <img
-                      src={bronzemedal}
-                      alt="3위"
-                      style={{
-                        width: "24px",
-                        verticalAlign: "middle",
-                        marginRight: "6px",
-                      }}
-                    />
-                    {p.githubId} ({p.commitCount ?? 0} days)
-                  </>
-                ) : (
-                  <>
-                    {index + 1}위 - {p.githubId} ({p.commitCount ?? 0} days)
-                  </>
-                )}
-              </li>
-            ))}
+            {commitParticipants.map((p, index) => {
+              const medal =
+                index === 0
+                  ? goldmedal
+                  : index === 1
+                  ? silvermedal
+                  : index === 2
+                  ? bronzemedal
+                  : null;
+
+              return (
+                <li
+                  key={p.githubId}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "8px 0",
+                  }}
+                >
+                  {/* 왼쪽: 등수 or 메달 */}
+                  <div style={{ width: "40px", textAlign: "left" }}>
+                    {medal ? (
+                      <img
+                        src={medal}
+                        alt={`${index + 1}위`}
+                        style={{ width: "24px", verticalAlign: "middle" }}
+                      />
+                    ) : (
+                      <span>{index + 1}위</span>
+                    )}
+                  </div>
+
+                  {/* 가운데: GitHub ID */}
+                  <div style={{ flex: 1, textAlign: "center" }}>
+                    {p.githubId}
+                  </div>
+
+                  {/* 오른쪽: commit 일수 */}
+                  <div style={{ width: "100px", textAlign: "right" }}>
+                    {p.commitCount ?? 0}일
+                  </div>
+                </li>
+              );
+            })}
           </ul>
 
           <div className={styles.pagination}>
