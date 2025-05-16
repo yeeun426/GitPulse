@@ -4,6 +4,8 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+  margin-left : 16%;
+  width : 100vw;
   background-color: #f9f9fc;
   text-align: center;
 }
