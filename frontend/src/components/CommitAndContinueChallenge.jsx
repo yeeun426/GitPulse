@@ -237,7 +237,7 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
       {!isJoinedContinue && (
         <div className={styles.joinOverlay}>
           <div className={styles.joinBox}>
-            <p className={styles.title}>Commit King</p>
+            <p className={styles.title}>Never Stop Challenge</p>
             <img src={challengeImage} alt="챌린지 대표 이미지" />
             <button
               className={styles.joinButton}
