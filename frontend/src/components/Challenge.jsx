@@ -70,9 +70,7 @@ const Challenge = () => {
       const userData = updated.find((p) => p.githubId === user.login);
       setJoinedCommit(!!userData?.commit);
       setJoinedContinue(!!userData?.continue);
-    } catch (e) {
-      alert("❌ 참여 취소 실패");
-    }
+    } catch (e) {}
   };
 
   const commitParticipants = participants.filter((p) => p.commit);
