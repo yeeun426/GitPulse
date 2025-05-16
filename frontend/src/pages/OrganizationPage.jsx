@@ -24,7 +24,7 @@ import ReactMarkdown from "react-markdown";
 import { useOrgsInfo, useOrgsRepos } from "../apis/useOrganizationApi";
 
 const OrganizationPage = () => {
-  const { name } = useParams();
+  const { id, name } = useParams();
   const { data, isLoading, isError } = useOrgsInfo(name);
   const members = data?.members;
   const repos = data?.repos;
@@ -227,7 +227,7 @@ const OrganizationPage = () => {
           {/* repo & PR 영역 */}
           <section className={orgs.repoInfoCon}>
             <RepoDetailInfo orgs={name} repo={selected} />
-            <PRTable orgs={name} repo={selected} />
+            <PRTable orgs={name} repo={selected} orgId={id} />
           </section>
 
           {/* 커밋 허수 감지 / 컨벤션 오류 감지 */}

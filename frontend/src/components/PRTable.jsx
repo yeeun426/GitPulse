@@ -1,9 +1,19 @@
 import React from "react";
 import css from "./PRTable.module.css";
 import { useOrgsPR } from "../apis/useOrganizationApi";
+import { useNavigate } from "react-router-dom";
 
-const RepoTable = ({ orgs, repo }) => {
+const PRTable = ({ orgId, orgs, repo }) => {
   const { data: PRList, isLoading, isError } = useOrgsPR(orgs, repo);
+  const navigate = useNavigate();
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>에러 발생!</p>;
+
+  const handlePrComment = (id) => {
+    navigate(`/org/${orgId}/${orgs}/${id}`);
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생!</p>;
 
@@ -35,7 +45,9 @@ const RepoTable = ({ orgs, repo }) => {
                         {PR.created_at.split("T")[0]}
                       </td>
                       <td className={css.colReview}>
-                        <button>Review</button>
+                        <button onClick={() => handlePrComment(PR.id)}>
+                          Review
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -48,4 +60,4 @@ const RepoTable = ({ orgs, repo }) => {
   );
 };
 
-export default RepoTable;
+export default PRTable;
