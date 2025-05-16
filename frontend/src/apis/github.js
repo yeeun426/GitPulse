@@ -10,35 +10,18 @@ export const githubAxios = axios.create({
 });
 
 export const fetchWithToken = async (path, params = {}) => {
-  const token = localStorage.getItem("jwt"); // JWT 꺼내고
+  const token = localStorage.getItem("jwt");
   const res = await axios.get(`${API_BASE}/github/proxy`, {
-    params: { path, ...params }, // path + params
-    headers: { Authorization: `Bearer ${token}` }, //  헤더에 넣어서
-    withCredentials: true, // 쿠키 전송(필요시)
+    params: { path, ...params },
+    headers: { Authorization: `Bearer ${token}` },
+    withCredentials: true,
   });
-  return res.data; // 결과 데이터 리턴
-};
-
-// 특정 사용자의 공개 레포지토리 가져오기 (axios 기반)
-export const fetchUserRepos = async (username, page = 1, perPage = 100) => {
-  try {
-    const data = await fetchWithToken(`/users/${username}/repos`, {
-      page,
-      per_page: perPage,
-      sort: "pushed",
-    });
-    return data;
-  } catch (err) {
-    console.error("Failed to fetch user repos:", err);
-    throw err;
-  }
+  return res.data;
 };
 
 export const getGitHubUserInfo = async (username) => {
   try {
     const res = await fetchWithToken(`/users/${username}`);
-
-    // Axios 기반이므로 res.data가 있을 수 있음
     const data = res.data || res;
 
     if (!data || data.message === "Not Found") {
@@ -54,6 +37,20 @@ export const getGitHubUserInfo = async (username) => {
   }
 };
 
+export const fetchUserRepos = async (username, page = 1, perPage = 100) => {
+  try {
+    const data = await fetchWithToken(`/users/${username}/repos`, {
+      page,
+      per_page: perPage,
+      sort: "pushed",
+    });
+    return data;
+  } catch (err) {
+    console.error("Failed to fetch user repos:", err);
+    throw err;
+  }
+};
+
 export const getUserRepos = async (username, page = 1, perPage = 5) => {
   try {
     const res = await fetchWithToken(`/users/${username}/repos`, {
@@ -61,7 +58,6 @@ export const getUserRepos = async (username, page = 1, perPage = 5) => {
       per_page: perPage,
       sort: "pushed",
     });
-    // console.log("GitHub repo 응답 데이터:", res);
     return res.map((repo) => ({
       name: repo.name,
       url: repo.html_url,
@@ -92,7 +88,6 @@ export const getRepoCommits = async (username, repoName, perPage = 30) => {
   }
 };
 
-// PR 횟수
 export const getMergedPullRequests = async (username) => {
   try {
     const res = await fetchWithToken(`/search/issues`, {
@@ -105,7 +100,6 @@ export const getMergedPullRequests = async (username) => {
   }
 };
 
-// 몇 개 언어 사용했는지
 export const getLanguageDiversity = async (username) => {
   try {
     const repos = await fetchWithToken(`/users/${username}/repos`, {
@@ -124,10 +118,9 @@ export const getLanguageDiversity = async (username) => {
   }
 };
 
-// 야행성 커밋 일수
 export const getLateNightCommitDays = async (username) => {
   try {
-    const repos = await getUserRepos(username, 1, 5); // 최근 5개 repo
+    const repos = await getUserRepos(username, 1, 5);
     const lateNightDays = new Set();
 
     for (const repo of repos) {
@@ -139,7 +132,6 @@ export const getLateNightCommitDays = async (username) => {
           let hour = date.getUTCHours() + 9;
           if (hour >= 24) hour -= 24;
           if (hour >= 0 && hour <= 4) {
-            // 0시~4시 사이
             const dayOnly = dateStr.slice(0, 10);
             lateNightDays.add(dayOnly);
           }
@@ -154,15 +146,13 @@ export const getLateNightCommitDays = async (username) => {
   }
 };
 
-// 100일 커밋 날짜 계산
 export const getUserCommitDates = async (username) => {
   try {
-    const repos = await getUserRepos(username, 1, 100); // 최대 100개 repo
+    const repos = await getUserRepos(username, 1, 100);
     const dateSet = new Set();
 
     for (const repo of repos) {
       const commits = await getRepoCommits(username, repo.name, 100);
-
       commits.forEach((commit) => {
         if (commit?.commit?.author?.date) {
           const date = new Date(commit.commit.author.date)
@@ -173,14 +163,13 @@ export const getUserCommitDates = async (username) => {
       });
     }
 
-    return dateSet.size; // 서로 다른 날짜 수
+    return dateSet.size;
   } catch (err) {
     console.error("100일 커밋 날짜 계산 실패", err);
     return 0;
   }
 };
 
-// 버그 사냥꾼: 외부 저장소에 생성한 이슈 개수
 export const getUserCreatedExternalIssues = async (username) => {
   try {
     let page = 1;
@@ -194,9 +183,7 @@ export const getUserCreatedExternalIssues = async (username) => {
       });
 
       if (!data.items || data.items.length === 0) break;
-
       allIssues = allIssues.concat(data.items);
-
       if (data.items.length < 100) break;
       page++;
     }
@@ -212,7 +199,6 @@ export const getUserCreatedExternalIssues = async (username) => {
   }
 };
 
-// 커밋 활동 분석(커밋 연속 일수, 누락일수 등)
 export const getUserCommitActivity = async (username) => {
   try {
     const dateSet = new Set();
@@ -225,7 +211,6 @@ export const getUserCommitActivity = async (username) => {
       ].join("-");
     })();
 
-    // 최대 3페이지(300개)까지 순회
     for (let page = 1; page <= 3; page++) {
       const events = await fetchWithToken(`/users/${username}/events`, {
         per_page: 100,
@@ -233,7 +218,6 @@ export const getUserCommitActivity = async (username) => {
       });
       if (!Array.isArray(events) || events.length === 0) break;
 
-      // PushEvent, merged PR, repo 생성 이벤트만 체크
       for (const e of events) {
         if (
           e.type === "PushEvent" ||
@@ -250,10 +234,7 @@ export const getUserCommitActivity = async (username) => {
         }
       }
 
-      if (dateSet.has(todayKey)) {
-        // 오늘 커밋 이벤트 발견하면 종료
-        break;
-      }
+      if (dateSet.has(todayKey)) break;
     }
 
     if (dateSet.size === 0) {
@@ -284,12 +265,10 @@ export const getUserCommitActivity = async (username) => {
   }
 };
 
-// 요청 횟수 제한 상태 확인
-export async function getRateLimit() {
+export const getRateLimit = async () => {
   return await fetchWithToken("/rate_limit");
-}
+};
 
-// 최근 한 달 커밋 수 계산
 export const getMonthlyCommitCount = async (username) => {
   try {
     const since = new Date();
@@ -320,6 +299,36 @@ export const getMonthlyCommitCount = async (username) => {
     return commitCount;
   } catch (err) {
     console.error("월간 커밋 수 가져오기 실패", err);
+    return 0;
+  }
+};
+
+export const getMonthlyCommitDays = async (username) => {
+  try {
+    const since = new Date();
+    since.setMonth(since.getMonth() - 1);
+    const sinceISOString = since.toISOString();
+    const dateSet = new Set();
+
+    for (let page = 1; page <= 3; page++) {
+      const res = await fetchWithToken(`/users/${username}/events`, {
+        per_page: 100,
+        page,
+      });
+
+      if (!Array.isArray(res) || res.length === 0) break;
+
+      res.forEach((event) => {
+        if (event.type === "PushEvent" && event.created_at >= sinceISOString) {
+          const date = new Date(event.created_at).toISOString().split("T")[0];
+          dateSet.add(date);
+        }
+      });
+    }
+
+    return dateSet.size;
+  } catch (err) {
+    console.error("월간 커밋 일수 가져오기 실패", err);
     return 0;
   }
 };

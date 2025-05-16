@@ -1,36 +1,68 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CommitKing.module.css";
 import challengeImage from "../assets/challenge-visual.png";
+import goldmedal from "../assets/gold.png";
+import silvermedal from "../assets/silver.png";
+import bronzemedal from "../assets/bronze.png";
 import {
   getAllParticipants,
   joinChallenge,
   leaveChallenge,
   getUserFromJWT,
 } from "../apis/Challenge.js";
+import { getMonthlyCommitDays } from "../apis/github"; // ✅ 변경됨
+import RepoRankcopy from "./RepoRankcopy";
 
-const CommitAndContinueChallenge = ({ type }) => {
-  const isCommit = type === "commit";
+const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
   const [isJoined, setIsJoined] = useState(false);
   const [participants, setParticipants] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserRank, setCurrentUserRank] = useState(null);
+  const [topCommitUser, setTopCommitUser] = useState(null);
 
   useEffect(() => {
     const load = async () => {
       try {
         const data = await getAllParticipants();
-        setParticipants(data);
-
         const user = getUserFromJWT();
+
+        const withCommitCounts = await Promise.all(
+          data.map(async (p) => {
+            const dayCount = await getMonthlyCommitDays(p.githubId); // ✅ 변경됨
+            return { ...p, commitCount: dayCount }; // 이름은 유지
+          })
+        );
+
+        setParticipants(withCommitCounts);
+
         if (user) {
-          const found = data.find((p) => p.githubId === user.login);
-          setIsJoined(type === "commit" ? !!found?.commit : !!found?.continue);
+          const isUserJoined = withCommitCounts.some(
+            (p) => p.githubId === user.login
+          );
+          setIsJoined(isUserJoined);
+
+          const sorted = [...withCommitCounts].sort(
+            (a, b) => b.commitCount - a.commitCount
+          );
+          const current = sorted.find((p) => p.githubId === user.login);
+          const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
+
+          setCurrentUser(current);
+          setCurrentUserRank(rank);
+          setTopCommitUser(sorted[0]);
         }
       } catch (e) {
+        console.error(e);
         alert("❌ 참여자 목록 불러오기 실패");
       }
     };
 
     load();
-  }, [type]);
+  }, []);
+
+  const handleUserClick = (githubId) => {
+    setSelectedUser(githubId);
+  };
 
   const handleJoin = async () => {
     const user = getUserFromJWT();
@@ -40,12 +72,35 @@ const CommitAndContinueChallenge = ({ type }) => {
     }
 
     try {
-      await joinChallenge({ githubId: user.login, type });
-      alert("✅ 챌린지 참여 완료!");
-      const updated = await getAllParticipants();
-      setParticipants(updated);
-      const found = updated.find((p) => p.githubId === user.login);
-      setIsJoined(type === "commit" ? !!found?.commit : !!found?.continue);
+      await joinChallenge({ githubId: user.login, type: "commit" });
+      alert("✅ 커밋왕 참여 완료!");
+
+      const userCommitCount = await getMonthlyCommitDays(user.login); // ✅ 변경됨
+      const newUser = { githubId: user.login, commitCount: userCommitCount };
+
+      const existing = await getAllParticipants();
+      const othersWithCounts = await Promise.all(
+        existing.map(async (p) => {
+          const count = await getMonthlyCommitDays(p.githubId); // ✅ 변경됨
+          return { ...p, commitCount: count };
+        })
+      );
+
+      const alreadyExists = othersWithCounts.some(
+        (p) => p.githubId === user.login
+      );
+      const updatedList = alreadyExists
+        ? othersWithCounts
+        : [...othersWithCounts, newUser];
+
+      const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
+      const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
+
+      setParticipants(sorted);
+      setIsJoined(true);
+      setCurrentUser(newUser);
+      setCurrentUserRank(rank);
+      setTopCommitUser(sorted[0]);
     } catch (e) {
       alert("⚠️ 이미 참여했거나 오류가 발생했습니다.");
     }
@@ -59,19 +114,38 @@ const CommitAndContinueChallenge = ({ type }) => {
     }
 
     try {
-      await leaveChallenge(user.login, type);
-      alert("🚫 챌린지 참여 취소 완료!");
-      const updated = await getAllParticipants();
-      setParticipants(updated);
-      const found = updated.find((p) => p.githubId === user.login);
-      setIsJoined(type === "commit" ? !!found?.commit : !!found?.continue);
+      await leaveChallenge(user.login, "commit");
+      alert("참여 취소 완료!");
+
+      const data = await getAllParticipants();
+      const withCommitCounts = await Promise.all(
+        data.map(async (p) => {
+          const count = await getMonthlyCommitDays(p.githubId); // ✅ 변경됨
+          return { ...p, commitCount: count };
+        })
+      );
+
+      const updatedList = withCommitCounts.filter(
+        (p) => p.githubId !== user.login
+      );
+
+      const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
+
+      setParticipants(sorted);
+      setIsJoined(false);
+      setCurrentUser(null);
+      setCurrentUserRank(null);
+      setTopCommitUser(sorted[0] ?? null);
+      setSelectedUser(null);
     } catch (e) {
+      console.error(e);
       alert("❌ 참여 취소 실패");
     }
   };
 
-  const title = isCommit ? "Commit King" : "Never Stop Challenge";
-  const label = isCommit ? "💪 커밋왕" : "📅 꾸준왕";
+  const commitParticipants = [...participants]
+    .filter((p) => p.commitCount > 0)
+    .sort((a, b) => b.commitCount - a.commitCount);
 
   return (
     <div className={styles.container}>
@@ -80,15 +154,58 @@ const CommitAndContinueChallenge = ({ type }) => {
       >
         <div className={styles.repoListBox}>
           <div>
-            <p className={styles.commitLabel}>{title}</p>
+            <p className={styles.commitLabel}>Never Stop Challenge</p>
           </div>
 
           <ul className={styles.repoList}>
-            {participants
-              .filter((p) => (isCommit ? p.commit : p.continue))
-              .map((p) => (
-                <li key={p.githubId}>{p.githubId}</li>
-              ))}
+            {commitParticipants.map((p, index) => (
+              <li key={p.githubId}>
+                {index === 0 ? (
+                  <>
+                    <img
+                      src={goldmedal}
+                      alt="1위"
+                      style={{
+                        width: "24px",
+                        verticalAlign: "middle",
+                        marginRight: "6px",
+                      }}
+                    />
+                    {p.githubId} ({p.commitCount ?? 0} days)
+                  </>
+                ) : index === 1 ? (
+                  <>
+                    <img
+                      src={silvermedal}
+                      alt="2위"
+                      style={{
+                        width: "24px",
+                        verticalAlign: "middle",
+                        marginRight: "6px",
+                      }}
+                    />
+                    {p.githubId} ({p.commitCount ?? 0} days)
+                  </>
+                ) : index === 2 ? (
+                  <>
+                    <img
+                      src={bronzemedal}
+                      alt="3위"
+                      style={{
+                        width: "24px",
+                        verticalAlign: "middle",
+                        marginRight: "6px",
+                      }}
+                    />
+                    {p.githubId} ({p.commitCount ?? 0} days)
+                  </>
+                ) : (
+                  <>
+                    {index + 1}위 - {p.githubId} ({p.commitCount ?? 0} days)
+                  </>
+                )}
+              </li>
+            ))}
           </ul>
 
           <div className={styles.pagination}>
@@ -100,10 +217,10 @@ const CommitAndContinueChallenge = ({ type }) => {
       {!isJoined && (
         <div className={styles.joinOverlay}>
           <div className={styles.joinBox}>
-            <p className={styles.title}>{title}</p>
+            <p className={styles.title}>Never Stop Challenge</p>
             <img src={challengeImage} alt="챌린지 대표 이미지" />
             <button className={styles.joinButton} onClick={handleJoin}>
-              📅 꾸준왕 참여하기
+              참가하기
             </button>
           </div>
         </div>
@@ -112,7 +229,7 @@ const CommitAndContinueChallenge = ({ type }) => {
       {isJoined && (
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <button className={styles.joinButton} onClick={handleLeave}>
-            🚫 꾸준왕 참여 취소
+            참여 취소
           </button>
         </div>
       )}

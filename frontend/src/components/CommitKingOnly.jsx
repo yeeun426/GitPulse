@@ -115,7 +115,7 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
 
     try {
       await leaveChallenge(user.login, "commit");
-      alert("🚫 커밋왕 참여 취소 완료!");
+      alert("참여 취소 완료!");
 
       const data = await getAllParticipants();
       const withCommitCounts = await Promise.all(
@@ -220,7 +220,7 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
             <p className={styles.title}>Commit King</p>
             <img src={challengeImage} alt="챌린지 대표 이미지" />
             <button className={styles.joinButton} onClick={handleJoin}>
-              💪 커밋왕 참가하기
+              참가하기
             </button>
           </div>
         </div>
@@ -229,7 +229,7 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
       {isJoined && (
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <button className={styles.joinButton} onClick={handleLeave}>
-            🚫 커밋왕 참여 취소
+            참여 취소
           </button>
         </div>
       )}

@@ -11,12 +11,9 @@ const Challenged = () => {
     <div className={css.container}>
       <h2>Challenge</h2>
       <div className={css.flexRow}>
-        <CommitKingOnly
-          selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser}
-        />
-        {/* <CommitAndContinueChallenge type="continue" /> */}
-        <RepoRankcopy />
+        <CommitKingOnly />
+        <CommitAndContinueChallenge type="continue" />
+        {/* <RepoRankcopy /> */}
       </div>
       <RepoRank />
     </div>
