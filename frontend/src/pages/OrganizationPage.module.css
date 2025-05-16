@@ -1,6 +1,7 @@
 .cardValue {
   cursor: pointer;
 }
+
 .repoSelect {
   font-size: 2rem;
   font-weight: bold;
@@ -74,7 +75,7 @@
   width: 40%;
 }
 .RankingItem {
-  align-items: anchor-center;
+  align-items: center;
 }
 .RankingItem div:nth-child(1) {
   font-size: 25px;
@@ -98,4 +99,80 @@ h3 > strong {
 }
 strong {
   color: var(--main-purple);
+}
+
+@media (max-width: 1410px) {
+  .RecentlyCon,
+  .repoInfoCon {
+    gap: 2rem;
+  }
+
+  .RecentlyItem > div {
+    min-height: 260px;
+  }
+
+  .RecentPRItem div:nth-child(1) {
+    font-size: 19px;
+  }
+
+  .RecentPRItem div:nth-child(3) h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .RecentlyCon,
+  .repoInfoCon {
+    flex-direction: column;
+  }
+
+  .RecentlyItem > div {
+    max-height: none;
+    height: auto;
+  }
+
+  .RankingItem {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .RankingItem div:nth-child(1) {
+    font-size: 22px;
+  }
+
+  .RankingItem div strong {
+    font-size: 20px;
+  }
+
+  .RecentlyItem .RankingItem img {
+    width: 60%;
+  }
+}
+
+@media (max-width: 764px) {
+  .RecentlyItem > div,
+  .RecentPRItem div:nth-child(3) {
+    padding: 0.75rem;
+  }
+
+  .RecentPRItem div:nth-child(1) {
+    font-size: 17px;
+  }
+
+  .RecentPRItem div:nth-child(3) {
+    font-size: 0.95rem;
+  }
+
+  .RecentPRItem div:nth-child(4) {
+    font-size: 12px;
+  }
+
+  .repoSelect {
+    font-size: 1.5rem;
+  }
+
+  .emptyPRItem {
+    font-size: 1rem;
+  }
 }
