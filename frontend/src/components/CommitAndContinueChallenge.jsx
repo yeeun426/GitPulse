@@ -70,7 +70,7 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
     setSelectedUser(githubId);
   };
 
-  const handleJoin = async () => {
+  const handleJoin = async (type = "commit") => {
     const user = getUserFromJWT();
     if (!user) {
       alert("🔐 로그인 후 참여 가능합니다.");
@@ -78,8 +78,8 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
     }
 
     try {
-      await joinChallenge({ githubId: user.login, type: "commit" });
-      alert("✅ 커밋왕 참여 완료!");
+      await joinChallenge({ githubId: user.login, type });
+      alert(`✅ ${type === "commit" ? "커밋왕" : "꾸준왕"} 참여 완료!`);
 
       const userCommitCount = await getMonthlyCommitDays(user.login);
       const newUser = { githubId: user.login, commitCount: userCommitCount };
@@ -103,10 +103,14 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
       const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
 
       setParticipants(sorted);
-      setIsJoined(true);
-      setCurrentUser(newUser);
-      setCurrentUserRank(rank);
-      setTopCommitUser(sorted[0]);
+      if (type === "commit") {
+        setIsJoined(true);
+        setCurrentUser(newUser);
+        setCurrentUserRank(rank);
+        setTopCommitUser(sorted[0]);
+      } else if (type === "continue") {
+        setIsJoinedContinue(true);
+      }
     } catch (e) {
       alert("⚠️ 이미 참여했거나 오류가 발생했습니다.");
     }
@@ -163,7 +167,9 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
   return (
     <div className={styles.container}>
       <div
-        className={`${styles.contentBox} ${!isJoined ? styles.blurred : ""}`}
+        className={`${styles.contentBox} ${
+          !isJoinedContinue ? styles.blurred : ""
+        }`}
       >
         <div className={styles.repoListBox}>
           <div>
@@ -227,26 +233,19 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
         </div>
       </div>
 
-      {!isJoined && (
+      {/* 정리된 꾸준왕 참여/취소 버튼 */}
+      {!isJoinedContinue && (
         <div className={styles.joinOverlay}>
           <div className={styles.joinBox}>
-            <p className={styles.title}>Never Stop Challenge</p>
+            <p className={styles.title}>Commit King</p>
             <img src={challengeImage} alt="챌린지 대표 이미지" />
-            <button className={styles.joinButton} onClick={handleJoin}>
+            <button
+              className={styles.joinButton}
+              onClick={() => handleJoin("continue")}
+            >
               참가하기
             </button>
           </div>
-        </div>
-      )}
-
-      {isJoined && (
-        <div style={{ textAlign: "center", marginTop: "1rem" }}>
-          <button
-            className={styles.joinButton}
-            onClick={() => handleLeave("commit")}
-          >
-            참여 취소
-          </button>
         </div>
       )}
 
@@ -256,7 +255,7 @@ const CommitAndContinueChallenge = ({ selectedUser, setSelectedUser }) => {
             className={styles.joinButton}
             onClick={() => handleLeave("continue")}
           >
-            📭 꾸준왕 취소
+            참여 취소
           </button>
         </div>
       )}
