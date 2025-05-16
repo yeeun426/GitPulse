@@ -9,10 +9,13 @@
 
   padding: 3rem 0rem 0rem 3rem;
 }
-/* Flexbox로 가로 정렬 */
 .flexRow {
   display: flex;
-  gap: 2rem; /* 두 컴포넌트 사이 간격 */
+  gap: 2rem;
   padding: 2rem 3rem;
-  align-items: flex-start; /* 세로 정렬 정리 필요 시 */
+  align-items: flex-start;
+}
+
+.bottomRow {
+  padding: 0rem 3rem 2rem 3rem;
 }

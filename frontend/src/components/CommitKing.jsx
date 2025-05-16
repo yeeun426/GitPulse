@@ -2,27 +2,27 @@ import { useEffect, useState } from "react";
 import styles from "./CommitKing.module.css";
 import challengeImage from "../assets/challenge-visual.png";
 import {
-  getAllParticipants,
-  joinChallenge,
-  leaveChallenge,
-  getUserFromJWT,
-} from "../apis/Challenge.js";
+  getAllParticipants2,
+  joinChallenge2,
+  leaveChallenge2,
+  getUserFromJWT2,
+} from "../apis/Challengecopy.js";
 
 const CommitKing = () => {
-  const [isJoined, setIsJoined] = useState(false);
-  const [participants, setParticipants] = useState([]);
+  const [isJoined, setIsJoined2] = useState(false);
+  const [participants, setParticipants2] = useState([]);
 
   // 초기 데이터 로드: 참가자 목록 + 사용자 참여 여부
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await getAllParticipants();
-        setParticipants(data);
+        const data = await getAllParticipants2();
+        setParticipants2(data);
 
-        const user = getUserFromJWT();
+        const user = getUserFromJWT2();
         if (user) {
           const isUserJoined = data.some((p) => p.githubId === user.login);
-          setIsJoined(isUserJoined);
+          setIsJoined2(isUserJoined);
         }
       } catch (e) {
         alert("❌ 참여자 목록 불러오기 실패");
@@ -32,37 +32,37 @@ const CommitKing = () => {
     load();
   }, []);
 
-  const handleJoin = async () => {
-    const user = getUserFromJWT();
+  const handleJoin2 = async () => {
+    const user = getUserFromJWT2();
     if (!user) {
       alert("🔐 로그인 후 참여 가능합니다.");
       return;
     }
 
     try {
-      await joinChallenge({ githubId: user.login, type: "commit" });
+      await joinChallenge2({ githubId: user.login, type: "commit" });
       alert("✅ 챌린지 참여 완료!");
-      const updated = await getAllParticipants();
-      setParticipants(updated);
-      setIsJoined(true);
+      const updated = await getAllParticipants2();
+      setParticipants2(updated);
+      setIsJoined2(true);
     } catch (e) {
       alert("⚠️ 이미 참여했거나 오류가 발생했습니다.");
     }
   };
 
-  const handleLeave = async () => {
-    const user = getUserFromJWT();
+  const handleLeave2 = async () => {
+    const user = getUserFromJWT2();
     if (!user) {
       alert("🔐 로그인 후만 가능합니다.");
       return;
     }
 
     try {
-      await leaveChallenge(user.login);
+      await leaveChallenge2(user.login);
       alert("🚫 챌린지 참여 취소 완료!");
-      const updated = await getAllParticipants();
-      setParticipants(updated);
-      setIsJoined(false);
+      const updated = await getAllParticipants2();
+      setParticipants2(updated);
+      setIsJoined2(false);
     } catch (e) {
       alert("❌ 참여 취소 실패");
     }
@@ -97,7 +97,7 @@ const CommitKing = () => {
           <div className={styles.joinBox}>
             <p className={styles.title}>Commit King</p>
             <img src={challengeImage} alt="챌린지 대표 이미지" />
-            <button className={styles.joinButton} onClick={handleJoin}>
+            <button className={styles.joinButton} onClick={handleJoin2}>
               참가하기
             </button>
           </div>
@@ -107,7 +107,7 @@ const CommitKing = () => {
       {/* 참가 중이면 취소 버튼 보여줌 */}
       {isJoined && (
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
-          <button className={styles.joinButton} onClick={handleLeave}>
+          <button className={styles.joinButton} onClick={handleLeave2}>
             🚫 참여 취소
           </button>
         </div>

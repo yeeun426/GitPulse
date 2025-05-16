@@ -64,10 +64,29 @@ export const useOrgsInfo = (org) => {
 // 조직 repo 불러오기
 export const getOrgsRepos = async (orgs, repo) => {
   try {
-    const [commit, pulls] = await Promise.all([
-      fetchWithToken(`/repos/${orgs}/${repo}/commits`),
+    const now = new Date(); // 현재 시각
+    const since = new Date(now);
+    since.setDate(now.getDate() - 6); // 6일 전(오늘 포함해서 7일간)
+    since.setHours(0, 0, 0, 0); // 00:00:00.000으로 맞춤
+
+    const until = new Date(now);
+    until.setHours(23, 59, 59, 999); // 오늘 23:59:59.999까지
+
+    const sinceStr = since.toISOString();
+    const untilStr = until.toISOString();
+
+    const [commitsPage1, commitsPage2, pulls] = await Promise.all([
+      fetchWithToken(
+        `/repos/${orgs}/${repo}/commits?since=${sinceStr}&until=${untilStr}&per_page=100&page=1`
+      ),
+      fetchWithToken(
+        `/repos/${orgs}/${repo}/commits?since=${sinceStr}&until=${untilStr}&per_page=100&page=2`
+      ),
       fetchWithToken(`/repos/${orgs}/${repo}/pulls`),
     ]);
+
+    const commit = [...commitsPage1, ...commitsPage2]; // 200개로 병합
+
     return {
       commit,
       pulls,

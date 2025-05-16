@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { throttle } from "../utils/feature";
 import { useOrganizationList } from "../apis/useOrganizationApi";
 import { useNavigate } from "react-router-dom";
+
 const SideBar = () => {
   const [isOn, setIsOn] = useState(false); // 반응형에 필요 (아직 미적용)
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const SideBar = () => {
 
   const { data: groupList, isLoading, isError } = useOrganizationList(username);
   console.log(groupList);
-  // ✅ 로그아웃 핸들러
+
   const handleLogout = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("token"); // 필요 시 추가
@@ -62,17 +63,10 @@ const SideBar = () => {
           icon={"bi-emoji-smile"}
         />
         <CustomNavLink
-          to={"/commitshare"}
-          label={"commit 공유 게시판"}
-          icon={"bi bi-chat-text"}
-        />
-        <CustomNavLink
           to={"/challenged"}
           label={"Challenge"}
           icon={"bi bi-joystick"}
         />
-
-        <CustomNavLink to={"/study"} label={"스터디"} icon={"bi bi-pencil"} />
         <button className={css.logoutButton} onClick={handleLogout}>
           로그아웃
         </button>

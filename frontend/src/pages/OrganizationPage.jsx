@@ -24,7 +24,7 @@ import ReactMarkdown from "react-markdown";
 import { useOrgsInfo, useOrgsRepos } from "../apis/useOrganizationApi";
 
 const OrganizationPage = () => {
-  const { name } = useParams();
+  const { id, name } = useParams();
   const { data, isLoading, isError } = useOrgsInfo(name);
   const members = data?.members;
   const repos = data?.repos;
@@ -56,7 +56,7 @@ const OrganizationPage = () => {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0); // 시간 초기화
 
-    // 일요일 ~ 토요일 배열
+    // 요일 배열
     const dateArray = [...Array(7)].map((_, i) => {
       const d = new Date(today);
       d.setUTCDate(today.getUTCDate() - (6 - i));
@@ -69,7 +69,7 @@ const OrganizationPage = () => {
       return acc;
     }, {});
 
-    const userCommitMap = {}; // 💡 사용자별 커밋 수
+    const userCommitMap = {}; // 사용자별 커밋 수
 
     // 커밋 수 계산
     commit.forEach((commit) => {
@@ -80,14 +80,11 @@ const OrganizationPage = () => {
       const authorLogin =
         commit.author?.login || commit.commit.author?.name || "anonymous";
 
-      if (commitCountByDay[dateStr]) {
-        commitCountByDay[dateStr].total += 1;
-
-        if (authorLogin === curUserLogin) {
-          commitCountByDay[dateStr].mine += 1;
-        }
-        userCommitMap[authorLogin] = (userCommitMap[authorLogin] || 0) + 1;
+      commitCountByDay[dateStr].total += 1;
+      if (authorLogin === curUserLogin) {
+        commitCountByDay[dateStr].mine += 1;
       }
+      userCommitMap[authorLogin] = (userCommitMap[authorLogin] || 0) + 1;
     });
 
     setCommitCounts(commitCountByDay);
@@ -101,7 +98,6 @@ const OrganizationPage = () => {
 
     console.log("일주일간 가장 많이 커밋한 사람:", topCommitter);
     setTopCommit(topCommitter);
-
     setCommitCounts(commitCountByDay);
   }, [commit, curUserLogin]);
 
@@ -183,7 +179,7 @@ const OrganizationPage = () => {
                 <Line
                   type="monotone"
                   dataKey="mine"
-                  stroke="#DADEE3"
+                  stroke="#545d69"
                   name="내 커밋 수"
                 />
               </LineChart>
@@ -193,7 +189,9 @@ const OrganizationPage = () => {
           {/* 최근 PR, 최근 commit */}
           <section className={orgs.RecentlyCon}>
             <div className={orgs.RecentlyItem}>
-              <h3>따끈따끈 PR 소식</h3>
+              <h3>
+                따끈따끈 <strong>PR</strong> 소식
+              </h3>
               {pulls ? (
                 <div className={orgs.RecentPRItem}>
                   <div>{pulls.title}</div>
@@ -208,7 +206,9 @@ const OrganizationPage = () => {
               )}
             </div>
             <div className={orgs.RecentlyItem}>
-              <h3>이번 주 MVP</h3>
+              <h3>
+                이번 주 <strong>MVP</strong>
+              </h3>
               <div className={orgs.RankingItem}>
                 {topCommit && (
                   <>
@@ -227,7 +227,7 @@ const OrganizationPage = () => {
           {/* repo & PR 영역 */}
           <section className={orgs.repoInfoCon}>
             <RepoDetailInfo orgs={name} repo={selected} />
-            <PRTable orgs={name} repo={selected} />
+            <PRTable orgs={name} repo={selected} orgId={id} />
           </section>
 
           {/* 커밋 허수 감지 / 컨벤션 오류 감지 */}
