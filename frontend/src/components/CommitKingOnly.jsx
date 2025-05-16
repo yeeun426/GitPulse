@@ -81,7 +81,14 @@ const CommitKingOnly = () => {
         })
       );
 
-      const updatedList = [...othersWithCounts, newUser];
+      // 이미 있는지 확인하고 중복 추가 방지
+      const alreadyExists = othersWithCounts.some(
+        (p) => p.githubId === user.login
+      );
+      const updatedList = alreadyExists
+        ? othersWithCounts
+        : [...othersWithCounts, newUser];
+
       const sorted = updatedList.sort((a, b) => b.commitCount - a.commitCount);
       const rank = sorted.findIndex((p) => p.githubId === user.login) + 1;
 
@@ -160,7 +167,7 @@ const CommitKingOnly = () => {
                   <>
                     <img
                       src={silvermedal}
-                      alt="1위"
+                      alt="2위"
                       style={{
                         width: "24px",
                         verticalAlign: "middle",
@@ -173,7 +180,7 @@ const CommitKingOnly = () => {
                   <>
                     <img
                       src={bronzemedal}
-                      alt="1위"
+                      alt="3위"
                       style={{
                         width: "24px",
                         verticalAlign: "middle",
