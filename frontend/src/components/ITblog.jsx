@@ -117,7 +117,7 @@ const ITblog = () => {
         observeParents={true}
         breakpoints={{
           0: {
-            slidesPerView: 1,
+            slidesPerView: 2,
             grid: { rows: 2 },
             spaceBetween: 20,
           },
@@ -169,7 +169,9 @@ const ITblog = () => {
         </SwiperSlide>
       </Swiper>
 
-      {swiperRef.current && <CustomScrollbar swiper={swiperRef.current} />}
+      <div className={styles.slider}>
+        {swiperRef.current && <CustomScrollbar swiper={swiperRef.current} />}
+      </div>
     </div>
   );
 };
