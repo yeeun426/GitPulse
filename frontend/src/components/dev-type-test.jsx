@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { toPng } from "html-to-image";
 import { useNavigate } from "react-router-dom";
+import IntroPage from "./IntroPage"
 import css from "./DevTypeTest.module.css";
 
 const questions = [
@@ -230,6 +231,7 @@ const DevTypeTest = () => {
   const [step, setStep] = useState(0);
   const [scores, setScores] = useState({});
   const [isDone, setIsDone] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
   const resultRef = useRef(null);
 
   const handleAnswer = (type) => {
@@ -258,6 +260,7 @@ const DevTypeTest = () => {
   };
 
   const handleRestart = () => {
+    setShowIntro(true);
     setStep(0);
     setScores({});
     setIsDone(false);
@@ -269,12 +272,12 @@ const DevTypeTest = () => {
   const navigate = useNavigate();
   return (
     <div className={css.main}>
-      {/* 변경: 질문화면과 결과화면을 분리하는 최상위 div 구조 */}
-      {!isDone ? (
+      {/* 질문화면과 결과화면을 분리하는 최상위 div 구조 */}
+      {showIntro ? (
+        <IntroPage onStart={() => setShowIntro(false)} />
+      ) : !isDone ? (
         <>
-          <div className={css.header}>
-            <h1 className={css.pageTitle}>개발자 유형 TEST</h1>
-          </div>
+          <div className={css.header}></div>
           <div className={css.progressWrapper}>
             <div className={css.progressBar}>
               <div
@@ -309,18 +312,19 @@ const DevTypeTest = () => {
       ) : (
         <div className={css.resultContainer}>
           {" "}
-          {/* 변경: 결과 전용 컨테이너 */}
-          <div className={css.resultHeader}>
-            <p className={css.resultSubtitle}>나의 개발자 유형은</p>
-            <h2 className={css.resultHeading}>{result.title}</h2>
+          {/* 결과 전용 컨테이너 */}
+          <div ref={resultRef}>
+            <div className={css.resultHeader}>
+              <p className={css.resultSubtitle}>나의 개발자 유형은</p>
+              <h2 className={css.resultHeading}>{result.title}</h2>
+            </div>
+            <img
+              src={result.character}
+              alt={result.title}
+              className={css.resultImageLarge}
+            />
+            <div className={css.resultDescBox}>{result.desc.join("\n")}</div>
           </div>
-          <img
-            src={result.character}
-            alt={result.title}
-            className={css.resultImageLarge}
-            ref={resultRef} // 변경: 이미지 ref로 결과 저장용 타겟
-          />
-          <div className={css.resultDescBox}>{result.desc.join("\n")}</div>
           <div className={css.buttonGroup}>
             <button
               className={css.primaryButton}

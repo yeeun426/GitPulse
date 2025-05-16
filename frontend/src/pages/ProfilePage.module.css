@@ -1,10 +1,9 @@
 .container {
   display: flex;
+  width : 100%;
   min-height: 90vh;
-  width: 100vw;
   background-color: #f9f9fc;
   border-radius: 16px;
-
   overflow-x: hidden;
 }
 
@@ -13,7 +12,7 @@
   flex: 1;
   padding: 2rem;
   width: 100%;
-  margin-left: 16%;
+  margin : 0 auto;
 }
 
 .contentContainer {
@@ -91,34 +90,6 @@
   object-fit: contain;
 }
 
-/* 커밋 잔디 */
-.contributions {
-  background-color: white;
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
-}
-
-.contributions h4 {
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
-}
-
-.contributionGraph {
-  height: 7.5rem;
-  background-color: #f0f0f5;
-  border-radius: 0.5rem;
-}
-
-/* 하단 레이아웃 */
-.bottom {
-  display: flex;
-  gap: 1.5rem;
-}
-
-/* 레포 테이블 */
-
 /* 원형 그래프 */
 .commitTimeChart {
   flex: 1;
@@ -126,12 +97,13 @@
   border-radius: 0.75rem;
   padding: 1.25rem;
   box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
-  text-align: center;
+  text-align: left;
 }
 
 .commitTimeChart h4 {
   margin-bottom: 1rem;
   font-size: 1rem;
+  font-weight : 700;
 }
 
 .chartBox {
@@ -181,6 +153,7 @@
 .contributions h4 {
   margin-bottom: 0.75rem;
   font-size: 1rem;
+  font-weight : 700;
 }
 
 .contributionGraph {
@@ -192,24 +165,9 @@
 /* 하단 레이아웃 */
 .bottom {
   display: flex;
-  gap: 1.5rem;
+  gap: 4rem;
 }
 
-/* 원형 그래프 */
-.commitTimeChart {
-  flex: 1;
-  background-color: white;
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
-  text-align: center;
-}
-
-.commitTimeChart h4 {
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  text-align: left;
-}
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -254,28 +212,31 @@
 }
 
 @media (max-width: 1410px) {
+  .container {
+    flex-direction: column;
+    width: 100vw;
+  }
   .main {
-    margin-left: 0;
+    width: 100%;
+    margin: 0;
     padding: 1.5rem;
   }
-
   .contentContainer {
-    max-width: 90%;
+    max-width: 95%;
+    width: 100%;
   }
-
   .profileStats {
     flex-wrap: wrap;
     justify-content: center;
   }
-
   .bottom {
     flex-direction: column;
   }
-
   .badgeSection {
     flex-direction: column;
   }
 }
+
 
 @media (max-width: 768px) {
   .container {

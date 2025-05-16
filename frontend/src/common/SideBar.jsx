@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import css from "./SideBar.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { throttle } from "../utils/feature";
 import { useOrganizationList } from "../apis/useOrganizationApi";
 
 const SideBar = () => {
   const [isOn, setIsOn] = useState(false);
+  const navigate = useNavigate();
 
   const handleResize = throttle(() => {
     if (window.innerWidth > 1410) {
@@ -59,23 +60,26 @@ const SideBar = () => {
             <img src="/img/icon_mini.png" alt="logo" />
           </a>
         </div>
-        <div className={css.sideBarList}>
-          <CustomNavLink
-            to="/profile"
-            label="My Git"
-            icon="bi-person-fill"
-            onClick={handleNavClick}
-          />
-          {groupList?.map((group) => (
+        <div className={css.scrollableArea}>
+          <div className={css.sideBarList}>
             <CustomNavLink
-              key={group.id}
-              to={`/org/${group.id}/${group.login}`}
-              label={group.login}
-              icon="bi-people-fill"
+              to="/profile"
+              label="My Git"
+              icon="bi-person-fill"
               onClick={handleNavClick}
             />
-          ))}
+            {groupList?.map((group) => (
+              <CustomNavLink
+                key={group.id}
+                to={`/org/${group.id}/${group.login}`}
+                label={group.login}
+                icon="bi-people-fill"
+                onClick={handleNavClick}
+              />
+            ))}
+          </div>
           <div className={css.divider}></div>
+
           <CustomNavLink
             to="/news"
             label="IT News"
@@ -95,6 +99,7 @@ const SideBar = () => {
             icon="bi-joystick"
             onClick={handleNavClick}
           />
+
 
           <button className={css.logoutButton} onClick={handleLogout}>
             로그아웃
