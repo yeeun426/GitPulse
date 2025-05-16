@@ -9,7 +9,6 @@ const NewsPage = () => {
     <div className={css.container}>
       <div className={css.box}>
         <ITblog />
-        <Challenge />
       </div>
     </div>
   );
