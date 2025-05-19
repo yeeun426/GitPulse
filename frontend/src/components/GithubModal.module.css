@@ -72,10 +72,33 @@
   box-sizing: border-box;
 }
 
+.bottom {
+  display : flex;
+  flex-direction: column !important;
+  gap : 3rem;
+}
+.repoWrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+}
+
+
 .commitTimeChart {
   overflow-x: auto;
   max-width: 100%;
   box-sizing: border-box;
+  background-color: white;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.5rem;
+}
+
+.commitTimeChart h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight : 700;
+  padding-left : 1rem;
+  padding-top : 1rem;
 }
 
 .noResultWrapper {
