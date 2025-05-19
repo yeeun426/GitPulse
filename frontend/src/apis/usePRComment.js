@@ -43,15 +43,12 @@ export const postPRComment = async (
 ) => {
   try {
     const isReviewComment = commitId && path && typeof position === "number";
-
     const endpoint = isReviewComment
       ? `/repos/${owner}/${repo}/pulls/${pullNumber}/comments`
       : `/repos/${owner}/${repo}/issues/${pullNumber}/comments`;
-
     const payload = isReviewComment
       ? { body, commit_id: commitId, path, position }
       : { body };
-
     const res = await postWithToken(endpoint, payload);
     return res;
   } catch (error) {
@@ -85,6 +82,6 @@ export const usePRLineReviews = (owner, repo, pullNumber) => {
         console.log("", err);
       }
     },
-    staleTime: 1000 * 5, // 5초 캐싱
+    staleTime: 1000 * 5,
   });
 };

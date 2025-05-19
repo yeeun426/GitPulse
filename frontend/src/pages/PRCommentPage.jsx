@@ -6,6 +6,7 @@ import {
   usePRInfo,
   usePRLineReviews,
 } from "../apis/usePRComment";
+import { getPositionInPatch } from "../utils/prComment.js";
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -27,6 +28,8 @@ const PRCommentPage = () => {
   const pullNumber = parts[7];
 
   const { data, isLoading, isError } = usePRInfo(orgs, repo, pullNumber);
+  const prFiles = data?.files;
+  const commitId = data?.info?.head?.sha;
 
   const {
     data: reviewComments,
@@ -34,45 +37,11 @@ const PRCommentPage = () => {
     refetch: refetchReviewComments,
   } = usePRLineReviews(orgs, repo, pullNumber);
 
-  const prFiles = data?.files;
-  const commitId = data?.info?.head?.sha;
-
   if (isLoading || isReviewLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생!</p>;
 
   const handleCommentChange = (key, value) => {
     setCommentTargets((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const getPositionInPatch = (patch, lineIndex) => {
-    const lines = patch.split("\n");
-    let position = 0;
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      // 무시할 줄들
-      if (
-        line.startsWith("@@") ||
-        line.startsWith("+++") ||
-        line.startsWith("---")
-      ) {
-        continue;
-      }
-      // lineIndex 번째 줄이면
-      if (i === lineIndex) {
-        // 그 줄이 추가된 줄이라면 position 리턴
-        if (line.startsWith("+") && !line.startsWith("+++")) {
-          return position;
-        } else {
-          return null; // 추가된 줄이 아니면 position 못 찾음
-        }
-      }
-      // 위치 계산 - 추가된 줄만 포함
-      if (line.startsWith("+") && !line.startsWith("+++")) {
-        position++;
-      }
-    }
-    return null;
   };
 
   const getCommentsForLine = (filename, lineIndex, patch, comments) => {
@@ -104,6 +73,7 @@ const PRCommentPage = () => {
                     <pre className={css.codeBlock}>
                       {file?.patch?.split("\n").map((line, lineIndex) => {
                         const key = `${file.filename}-${lineIndex}`;
+
                         let bgColor = "";
                         let color = "";
                         const isAddedLine =
@@ -111,7 +81,6 @@ const PRCommentPage = () => {
                         const isRemovedLine =
                           line.startsWith("-") && !line.startsWith("---");
                         const isMetaLine = line.startsWith("@@");
-
                         if (isAddedLine) {
                           bgColor = "#e6ffed";
                           color = "#22863a";
@@ -128,10 +97,9 @@ const PRCommentPage = () => {
                           lineIndex,
                           file.patch,
                           reviewComments
-                        );
-
+                        ); // 라인 리뷰 필터링
                         const hasComments = commentsForLine.length > 0;
-                        const isExpanded = expandedLines[key];
+                        const isLineOpened = expandedLines[key];
 
                         return (
                           <div
@@ -150,7 +118,6 @@ const PRCommentPage = () => {
                               {/* 줄 번호 및 댓글 아이콘 */}
                               <div
                                 style={{
-                                  width: "50px",
                                   paddingLeft: "8px",
                                   paddingRight: "8px",
                                   textAlign: "right",
@@ -190,7 +157,7 @@ const PRCommentPage = () => {
                             </div>
 
                             {/* 댓글 목록 + 작성창 (클릭 시에만 보여줌) */}
-                            {isExpanded && (
+                            {isLineOpened && (
                               <div
                                 style={{
                                   flexBasis: "100%",
@@ -231,14 +198,12 @@ const PRCommentPage = () => {
                                         file.patch,
                                         lineIndex
                                       );
-
                                       if (!commitId || position === null) {
                                         alert(
                                           "커밋 ID 또는 position이 유효하지 않습니다."
                                         );
                                         return;
                                       }
-
                                       await postPRComment(
                                         orgs,
                                         repo,
@@ -248,7 +213,6 @@ const PRCommentPage = () => {
                                         file.filename,
                                         position
                                       );
-
                                       await refetchReviewComments();
                                       handleCommentChange(key, undefined);
                                     }}
