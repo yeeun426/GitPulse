@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import css from "./PRCommentPage.module.css";
 import { useLocation } from "react-router-dom";
-import { postPRComment, usePRInfo } from "../apis/usePRComment";
-import Markdown from "react-markdown";
+import {
+  postPRComment,
+  usePRInfo,
+  usePRLineReviews,
+} from "../apis/usePRComment";
+import { getPositionInPatch } from "../utils/prComment.js";
 
 import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
+
+import PrCommentHeader from "../components/PrCommentHeader.jsx";
+import ColSidePrTab from "../components/ColSidePrTab.jsx";
+import TabPrInfo from "../components/TabPrInfo.jsx";
 
 const PRCommentPage = () => {
   const location = useLocation();
   const { url } = location.state || {};
   const [commentTargets, setCommentTargets] = useState({});
-  const [generalComment, setGeneralComment] = useState("");
+  const [expandedLines, setExpandedLines] = useState({});
 
   const parts = url?.split("/");
   const orgs = parts[4];
@@ -21,113 +28,52 @@ const PRCommentPage = () => {
   const pullNumber = parts[7];
 
   const { data, isLoading, isError } = usePRInfo(orgs, repo, pullNumber);
-
-  const { body, title, created_at, user, state, commits, changed_files } =
-    data?.info || {};
   const prFiles = data?.files;
-  const prComment = data?.comment;
   const commitId = data?.info?.head?.sha;
 
-  if (isLoading) return <p>Loading...</p>;
+  const {
+    data: reviewComments,
+    isLoading: isReviewLoading,
+    refetch: refetchReviewComments,
+  } = usePRLineReviews(orgs, repo, pullNumber);
+
+  if (isLoading || isReviewLoading) return <p>Loading...</p>;
   if (isError) return <p>에러 발생!</p>;
 
   const handleCommentChange = (key, value) => {
     setCommentTargets((prev) => ({ ...prev, [key]: value }));
   };
 
-  const getPositionInPatch = (patch, targetIndex) => {
-    const lines = patch.split("\n");
-    let position = 0;
-
-    for (let i = 0; i <= targetIndex; i++) {
-      const line = lines[i];
-      if (line.startsWith("@@")) continue;
-      if (line.startsWith("+++")) continue;
-      if (line.startsWith("---")) continue;
-
-      position++;
-    }
-
-    return position;
+  const getCommentsForLine = (filename, lineIndex, patch, comments) => {
+    return (
+      comments?.filter((comment) => {
+        return (
+          comment.path === filename &&
+          getPositionInPatch(patch, lineIndex) === comment.position
+        );
+      }) || []
+    );
   };
 
   return (
     <div className={css.prCommentCon}>
-      <header>
-        <h2>
-          PR #{pullNumber} : {title}
-        </h2>
-        <div className={css.prCommentDesc}>
-          <div>작성자 : {user.login}</div>
-          <div>날짜 : {created_at.split("T")[0]}</div>
-          <div>state : {state}</div>
-          <div>커밋 : {commits}개</div>
-          <div>변경된 파일 : {changed_files}개</div>
-        </div>
-      </header>
+      <PrCommentHeader info={data?.info} pullNumber={pullNumber} />
       <main>
         <Tab.Container defaultActiveKey="pr-body">
           <Row>
-            <Col sm={3}>
-              <Nav variant="pills" className="flex-column">
-                <Nav.Item>
-                  <Nav.Link eventKey="pr-body">PR 설명</Nav.Link>
-                </Nav.Item>
-                {prFiles?.map((file) => (
-                  <Nav.Item key={file.filename}>
-                    <Nav.Link eventKey={file.filename}>
-                      {file.filename.split("/").pop()}
-                    </Nav.Link>
-                  </Nav.Item>
-                ))}
-              </Nav>
-            </Col>
-
-            <Col sm={9}>
+            <ColSidePrTab prFiles={prFiles} />
+            <Col className={css.prCon} sm={9}>
               <Tab.Content>
-                {/* PR 설명 탭 */}
-                <Tab.Pane eventKey="pr-body">
-                  <div className={css.prMdCon}>
-                    <Markdown>{body}</Markdown>
-                  </div>
-
-                  <div className={css.commentList}>
-                    {prComment?.map((comment, index) => (
-                      <div key={index} className={css.commentCon}>
-                        <img src={comment.user.avatar_url} />
-                        <div className={css.commentBody}>
-                          <div className={css.commentInfo}>
-                            <div>{comment.user.login}</div>
-                            <div>{comment.created_at.split("T")[0]}</div>
-                          </div>
-                          <div>{comment.body}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div>
-                    <textarea
-                      placeholder="이 PR에 대한 의견을 남겨보세요"
-                      value={generalComment}
-                      onChange={(e) => setGeneralComment(e.target.value)}
-                    />
-                    <button
-                      onClick={() =>
-                        postPRComment(orgs, repo, pullNumber, generalComment)
-                      }
-                    >
-                      일반 코멘트 등록
-                    </button>
-                  </div>
-                </Tab.Pane>
-
+                {/* 코드 변경 요약 탭 */}
+                <TabPrInfo orgs={orgs} repo={repo} pullNumber={pullNumber} />
                 {/* 파일별 탭 */}
                 {prFiles?.map((file) => (
                   <Tab.Pane key={file.filename} eventKey={file.filename}>
                     <h4>{file.filename}</h4>
-                    <pre>
+                    <pre className={css.codeBlock}>
                       {file?.patch?.split("\n").map((line, lineIndex) => {
                         const key = `${file.filename}-${lineIndex}`;
+
                         let bgColor = "";
                         let color = "";
                         const isAddedLine =
@@ -135,7 +81,6 @@ const PRCommentPage = () => {
                         const isRemovedLine =
                           line.startsWith("-") && !line.startsWith("---");
                         const isMetaLine = line.startsWith("@@");
-
                         if (isAddedLine) {
                           bgColor = "#e6ffed";
                           color = "#22863a";
@@ -147,71 +92,134 @@ const PRCommentPage = () => {
                           color = "#6a737d";
                         }
 
-                        const isCommenting = commentTargets[key] !== undefined;
+                        const commentsForLine = getCommentsForLine(
+                          file.filename,
+                          lineIndex,
+                          file.patch,
+                          reviewComments
+                        ); // 라인 리뷰 필터링
+                        const hasComments = commentsForLine.length > 0;
+                        const isLineOpened = expandedLines[key];
 
                         return (
                           <div
                             key={lineIndex}
+                            className={css.codeLineWrapper}
                             style={{
                               backgroundColor: bgColor,
                               color,
-                              padding: "4px",
+                              display: "flex",
+                              padding: "2px 0",
+                              flexDirection: "column",
                             }}
                           >
-                            <div
-                              onClick={() => {
-                                if (isAddedLine) {
-                                  handleCommentChange(
-                                    key,
-                                    commentTargets[key] || ""
-                                  );
-                                }
-                              }}
-                              style={{
-                                cursor: isAddedLine ? "pointer" : "default",
-                              }}
-                            >
-                              {line}
+                            {/* 줄 번호 + 코드 한 줄 */}
+                            <div style={{ display: "flex", width: "100%" }}>
+                              {/* 줄 번호 및 댓글 아이콘 */}
+                              <div
+                                style={{
+                                  paddingLeft: "8px",
+                                  paddingRight: "8px",
+                                  textAlign: "right",
+                                  userSelect: "none",
+                                  color: "#999",
+                                }}
+                              >
+                                {lineIndex + 1}
+                                {hasComments && (
+                                  <span
+                                    className={css.isComment}
+                                    style={{ marginLeft: 10 }}
+                                  >
+                                    💜
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* 코드 줄 내용 */}
+                              <div
+                                style={{
+                                  flex: 1,
+                                  whiteSpace: "pre-wrap",
+                                  cursor: isAddedLine ? "pointer" : "default",
+                                }}
+                                onClick={() => {
+                                  if (isAddedLine) {
+                                    setExpandedLines((prev) => ({
+                                      ...prev,
+                                      [key]: !prev[key],
+                                    }));
+                                  }
+                                }}
+                              >
+                                {line}
+                              </div>
                             </div>
 
-                            {isCommenting && (
-                              <div style={{ marginTop: "4px" }}>
-                                <textarea
-                                  rows={2}
-                                  style={{ width: "100%" }}
-                                  value={commentTargets[key]}
-                                  onChange={(e) =>
-                                    handleCommentChange(key, e.target.value)
-                                  }
-                                />
-                                <button
-                                  onClick={() => {
-                                    const body = commentTargets[key];
-                                    const position = getPositionInPatch(
-                                      file.patch,
-                                      lineIndex
-                                    );
+                            {/* 댓글 목록 + 작성창 (클릭 시에만 보여줌) */}
+                            {isLineOpened && (
+                              <div
+                                style={{
+                                  flexBasis: "100%",
+                                  marginLeft: "50px",
+                                  marginTop: "4px",
+                                }}
+                              >
+                                {/* 댓글 목록 */}
+                                {commentsForLine.map((cmt, i) => (
+                                  <div key={i} className={css.commentBody}>
+                                    <div className={css.commentInfo}>
+                                      <div className={css.commentUser}>
+                                        {cmt.user.login}
+                                      </div>
+                                      <div>{cmt.created_at.split("T")[0]}</div>
+                                    </div>
+                                    <div className={css.lineBody}>
+                                      {cmt.body}
+                                    </div>
+                                  </div>
+                                ))}
 
-                                    if (!commitId || position === null) {
-                                      alert(
-                                        "커밋 ID 또는 position이 유효하지 않습니다."
-                                      );
-                                      return;
+                                {/* 댓글 작성 창 */}
+                                <div className={css.lineComment}>
+                                  <textarea
+                                    placeholder="해당 라인에 리뷰를 달아주세요."
+                                    rows={2}
+                                    style={{ width: "100%" }}
+                                    value={commentTargets[key] || ""}
+                                    onChange={(e) =>
+                                      handleCommentChange(key, e.target.value)
                                     }
-                                    postPRComment(
-                                      orgs,
-                                      repo,
-                                      pullNumber,
-                                      body,
-                                      commitId,
-                                      file.filename,
-                                      position
-                                    );
-                                    handleCommentChange(key, undefined);
-                                  }}
-                                >
-                                  리뷰 등록
-                                </button>
+                                  />
+                                  <button
+                                    onClick={async () => {
+                                      const body = commentTargets[key];
+                                      const position = getPositionInPatch(
+                                        file.patch,
+                                        lineIndex
+                                      );
+                                      if (!commitId || position === null) {
+                                        alert(
+                                          "커밋 ID 또는 position이 유효하지 않습니다."
+                                        );
+                                        return;
+                                      }
+                                      await postPRComment(
+                                        orgs,
+                                        repo,
+                                        pullNumber,
+                                        body,
+                                        commitId,
+                                        file.filename,
+                                        position
+                                      );
+                                      await refetchReviewComments();
+                                      handleCommentChange(key, undefined);
+                                    }}
+                                  >
+                                    리뷰 등록
+                                  </button>
+                                </div>
                               </div>
                             )}
                           </div>

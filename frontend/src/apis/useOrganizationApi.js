@@ -3,6 +3,8 @@ import { fetchWithToken } from "./github";
 
 // 사용자 이름으로 조직 불러오기
 export const getOrganizationsByUser = async (username) => {
+  if (!username) return []; // 또는 return null;
+
   try {
     const res = await fetchWithToken(`/users/${username}/orgs`);
     return res;
