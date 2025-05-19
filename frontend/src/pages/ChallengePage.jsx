@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import css from "./Challenged.module.css";
-import RepoRankcopy from "./RepoRankcopy";
-import CommitKingOnly from "./CommitKingOnly";
-import CommitAndContinueChallenge from "./CommitAndContinueChallenge";
+import css from "./ChallengePage.module.css";
+import CommitKingOnly from "../components/CommitKingOnly";
+import CommitAndContinueChallenge from "../components/CommitAndContinueChallenge";
 
 const Challenged = () => {
   return (
