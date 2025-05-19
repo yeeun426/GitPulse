@@ -207,7 +207,7 @@ const CommitKingOnly = () => {
                       minWidth: "200px",
                       cursor: "pointer",
                       color:
-                        selectedUser === p.githubId ? "#1976d2" : "inherit",
+                        selectedUser === p.githubId ? "#5F41B2" : "inherit",
                       textDecoration:
                         selectedUser === p.githubId ? "underline" : "none",
                     }}
