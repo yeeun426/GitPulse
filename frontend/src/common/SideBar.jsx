@@ -93,18 +93,11 @@ const SideBar = () => {
               onClick={handleNavClick}
             />
             <CustomNavLink
-              to="/commitshare"
-              label="commit 공유 게시판"
-              icon="bi-chat-text"
-              onClick={handleNavClick}
-            />
-            <CustomNavLink
               to="/challenged"
               label="Challenged"
               icon="bi-joystick"
               onClick={handleNavClick}
             />
-            <CustomNavLink to="/study" label="스터디" icon="bi-pencil" />
           </div>
           <button className={css.logoutButton} onClick={handleLogout}>
             로그아웃

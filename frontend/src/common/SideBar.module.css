@@ -6,14 +6,13 @@
   max-width: 350px;
   background: white;
   border-right: 1px solid #b4b6c573;
-  padding-right: 2rem;
+  padding: 2rem;
 }
 
 /* 오버레이 */
 .sideBarCon.on {
   transform: translateX(0);
 }
-
 .hamburger {
   display: none;
   position: fixed;

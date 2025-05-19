@@ -22,7 +22,6 @@ export const fetchWithToken = async (path, params = {}) => {
 export const postWithToken = async (path, data = {}) => {
   const token = localStorage.getItem("jwt");
   const res = await axios.post(`${API_BASE}/github/proxy${path}`, data, {
-    // params: { path },
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
