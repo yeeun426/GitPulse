@@ -14,13 +14,18 @@ const PRCommentPage = () => {
   const { url } = location.state || {};
   const [commentTargets, setCommentTargets] = useState({});
   const [generalComment, setGeneralComment] = useState("");
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
 
   const parts = url?.split("/");
   const orgs = parts[4];
   const repo = parts[5];
   const pullNumber = parts[7];
 
-  const { data, isLoading, isError } = usePRInfo(orgs, repo, pullNumber);
+  const { data, isLoading, isError, refetch } = usePRInfo(
+    orgs,
+    repo,
+    pullNumber
+  );
 
   const { body, title, created_at, user, state, commits, changed_files } =
     data?.info || {};
@@ -35,6 +40,19 @@ const PRCommentPage = () => {
     setCommentTargets((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handlePRComment = async (orgs, repo, pullNumber, generalComment) => {
+    try {
+      setIsCommentLoading(true);
+      await postPRComment(orgs, repo, pullNumber, generalComment);
+      setGeneralComment("");
+      await refetch(); // 리렌더링을 위한 데이터 다시 불러오기
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsCommentLoading(false);
+    }
+  };
+
   const getPositionInPatch = (patch, targetIndex) => {
     const lines = patch.split("\n");
     let position = 0;
@@ -47,7 +65,6 @@ const PRCommentPage = () => {
 
       position++;
     }
-
     return position;
   };
 
@@ -68,25 +85,28 @@ const PRCommentPage = () => {
       <main>
         <Tab.Container defaultActiveKey="pr-body">
           <Row>
-            <Col sm={3}>
+            <Col className={css.prSidebar} sm={3}>
               <Nav variant="pills" className="flex-column">
                 <Nav.Item>
-                  <Nav.Link eventKey="pr-body">PR 설명</Nav.Link>
+                  <Nav.Link eventKey="pr-body">코드 변경 요약</Nav.Link>
                 </Nav.Item>
                 {prFiles?.map((file) => (
                   <Nav.Item key={file.filename}>
-                    <Nav.Link eventKey={file.filename}>
-                      {file.filename.split("/").pop()}
+                    <Nav.Link className={css.fileName} eventKey={file.filename}>
+                      <span className="text-ellipsis">
+                        {file.filename.split("/").pop()}
+                      </span>
                     </Nav.Link>
                   </Nav.Item>
                 ))}
               </Nav>
             </Col>
 
-            <Col sm={9}>
+            <Col className={css.prCon} sm={9}>
               <Tab.Content>
                 {/* PR 설명 탭 */}
                 <Tab.Pane eventKey="pr-body">
+                  <h4>코드 변경 요약</h4>
                   <div className={css.prMdCon}>
                     <Markdown>{body}</Markdown>
                   </div>
@@ -97,26 +117,32 @@ const PRCommentPage = () => {
                         <img src={comment.user.avatar_url} />
                         <div className={css.commentBody}>
                           <div className={css.commentInfo}>
-                            <div>{comment.user.login}</div>
-                            <div>{comment.created_at.split("T")[0]}</div>
+                            <div className={css.commentUser}>
+                              {comment.user.login}
+                            </div>
+                            <div className={css.commentDate}>
+                              {comment.created_at.split("T")[0]}
+                            </div>
                           </div>
                           <div>{comment.body}</div>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div>
+
+                  <div className={css.commentInput}>
                     <textarea
                       placeholder="이 PR에 대한 의견을 남겨보세요"
                       value={generalComment}
                       onChange={(e) => setGeneralComment(e.target.value)}
                     />
                     <button
+                      disabled={isCommentLoading}
                       onClick={() =>
-                        postPRComment(orgs, repo, pullNumber, generalComment)
+                        handlePRComment(orgs, repo, pullNumber, generalComment)
                       }
                     >
-                      일반 코멘트 등록
+                      Comment
                     </button>
                   </div>
                 </Tab.Pane>
@@ -175,7 +201,10 @@ const PRCommentPage = () => {
                             </div>
 
                             {isCommenting && (
-                              <div style={{ marginTop: "4px" }}>
+                              <div
+                                style={{ marginTop: "4px" }}
+                                className={css.lineComment}
+                              >
                                 <textarea
                                   rows={2}
                                   style={{ width: "100%" }}

@@ -27,3 +27,22 @@
 p {
   margin-bottom: 0;
 }
+
+.nav-pills .nav-link.active {
+  background-color: var(--main-purple);
+}
+.nav-link {
+  color: var(--main-purple);
+}
+.nav-item {
+  display: block;
+  width: 100%;
+}
+
+.text-ellipsis {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
