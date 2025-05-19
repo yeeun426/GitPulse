@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getUserRepos, getRepoCommits, fetchWithToken } from "../apis/github";
 import styles from "./RepoRank.module.css";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-
+import loading from "../assets/loading.png";
 const RepoRankcopy = ({ selectedUser }) => {
   const [commitList, setCommitList] = useState([]);
   const [selectedCommit, setSelectedCommit] = useState(null);
@@ -83,12 +83,50 @@ const RepoRankcopy = ({ selectedUser }) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.containertitle}>{selectedUser}'s' Commits</h2>
+      <h2 className={styles.containertitle}>{selectedUser}'s Commits</h2>
       <div className={styles.contentBox}>
         {/* 좌측: 커밋 메시지 리스트 + 페이지네이션 */}
         <div className={styles.readmeViewer}>
           <h3 className={styles.readmeHeader}>커밋 메시지</h3>
 
+          <div style={{ marginTop: 16 }}>
+            {loadingCommits && (
+              <div className={styles.loadingCommits}>
+                <img src={loading} alt="커밋 로딩" />{" "}
+              </div>
+            )}
+            {!loadingCommits && pagedCommits.length === 0 && (
+              <div className={styles.emptyPlaceholder}>커밋이 없습니다</div>
+            )}
+            {!loadingCommits &&
+              pagedCommits.map((commit) => (
+                <button
+                  key={commit.sha}
+                  onClick={() => handleCommitClick(commit)}
+                  className={
+                    selectedCommit?.sha === commit.sha ? styles.activePage : ""
+                  }
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    textAlign: "left",
+                    marginBottom: "4px",
+                    background:
+                      selectedCommit?.sha === commit.sha ? "#d0f0ff" : "#fff",
+                    border: "1px solid #eee",
+                    borderRadius: 4,
+                    padding: 8,
+                  }}
+                >
+                  <div style={{ fontWeight: "bold" }}>
+                    {commit.commit.message}
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#888" }}>
+                    {commit.repoName} | {commit.commit.author.date.slice(0, 10)}
+                  </div>
+                </button>
+              ))}
+          </div>
           <div className={styles.pagination}>
             <button onClick={() => setPage(1)} disabled={page === 1}>
               «
@@ -121,41 +159,6 @@ const RepoRankcopy = ({ selectedUser }) => {
             >
               »
             </button>
-          </div>
-
-          <div style={{ marginTop: 16 }}>
-            {loadingCommits && <div>커밋 로딩 중...</div>}
-            {!loadingCommits && pagedCommits.length === 0 && (
-              <div className={styles.emptyPlaceholder}>커밋이 없습니다</div>
-            )}
-            {!loadingCommits &&
-              pagedCommits.map((commit) => (
-                <button
-                  key={commit.sha}
-                  onClick={() => handleCommitClick(commit)}
-                  className={
-                    selectedCommit?.sha === commit.sha ? styles.activePage : ""
-                  }
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    textAlign: "left",
-                    marginBottom: "4px",
-                    background:
-                      selectedCommit?.sha === commit.sha ? "#d0f0ff" : "#fff",
-                    border: "1px solid #eee",
-                    borderRadius: 4,
-                    padding: 8,
-                  }}
-                >
-                  <div style={{ fontWeight: "bold" }}>
-                    {commit.commit.message}
-                  </div>
-                  <div style={{ fontSize: "12px", color: "#888" }}>
-                    {commit.repoName} | {commit.commit.author.date.slice(0, 10)}
-                  </div>
-                </button>
-              ))}
           </div>
         </div>
 
