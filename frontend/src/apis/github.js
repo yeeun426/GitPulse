@@ -283,9 +283,9 @@ export const getRateLimit = async () => {
 
 export const getMonthlyCommitCount = async (username) => {
   try {
-    const since = new Date();
-    since.setMonth(since.getMonth() - 1);
-    const sinceISOString = since.toISOString();
+    const now = new Date();
+    const since = new Date(now.getFullYear(), now.getMonth() - 1, 1); // 지난달 1일
+    const until = new Date(now.getFullYear(), now.getMonth(), 1); // 이번달 1일
 
     const events = [];
     for (let page = 1; page <= 3; page++) {
@@ -297,7 +297,8 @@ export const getMonthlyCommitCount = async (username) => {
       if (!Array.isArray(res) || res.length === 0) break;
 
       res.forEach((event) => {
-        if (event.type === "PushEvent" && event.created_at >= sinceISOString) {
+        const created = new Date(event.created_at);
+        if (event.type === "PushEvent" && created >= since && created < until) {
           events.push(event);
         }
       });
@@ -310,7 +311,7 @@ export const getMonthlyCommitCount = async (username) => {
 
     return commitCount;
   } catch (err) {
-    console.error("월간 커밋 수 가져오기 실패", err);
+    console.error("지난달 커밋 수 가져오기 실패", err);
     return 0;
   }
 };
@@ -318,7 +319,7 @@ export const getMonthlyCommitCount = async (username) => {
 export const getMonthlyCommitDays = async (username) => {
   try {
     const since = new Date();
-    since.setMonth(since.getMonth() - 1);
+    since.setDate(since.getDate() - 30); // 지난 30일로 변경
     const sinceISOString = since.toISOString();
     const dateSet = new Set();
 
