@@ -27,11 +27,22 @@ export const getAllParticipants = async () => {
   }
 };
 
+//JWT Token
 export const getUserFromJWT = () => {
   const token = localStorage.getItem("jwt");
   if (!token) return null;
+
   try {
-    const payloadBase64 = token.split(".")[1];
+    const payloadBase64Url = token.split(".")[1];
+    // Base64Url → Base64 변환
+    const payloadBase64 = payloadBase64Url
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .padEnd(
+        payloadBase64Url.length + ((4 - (payloadBase64Url.length % 4)) % 4),
+        "="
+      );
+
     const decoded = JSON.parse(atob(payloadBase64));
     return decoded; // { login, name, avatar_url }
   } catch (e) {

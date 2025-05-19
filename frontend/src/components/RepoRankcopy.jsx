@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  getUserRepos,
-  getRepoCommits,
   fetchWithToken,
   getMonthlyCommitCount,
   getMonthlyCommitDays,
@@ -27,7 +25,6 @@ const RepoRankcopy = ({ selectedUser }) => {
   const [loadingCommits, setLoadingCommits] = useState(false);
   const [loadingFiles, setLoadingFiles] = useState(false);
 
-  // 커밋 수 출력
   useEffect(() => {
     if (selectedUser) {
       logMonthlyCommitStats(selectedUser);
@@ -47,44 +44,59 @@ const RepoRankcopy = ({ selectedUser }) => {
       setCommitList([]);
       setSelectedCommit(null);
       setCommitFiles([]);
+
       try {
-        const repos = await getUserRepos(selectedUser, 1, 100);
-        let allCommits = [];
         const now = new Date();
-        const startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        const endDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const thisMonthFirst = new Date(now.getFullYear(), now.getMonth(), 1);
+        const lastMonthFirst = new Date(
+          now.getFullYear(),
+          now.getMonth() - 1,
+          1
+        );
+        const sinceISOString = lastMonthFirst.toISOString();
+        const untilISOString = thisMonthFirst.toISOString();
 
-        for (const repo of repos) {
-          let page = 1;
-          let keepFetching = true;
+        const events = [];
+        for (let page = 1; page <= 3; page++) {
+          const res = await fetchWithToken(`/users/${selectedUser}/events`, {
+            per_page: 100,
+            page,
+          });
 
-          while (keepFetching) {
-            const commits = await getRepoCommits(
-              selectedUser,
-              repo.name,
-              100,
-              page
-            );
-            if (!commits.length) break;
+          if (!Array.isArray(res) || res.length === 0) break;
 
-            const filtered = commits.filter((commit) => {
-              const commitDate = new Date(commit.commit.author.date);
-              return commitDate >= startDate && commitDate < endDate;
+          res.forEach((event) => {
+            if (
+              event.type === "PushEvent" &&
+              event.created_at >= sinceISOString &&
+              event.created_at < untilISOString
+            ) {
+              events.push(event);
+            }
+          });
+        }
+
+        // 이벤트 기반 커밋 리스트 생성
+        const allCommits = [];
+
+        for (const event of events) {
+          const repoName = event.repo.name.split("/")[1];
+          const eventDate = event.created_at;
+
+          event.payload.commits.forEach((commit) => {
+            allCommits.push({
+              sha: commit.sha,
+              repoName,
+              commit: {
+                message: commit.message,
+                author: {
+                  date: eventDate,
+                  name: commit.author?.name || "",
+                  email: commit.author?.email || "",
+                },
+              },
             });
-
-            allCommits = allCommits.concat(
-              filtered.map((c) => ({ ...c, repoName: repo.name }))
-            );
-
-            if (commits.length < 100) break;
-
-            const isAllOlder = commits.every(
-              (commit) => new Date(commit.commit.author.date) < startDate
-            );
-            if (isAllOlder) break;
-
-            page += 1;
-          }
+          });
         }
 
         allCommits.sort(
@@ -178,8 +190,7 @@ const RepoRankcopy = ({ selectedUser }) => {
                     {commit.commit.message}
                   </div>
                   <div style={{ fontSize: "12px", color: "#888" }}>
-                    {commit.repoName} |{" "}
-                    {commit.commit.author.date.slice(0, 100)}
+                    {commit.repoName} | {commit.commit.author.date.slice(0, 10)}
                   </div>
                 </button>
               ))}

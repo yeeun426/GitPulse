@@ -125,11 +125,13 @@ const GithubModal = ({ username, onClose }) => {
               />
             </section>
 
-            <section className={css.bottom}>
-              <RepoTable username={username} />
-              <div className={css.commitTimeChart}>
+            <section className={modalStyle.bottom}>
+              <div className={modalStyle.commitTimeChart}>
                 <h4>Commit Time Graph</h4>
                 <CommitTimeChart username={username} />
+              </div>
+              <div className={css.repoWrapper}>
+                <RepoTable username={username} />
               </div>
             </section>
           </div>
