@@ -13,12 +13,13 @@ import {
 import { getMonthlyCommitCount } from "../apis/github";
 import RepoRankcopy from "./RepoRankcopy";
 
-const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
+const CommitKingOnly = () => {
   const [isJoined, setIsJoined] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserRank, setCurrentUserRank] = useState(null);
   const [topCommitUser, setTopCommitUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // 추가
 
   useEffect(() => {
     const load = async () => {
@@ -136,10 +137,8 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
       setCurrentUser(null);
       setCurrentUserRank(null);
       setTopCommitUser(sorted[0] ?? null);
-      setSelectedUser(null);
-    } catch (e) {
-      console.error(e);
-    }
+      setSelectedUser(null); // 참여취소 시 RepoRankcopy 안보이게
+    } catch (e) {}
   };
 
   const commitParticipants = [...participants]
@@ -157,54 +156,80 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
           </div>
 
           <ul className={styles.repoList}>
-            {commitParticipants.map((p, index) => (
-              <li key={p.githubId}>
-                {index === 0 ? (
-                  <>
-                    <img
-                      src={goldmedal}
-                      alt="1위"
-                      style={{
-                        width: "24px",
-                        verticalAlign: "middle",
-                        marginRight: "6px",
-                      }}
-                    />
-                    {p.githubId} ({p.commitCount ?? 0} commits)
-                  </>
-                ) : index === 1 ? (
-                  <>
-                    <img
-                      src={silvermedal}
-                      alt="2위"
-                      style={{
-                        width: "24px",
-                        verticalAlign: "middle",
-                        marginRight: "6px",
-                      }}
-                    />
-                    {p.githubId} ({p.commitCount ?? 0} commits)
-                  </>
-                ) : index === 2 ? (
-                  <>
-                    <img
-                      src={bronzemedal}
-                      alt="3위"
-                      style={{
-                        width: "24px",
-                        verticalAlign: "middle",
-                        marginRight: "6px",
-                      }}
-                    />
-                    {p.githubId} ({p.commitCount ?? 0} commits)
-                  </>
-                ) : (
-                  <>
-                    {index + 1}위 - {p.githubId} ({p.commitCount ?? 0} commits)
-                  </>
-                )}
-              </li>
-            ))}
+            {commitParticipants.map((p, index) => {
+              const medal =
+                index === 0
+                  ? goldmedal
+                  : index === 1
+                  ? silvermedal
+                  : index === 2
+                  ? bronzemedal
+                  : null;
+
+              return (
+                <li
+                  key={p.githubId}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "8px 0",
+                    position: "relative",
+                  }}
+                >
+                  {/* 왼쪽: 메달 or 등수 */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100px",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    {medal ? (
+                      <img
+                        src={medal}
+                        alt={`${index + 1}위`}
+                        style={{ width: "24px", verticalAlign: "middle" }}
+                      />
+                    ) : (
+                      <span>{index + 1}위</span>
+                    )}
+                  </div>
+
+                  {/* 가운데: GitHub ID */}
+                  <div
+                    style={{
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      minWidth: "200px",
+                      cursor: "pointer",
+                      color:
+                        selectedUser === p.githubId ? "#1976d2" : "inherit",
+                      textDecoration:
+                        selectedUser === p.githubId ? "underline" : "none",
+                    }}
+                    onClick={() => handleUserClick(p.githubId)}
+                  >
+                    {p.githubId}
+                  </div>
+
+                  {/* 오른쪽: 커밋 수 */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      width: "100px",
+                      textAlign: "right",
+                    }}
+                  >
+                    {p.commitCount ?? 0}회
+                  </div>
+                </li>
+              );
+            })}
           </ul>
 
           <div className={styles.pagination}>
@@ -216,7 +241,7 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
       {!isJoined && (
         <div className={styles.joinOverlay}>
           <div className={styles.joinBox}>
-            <p className={styles.title}>Commit King</p>
+            <p className={styles.title}>Commit's Challenge</p>
             <img src={challengeImage} alt="챌린지 대표 이미지" />
             <button className={styles.joinButton} onClick={handleJoin}>
               참가하기
@@ -230,6 +255,13 @@ const CommitKingOnly = ({ selectedUser, setSelectedUser }) => {
           <button className={styles.joinButton} onClick={handleLeave}>
             참여 취소
           </button>
+        </div>
+      )}
+
+      {/* 아래에 RepoRankcopy 추가 */}
+      {selectedUser && (
+        <div style={{ marginTop: 40 }}>
+          <RepoRankcopy selectedUser={selectedUser} />
         </div>
       )}
     </div>

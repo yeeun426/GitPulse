@@ -7,8 +7,8 @@
   background: white;
   border-right: 1px solid #b4b6c573;
   padding: 2rem;
-  padding-bottom: 0;
 }
+
 /* 오버레이 */
 .sideBarCon.on {
   transform: translateX(0);

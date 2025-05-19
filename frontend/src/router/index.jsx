@@ -7,7 +7,6 @@ import DevTypeTest from "../pages/DevTestPage.jsx";
 import NewsPage from "../pages/NewsPage";
 import Challenged from "../components/Challenged";
 import PRCommentPage from "../pages/PRCommentPage.jsx";
-
 export const router = createBrowserRouter([
   {
     path: "/", // 로그인 페이지
