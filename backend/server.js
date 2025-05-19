@@ -167,6 +167,38 @@ app.post(
     }
   }
 );
+// 일반 PR 코멘트 달기용 (본문 전체에 댓글)
+app.post(
+  "/github/proxy/repos/:owner/:repo/issues/:number/comments",
+  authenticate,
+  async (req, res) => {
+    const { owner, repo, number } = req.params;
+    const { body } = req.body;
+
+    const token = userAccessTokens[req.user.login];
+    if (!token) return res.status(404).json({ message: "AccessToken 없음" });
+
+    try {
+      const response = await axios.post(
+        `https://api.github.com/repos/${owner}/${repo}/issues/${number}/comments`,
+        { body },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+          },
+        }
+      );
+      res.json(response.data);
+    } catch (error) {
+      console.error(
+        "일반 PR 코멘트 실패:",
+        error.response?.data || error.message
+      );
+      res.status(500).json({ message: "GitHub POST 호출 실패" });
+    }
+  }
+);
 
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;

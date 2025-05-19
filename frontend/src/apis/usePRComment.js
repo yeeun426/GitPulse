@@ -32,35 +32,30 @@ export const usePRInfo = (orgs, repo, pullNumber) => {
   });
 };
 
-export const postReviewComment = async (
+export const postPRComment = async (
   owner,
   repo,
   pullNumber,
   body,
-  commitId,
-  path,
-  position
+  commitId, // optional
+  path, // optional
+  position // optional
 ) => {
   try {
-    console.log(owner, repo, pullNumber, body, commitId, path, position);
-    console.log({
-      body,
-      commit_id: commitId,
-      path,
-      position,
-    });
-    const res = await postWithToken(
-      `/repos/${owner}/${repo}/pulls/${pullNumber}/comments`,
-      {
-        body,
-        commit_id: commitId,
-        path,
-        position: position, // diff에서의 줄 번호
-      }
-    );
+    const isReviewComment = commitId && path && typeof position === "number";
+
+    const endpoint = isReviewComment
+      ? `/repos/${owner}/${repo}/pulls/${pullNumber}/comments`
+      : `/repos/${owner}/${repo}/issues/${pullNumber}/comments`;
+
+    const payload = isReviewComment
+      ? { body, commit_id: commitId, path, position }
+      : { body };
+
+    const res = await postWithToken(endpoint, payload);
     return res;
   } catch (error) {
-    console.error("comment달기 실패", error.response?.data || error);
+    console.error("PR 코멘트 실패", error.response?.data || error);
     throw error;
   }
 };
