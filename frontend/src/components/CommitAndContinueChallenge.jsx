@@ -262,12 +262,14 @@ const CommitAndContinueChallenge = () => {
           <div className={styles.joinBox}>
             <p className={styles.title}>Never Stop Challenge</p>
             <img src={challengeImage} alt="챌린지 대표 이미지" />
-            <button
-              className={styles.joinButton}
-              onClick={() => handleJoin("continue")}
-            >
-              참가하기
-            </button>
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+              <button
+                className={styles.joinButton}
+                onClick={() => handleJoin("continue")}
+              >
+                참가하기
+              </button>
+            </div>
           </div>
         </div>
       )}
