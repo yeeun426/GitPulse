@@ -22,6 +22,7 @@ export const fetchWithToken = async (path, params = {}) => {
 export const postWithToken = async (path, data = {}) => {
   const token = localStorage.getItem("jwt");
   const res = await axios.post(`${API_BASE}/github/proxy${path}`, data, {
+    // params: { path },
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -283,9 +284,12 @@ export const getRateLimit = async () => {
 
 export const getMonthlyCommitCount = async (username) => {
   try {
-    const since = new Date();
-    since.setMonth(since.getMonth() - 1);
-    const sinceISOString = since.toISOString();
+    const now = new Date();
+    const thisMonthFirst = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthFirst = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+    const sinceISOString = lastMonthFirst.toISOString();
+    const untilISOString = thisMonthFirst.toISOString();
 
     const events = [];
     for (let page = 1; page <= 3; page++) {
@@ -297,7 +301,11 @@ export const getMonthlyCommitCount = async (username) => {
       if (!Array.isArray(res) || res.length === 0) break;
 
       res.forEach((event) => {
-        if (event.type === "PushEvent" && event.created_at >= sinceISOString) {
+        if (
+          event.type === "PushEvent" &&
+          event.created_at >= sinceISOString &&
+          event.created_at < untilISOString
+        ) {
           events.push(event);
         }
       });
@@ -317,9 +325,13 @@ export const getMonthlyCommitCount = async (username) => {
 
 export const getMonthlyCommitDays = async (username) => {
   try {
-    const since = new Date();
-    since.setMonth(since.getMonth() - 1);
-    const sinceISOString = since.toISOString();
+    const now = new Date();
+    const thisMonthFirst = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthFirst = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+    const sinceISOString = lastMonthFirst.toISOString();
+    const untilISOString = thisMonthFirst.toISOString();
+
     const dateSet = new Set();
 
     for (let page = 1; page <= 3; page++) {
@@ -331,7 +343,11 @@ export const getMonthlyCommitDays = async (username) => {
       if (!Array.isArray(res) || res.length === 0) break;
 
       res.forEach((event) => {
-        if (event.type === "PushEvent" && event.created_at >= sinceISOString) {
+        if (
+          event.type === "PushEvent" &&
+          event.created_at >= sinceISOString &&
+          event.created_at < untilISOString
+        ) {
           const date = new Date(event.created_at).toISOString().split("T")[0];
           dateSet.add(date);
         }
