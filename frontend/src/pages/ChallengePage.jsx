@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./ChallengePage.module.css";
+import css from "./ChallengePage.module.css";
 import ChallengeBox from "../components/ChallengeBox";
 import CommitListViewer from "../components/CommitListViewer";
 
@@ -9,9 +9,9 @@ const ChallengePage = () => {
   const [activeType, setActiveType] = useState(null);
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Challenge</h2>
-      <div className={styles.challengeRow}>
+    <div className={css.container}>
+      <h2 className={css.title}>Challenge</h2>
+      <div className={css.challengeRow}>
         <ChallengeBox
           title="Commit's Challenge"
           type="commit"
@@ -40,8 +40,8 @@ const ChallengePage = () => {
           }}
         />
       </div>
-      <div className={styles.viewerSection}>
-      <h2 className={styles.title}>Commit List</h2>
+      <div className={css.viewerSection}>
+        <h2 className={css.title}>Commit List</h2>
         <CommitListViewer
           selectedUser={selectedUser}
           selectedRepo={selectedRepo}

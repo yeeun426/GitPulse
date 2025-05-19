@@ -86,6 +86,7 @@ export const getUserRepos = async (username, page = 1, perPage = 5) => {
 
 export const getRepoCommits = async (username, repoName, perPage = 30) => {
   try {
+    if (!repoName) throw new Error("유효하지 않은 repoName");
     const res = await fetchWithToken(`/repos/${username}/${repoName}/commits`, {
       per_page: perPage,
     });
@@ -377,6 +378,7 @@ export const fetchRepos = async (sort = "stars", page = 1, perPage = 10) => {
   }
 };
 
+// Readme 불러오기기
 export const fetchReadme = async (owner, repo) => {
   try {
     const readme = await fetchWithToken(`/repos/${owner}/${repo}/readme`);
@@ -384,5 +386,24 @@ export const fetchReadme = async (owner, repo) => {
   } catch (err) {
     console.error("readMe 불러오기 실패:", err);
     return "";
+  }
+};
+
+//Diff 가져오기기
+export const getCommitDiff = async (username, repoName, sha) => {
+  try {
+    const res = await fetchWithToken(
+      `/repos/${username}/${repoName}/commits/${sha}`
+    );
+    const files = res.files || [];
+    const diffs = files.map((file) => {
+      return `\`\`\`diff
+${file.patch || ""}
+\`\`\``;
+    });
+    return diffs.join("\n\n");
+  } catch (err) {
+    console.error("커밋 diff 불러오기 실패", err);
+    return "불러오기 실패";
   }
 };

@@ -34,7 +34,6 @@ export const getUserFromJWT = () => {
 
   try {
     const payloadBase64Url = token.split(".")[1];
-    // Base64Url → Base64 변환
     const payloadBase64 = payloadBase64Url
       .replace(/-/g, "+")
       .replace(/_/g, "/")
@@ -58,7 +57,7 @@ export const leaveChallenge = async (githubId, type) => {
     );
     return res.data;
   } catch (err) {
-    console.error("❌ 챌린지 취소 실패:", err.response?.data || err.message);
+    console.error("챌린지 취소 실패:", err.response?.data || err.message);
     throw err;
   }
 };

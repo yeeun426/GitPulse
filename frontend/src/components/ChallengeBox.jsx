@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./ChallengeBox.module.css";
+import css from "./ChallengeBox.module.css";
 import challengeImage from "../assets/challenge-visual.png";
 import medalImages from "../utils/medals"; // { gold, silver, bronze }
 import {
@@ -98,14 +98,14 @@ const ChallengeBox = ({ title, type, onSelect }) => {
         key={label}
         onClick={() => onSelect(isRepo ? item.repo : item.githubId)}
       >
-        <div className={styles.rank}>{medal ? "" : `${index + 1}th`}</div>
+        <div className={css.rank}>{medal ? "" : `${index + 1}th`}</div>
         {medal ? (
-          <img className={styles.medal} src={medal} alt="medal" />
+          <img className={css.medal} src={medal} alt="medal" />
         ) : (
-          <div style={{ width: "3rem"}}></div> // 빈 칸 확보
+          <div style={{ width: "3rem" }}></div> // 빈 칸 확보
         )}
-        <div className={styles.label}>{label}</div>
-        <div className={styles.count}>
+        <div className={css.label}>{label}</div>
+        <div className={css.count}>
           {type === "continue" ? `${count}일` : `${count}회`}
         </div>
       </li>
@@ -113,22 +113,22 @@ const ChallengeBox = ({ title, type, onSelect }) => {
   };
 
   return (
-    <div className={`${styles.box} ${!joined ? styles.blurred : ""}`}>
-      <p className={styles.header}>{title}</p>
+    <div className={`${css.box} ${!joined ? css.blurred : ""}`}>
+      <p className={css.header}>{title}</p>
 
-      <ul className={styles.list}>
+      <ul className={css.list}>
         {participants.map((p, i) => renderListItem(p, i))}
       </ul>
 
       {!joined && (
-        <div className={styles.overlay}>
+        <div className={css.overlay}>
           <img src={challengeImage} alt="배경" />
           <button onClick={handleJoin}>참여하기</button>
         </div>
       )}
 
       {joined && type !== "star" && (
-        <button className={styles.leave} onClick={handleLeave}>
+        <button className={css.leave} onClick={handleLeave}>
           참여 취소
         </button>
       )}
