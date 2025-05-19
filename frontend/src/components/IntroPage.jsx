@@ -1,7 +1,5 @@
-import React from "react";
 import css from "./IntroPage.module.css";
-import logoImage from "../assets/icon_mini.png"; // 이미지 파일 경로 확인!
-import SideBar from "../common/SideBar";
+import logoImage from "../assets/icon_mini.png";
 
 const IntroPage = ({ onStart }) => {
   return (
@@ -12,7 +10,7 @@ const IntroPage = ({ onStart }) => {
       </div>
       <p className={css.subtitle}>나의 개발자 유형과 숨겨진 능력은 ?</p>
       <button onClick={onStart} className={css.startButton}>
-        테스트 시작하기
+        테스트 시작하기 🚀
       </button>
     </main>
   );

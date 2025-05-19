@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { toPng } from "html-to-image";
 import { useNavigate } from "react-router-dom";
-import IntroPage from "./IntroPage"
+import IntroPage from "./IntroPage";
 import css from "./DevTypeTest.module.css";
 
 const questions = [
@@ -277,7 +277,6 @@ const DevTypeTest = () => {
         <IntroPage onStart={() => setShowIntro(false)} />
       ) : !isDone ? (
         <>
-          <div className={css.header}></div>
           <div className={css.progressWrapper}>
             <div className={css.progressBar}>
               <div
@@ -330,7 +329,7 @@ const DevTypeTest = () => {
               className={css.primaryButton}
               onClick={() => navigate("/news")}
             >
-              프론트엔드 IT 뉴스 바로가기
+              요즘 인기있는 기술 트렌드 보기
             </button>
             <button className={css.outlinedButton} onClick={handleDownload}>
               결과 이미지 저장하기
