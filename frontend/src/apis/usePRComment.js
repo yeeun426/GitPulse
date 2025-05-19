@@ -59,3 +59,32 @@ export const postPRComment = async (
     throw error;
   }
 };
+
+// PR 정보 불러오기
+export const getPRLineReviews = async (owner, repo, pullNumber) => {
+  try {
+    const res = await fetchWithToken(
+      `/repos/${owner}/${repo}/pulls/${pullNumber}/comments`
+    );
+    return res;
+  } catch (error) {
+    console.log("리뷰 가져오기 실패", error);
+    throw error;
+  }
+};
+
+export const usePRLineReviews = (owner, repo, pullNumber) => {
+  return useQuery({
+    queryKey: ["review-comments", owner, repo, pullNumber],
+    queryFn: async () => {
+      try {
+        const data =
+          pullNumber && (await getPRLineReviews(owner, repo, pullNumber));
+        return data;
+      } catch (err) {
+        console.log("", err);
+      }
+    },
+    staleTime: 1000 * 5, // 5초 캐싱
+  });
+};

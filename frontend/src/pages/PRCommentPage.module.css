@@ -17,17 +17,7 @@
   margin: auto;
   padding-top: 3rem;
 }
-.prCommentDesc {
-  display: flex;
-  gap: 2rem;
-  margin-top: 1.5rem;
-}
-.prCommentDesc div {
-  background: white;
-  padding: 0.5rem 2rem;
-  box-shadow: 5px 5px 8px #e8e8e891;
-  border-radius: 21px;
-}
+
 /* md UI */
 .prCommentCon .prMdCon {
   background-color: white;
@@ -95,15 +85,16 @@
   margin: auto;
   margin-top: 2rem;
 }
-.commentList .commentBody {
+.commentBody {
   display: flex;
   flex-direction: column;
   background: white;
-  width: 90%;
   padding: 1rem 1.5rem;
   border-radius: 21px;
   border: 1px solid lightgray;
   box-shadow: 5px 5px 5px #d3d3d37a;
+  width: 60%;
+  margin: auto;
 }
 .commentList .commentUser {
   font-size: 14px;
@@ -138,8 +129,11 @@
   margin-top: 1rem;
 }
 .lineComment {
-  width: 90%;
+  width: 60%;
+  border-top: 2px solid #dadada;
   margin: auto;
+  margin-top: 1rem;
+  padding-top: 1rem;
 }
 pre {
   font-family: "monospace";
@@ -153,7 +147,6 @@ pre {
 pre > div {
   white-space: pre-wrap;
 }
-
 .prSidebar {
   height: 35rem;
   overflow: auto;
@@ -161,4 +154,12 @@ pre > div {
   padding: 1rem;
   border-radius: 15px 0 0 15px;
   margin-top: 2.5rem;
+}
+.lineBody {
+  color: black;
+  font-size: 16px;
+}
+.codeLineWrapper .commentBody {
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
