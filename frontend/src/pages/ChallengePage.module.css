@@ -1,23 +1,28 @@
+:root {
+  --card-width: 21rem;
+  --card-gap: 13rem;
+}
 .container {
-    background-color: #f9f9fc;
-    width: 100vw;
-  }
-  
-  .container h2 {
-    font-size: var(--fs33);
-  
-    font-size: 3rem;
-  
-    padding: 3rem 0rem 0rem 3rem;
-  }
-  .flexRow {
-    display: flex;
-    gap: 2rem;
-    padding: 2rem 3rem;
-    align-items: flex-start;
-  }
-  
-  .bottomRow {
-    padding: 0rem 3rem 2rem 3rem;
-  }
-  
+  width: 100%;
+  background-color: #f9f9fc;
+  padding: 2rem 1rem;
+}
+.title {
+  font-size: 3rem;
+  color: #5a5f6b;
+  text-align: left;
+  margin-left: 6rem;
+  margin-bottom: 1.5rem;
+  margin-top : 2rem;
+  font-weight : 700;
+}
+.challengeRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--card-gap);
+  width: calc(var(--card-width) * 3 + var(--card-gap) * 2);
+  margin: 0 auto;
+}
+.viewerSection {
+  margin-top: 2rem;
+}

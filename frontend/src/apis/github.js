@@ -360,3 +360,29 @@ export const getMonthlyCommitDays = async (username) => {
     return 0;
   }
 };
+
+export const fetchRepos = async (sort = "stars", page = 1, perPage = 10) => {
+  try {
+    const res = await fetchWithToken(`/search/repositories`, {
+      q: "stars:>100",
+      sort,
+      order: "desc",
+      page,
+      per_page: perPage,
+    });
+    return res.items || [];
+  } catch (err) {
+    console.error("인기 레포지토리 불러오기 실패", err);
+    return [];
+  }
+};
+
+export const fetchReadme = async (owner, repo) => {
+  try {
+    const readme = await fetchWithToken(`/repos/${owner}/${repo}/readme`);
+    return typeof readme === "string" ? readme : ""; // markdown text
+  } catch (err) {
+    console.error("readMe 불러오기 실패:", err);
+    return "";
+  }
+};
