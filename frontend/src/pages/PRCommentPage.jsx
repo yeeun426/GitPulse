@@ -6,44 +6,35 @@ import {
   usePRInfo,
   usePRLineReviews,
 } from "../apis/usePRComment";
-import Markdown from "react-markdown";
 
 import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 
 import PrCommentHeader from "../components/PrCommentHeader.jsx";
+import ColSidePrTab from "../components/ColSidePrTab.jsx";
+import TabPrInfo from "../components/TabPrInfo.jsx";
 
 const PRCommentPage = () => {
   const location = useLocation();
   const { url } = location.state || {};
   const [commentTargets, setCommentTargets] = useState({});
-  const [generalComment, setGeneralComment] = useState("");
   const [expandedLines, setExpandedLines] = useState({});
-
-  const [isCommentLoading, setIsCommentLoading] = useState(false);
 
   const parts = url?.split("/");
   const orgs = parts[4];
   const repo = parts[5];
   const pullNumber = parts[7];
 
-  const { data, isLoading, isError, refetch } = usePRInfo(
-    orgs,
-    repo,
-    pullNumber
-  );
+  const { data, isLoading, isError } = usePRInfo(orgs, repo, pullNumber);
+
   const {
     data: reviewComments,
     isLoading: isReviewLoading,
     refetch: refetchReviewComments,
   } = usePRLineReviews(orgs, repo, pullNumber);
 
-  console.log(reviewComments);
-  const { body } = data?.info || {};
   const prFiles = data?.files;
-  const prComment = data?.comment;
   const commitId = data?.info?.head?.sha;
 
   if (isLoading || isReviewLoading) return <p>Loading...</p>;
@@ -51,19 +42,6 @@ const PRCommentPage = () => {
 
   const handleCommentChange = (key, value) => {
     setCommentTargets((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handlePRComment = async (orgs, repo, pullNumber, generalComment) => {
-    try {
-      setIsCommentLoading(true);
-      await postPRComment(orgs, repo, pullNumber, generalComment);
-      setGeneralComment("");
-      await refetch(); // 리렌더링을 위한 데이터 다시 불러오기
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsCommentLoading(false);
-    }
   };
 
   const getPositionInPatch = (patch, lineIndex) => {
@@ -114,68 +92,11 @@ const PRCommentPage = () => {
       <main>
         <Tab.Container defaultActiveKey="pr-body">
           <Row>
-            <Col className={css.prSidebar} sm={3}>
-              <Nav variant="pills" className="flex-column">
-                <Nav.Item>
-                  <Nav.Link eventKey="pr-body">코드 변경 요약</Nav.Link>
-                </Nav.Item>
-                {prFiles?.map((file) => (
-                  <Nav.Item key={file.filename}>
-                    <Nav.Link className={css.fileName} eventKey={file.filename}>
-                      <span className="text-ellipsis">
-                        {file.filename.split("/").pop()}
-                      </span>
-                    </Nav.Link>
-                  </Nav.Item>
-                ))}
-              </Nav>
-            </Col>
-
+            <ColSidePrTab prFiles={prFiles} />
             <Col className={css.prCon} sm={9}>
               <Tab.Content>
                 {/* 코드 변경 요약 탭 */}
-                <Tab.Pane eventKey="pr-body">
-                  <h4>코드 변경 요약</h4>
-                  <div className={css.prMdCon}>
-                    <Markdown>{body}</Markdown>
-                  </div>
-
-                  <div className={css.commentList}>
-                    {prComment?.map((comment, index) => (
-                      <div key={index} className={css.commentCon}>
-                        <img src={comment.user.avatar_url} />
-                        <div className={css.commentBody}>
-                          <div className={css.commentInfo}>
-                            <div className={css.commentUser}>
-                              {comment.user.login}
-                            </div>
-                            <div className={css.commentDate}>
-                              {comment.created_at.split("T")[0]}
-                            </div>
-                          </div>
-                          <div>{comment.body}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className={css.commentInput}>
-                    <textarea
-                      placeholder="이 PR에 대한 의견을 남겨보세요"
-                      value={generalComment}
-                      onChange={(e) => setGeneralComment(e.target.value)}
-                    />
-                    <button
-                      disabled={isCommentLoading}
-                      onClick={() =>
-                        handlePRComment(orgs, repo, pullNumber, generalComment)
-                      }
-                    >
-                      Comment
-                    </button>
-                  </div>
-                </Tab.Pane>
-
+                <TabPrInfo orgs={orgs} repo={repo} pullNumber={pullNumber} />
                 {/* 파일별 탭 */}
                 {prFiles?.map((file) => (
                   <Tab.Pane key={file.filename} eventKey={file.filename}>
@@ -295,6 +216,7 @@ const PRCommentPage = () => {
                                 {/* 댓글 작성 창 */}
                                 <div className={css.lineComment}>
                                   <textarea
+                                    placeholder="해당 라인에 리뷰를 달아주세요."
                                     rows={2}
                                     style={{ width: "100%" }}
                                     value={commentTargets[key] || ""}
