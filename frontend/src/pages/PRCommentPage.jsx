@@ -182,13 +182,10 @@ const PRCommentPage = () => {
 
                                 {/* 댓글 작성 창 */}
                                 <div className={css.lineComment}>
-                                  <textarea
-                                    placeholder="해당 라인에 리뷰를 달아주세요."
-                                    rows={2}
-                                    style={{ width: "100%" }}
-                                    value={commentTargets[key] || ""}
-                                    onChange={(e) =>
-                                      handleCommentChange(key, e.target.value)
+                                  <LineCommentInput
+                                    value={commentTargets[key]}
+                                    onChange={(val) =>
+                                      handleCommentChange(key, val)
                                     }
                                   />
                                   <button
@@ -238,3 +235,13 @@ const PRCommentPage = () => {
 };
 
 export default PRCommentPage;
+
+const LineCommentInput = React.memo(({ value, onChange }) => (
+  <textarea
+    placeholder="해당 라인에 리뷰를 달아주세요."
+    rows={2}
+    style={{ width: "100%" }}
+    value={value || ""}
+    onChange={(e) => onChange(e.target.value)}
+  />
+));
