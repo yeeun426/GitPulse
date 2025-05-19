@@ -83,7 +83,7 @@ const RepoRankcopy = ({ selectedUser }) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.containertitle}>{selectedUser}의 Commits</h2>
+      <h2 className={styles.containertitle}>{selectedUser}'s' Commits</h2>
       <div className={styles.contentBox}>
         {/* 좌측: 커밋 메시지 리스트 + 페이지네이션 */}
         <div className={styles.readmeViewer}>
