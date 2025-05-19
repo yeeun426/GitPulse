@@ -10,12 +10,16 @@
 .container h2 {
   font-size: 3rem;
   margin-bottom: 30px;
-  font-weight: 600;
+  /* font-weight: 600; */
+  margin-top: 5rem;
 }
 
 .box {
-  margin-top: 0px;
-  margin-left: 8%;
+  /* margin-top: 0px;
+  margin-left: 8%; */
+  width: 80%;
+  margin: auto;
+  min-height: 100vh;
 }
 @media (max-width: 1410px) {
   .box {

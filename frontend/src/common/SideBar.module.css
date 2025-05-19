@@ -90,7 +90,7 @@
 }
 .logoutButton {
   margin-top: 10px;
-  margin-left: 30px;
+  /* margin-left: 30px; */
   padding: 10px 30px;
   background-color: var(--main-dark-gray);
   color: white;
@@ -98,6 +98,8 @@
   border-radius: 2rem;
   cursor: pointer;
   transition: 0.3s ease;
+  width: 90%;
+  margin: auto;
 }
 
 .logoutButton:hover {

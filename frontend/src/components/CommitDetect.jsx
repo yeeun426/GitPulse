@@ -7,8 +7,6 @@ const CommitDetect = ({ name, repo }) => {
     name,
     repo,
   });
-
-  console.log(suspiciousCommits);
   return (
     <div className={css.detectTable}>
       <div className={css.tableTitle}>

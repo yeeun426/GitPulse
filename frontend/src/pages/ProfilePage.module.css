@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  width : 100%;
+  width: 100%;
   min-height: 90vh;
   background-color: #f9f9fc;
   border-radius: 16px;
@@ -12,7 +12,8 @@
   flex: 1;
   padding: 2rem;
   width: 100%;
-  margin : 0 auto;
+  margin: 0 auto;
+  padding-bottom: 4rem;
 }
 
 .contentContainer {
@@ -103,7 +104,7 @@
 .commitTimeChart h4 {
   margin-bottom: 1rem;
   font-size: 1rem;
-  font-weight : 700;
+  font-weight: 700;
 }
 
 .chartBox {
@@ -153,7 +154,7 @@
 .contributions h4 {
   margin-bottom: 0.75rem;
   font-size: 1rem;
-  font-weight : 700;
+  font-weight: 700;
 }
 
 .contributionGraph {
@@ -236,7 +237,6 @@
     flex-direction: column;
   }
 }
-
 
 @media (max-width: 768px) {
   .container {
