@@ -5,17 +5,14 @@ import CommitKingOnly from "./CommitKingOnly";
 import CommitAndContinueChallenge from "./CommitAndContinueChallenge";
 import RepoRank from "./RepoRank";
 const Challenged = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
-
   return (
     <div className={css.container}>
       <h2>Challenge</h2>
-      <div className={css.flexRow}>
-        <CommitKingOnly />
-        <CommitAndContinueChallenge type="continue" />
-        {/* <RepoRankcopy /> */}
-      </div>
-      <RepoRank />
+
+      <CommitKingOnly />
+      <CommitAndContinueChallenge type="continue" />
+      {/* <RepoRankcopy /> */}
+      {/* <RepoRankcopy selectedUser={selectedUser} /> */}
     </div>
   );
 };
