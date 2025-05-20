@@ -27,8 +27,9 @@ const ChallengeBox = ({ title, type, onSelect }) => {
     const currentUser = getUserFromJWT();
     setUser(currentUser);
 
-    const year = 2025;
-    const month = 5;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
     const { since, until } = getKRMonthRange(year, month);
 
     let commitData = [];
@@ -38,7 +39,11 @@ const ChallengeBox = ({ title, type, onSelect }) => {
         data
           .filter((p) => p.commit)
           .map(async (p) => {
-            const commits = await getAllUserCommitRepos(p.githubId, since, until);
+            const commits = await getAllUserCommitRepos(
+              p.githubId,
+              since,
+              until
+            );
             return {
               githubId: p.githubId,
               count: commits.length,
@@ -68,9 +73,13 @@ const ChallengeBox = ({ title, type, onSelect }) => {
 
     if (currentUser) {
       if (type === "commit")
-        setJoined(data.some((p) => p.githubId === currentUser.login && p.commit));
+        setJoined(
+          data.some((p) => p.githubId === currentUser.login && p.commit)
+        );
       if (type === "continue")
-        setJoined(data.some((p) => p.githubId === currentUser.login && p.continue));
+        setJoined(
+          data.some((p) => p.githubId === currentUser.login && p.continue)
+        );
       if (type === "star") setJoined(true);
     }
     setLoading(false);
@@ -125,8 +134,16 @@ const ChallengeBox = ({ title, type, onSelect }) => {
 
       {loading ? (
         <div className={css.loadingWrapper}>
-          <img src="/img/ChallengeLoading.png" alt="로딩 중" className={css.loadingImage} />
-          <p className={css.loadingText}>챌린지 친구들을<br/>불러오고 있어요...</p>
+          <img
+            src="/img/ChallengeLoading.png"
+            alt="로딩 중"
+            className={css.loadingImage}
+          />
+          <p className={css.loadingText}>
+            챌린지 친구들을
+            <br />
+            불러오고 있어요...
+          </p>
         </div>
       ) : (
         <>
