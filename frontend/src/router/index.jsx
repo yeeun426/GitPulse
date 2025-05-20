@@ -5,8 +5,8 @@ import OrganizationPage from "../pages/OrganizationPage";
 import ProfilePage from "../pages/ProfilePage";
 import DevTypeTest from "../pages/DevTestPage.jsx";
 import NewsPage from "../pages/NewsPage";
-import Challenged from "../components/Challenged";
 import PRCommentPage from "../pages/PRCommentPage.jsx";
+import ChallengePage from "../pages/ChallengePage.jsx"
 export const router = createBrowserRouter([
   {
     path: "/", // 로그인 페이지
@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "challenged",
-        element: <Challenged />,
+        element: <ChallengePage />,
       },
     ],
   },

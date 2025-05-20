@@ -13,7 +13,6 @@ import {
   fetchRssFeeds,
 } from "../apis/ItBlogapi.js";
 import CustomScrollbar from "./CustomScrollbar";
-import Challenge from "./Challenge.jsx";
 
 const extractImage = (html) => {
   const match = html?.match(/<img.*?src=["'](.*?)["']/);
