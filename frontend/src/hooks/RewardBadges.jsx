@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import Badges from "../components/Badges";
 import css from "./RewardBadges.module.css";
 
@@ -20,7 +20,6 @@ import BugImg from "/img/Bug Image.svg";
 import AlchemyImg from "/img/Alchemy image.svg";
 import NightImg from "/img/Night Owl image.svg";
 
-// 뱃지 메타
 const BADGE_CONFIG = {
   firstCommit: {
     src: FirstCommitImg,
@@ -67,16 +66,13 @@ const RewardBadges = ({ username }) => {
   const [earnedBadges, setEarnedBadges] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  // 모달에 그릴 전체 뱃지 배열
   const allKeys = Object.keys(BADGE_CONFIG);
 
   useEffect(() => {
     const load = async () => {
       if (!username) return;
       const earned = [];
-
       const repos = await getUserRepos(username, 1, 10);
-      // 첫 커밋
       for (const r of repos) {
         const commits = await getRepoCommits(username, r.name, 10);
         if (commits.length > 0) {
@@ -84,27 +80,21 @@ const RewardBadges = ({ username }) => {
           break;
         }
       }
-      // 100일 커밋
       if ((await getUserCommitDates(username)) >= 100) {
         earned.push("hundredCommit");
       }
-      // PR 챔피언
       if ((await getMergedPullRequests(username)) >= 30) {
         earned.push("prChampion");
       }
-      // 연금술사
       if ((await getLanguageDiversity(username)) >= 5) {
         earned.push("alchemist");
       }
-      // 야행성 코더
       if ((await getLateNightCommitDays(username)) >= 30) {
         earned.push("nightOwl");
       }
-      // 버그 사냥꾼
       if ((await getUserCreatedExternalIssues(username)) >= 10) {
         earned.push("bugHunter");
       }
-
       setEarnedBadges(earned);
       setIsLoading(false);
     };
@@ -113,8 +103,7 @@ const RewardBadges = ({ username }) => {
 
   return (
     <>
-      {/*클릭하면 모달 */}
-      <div className={css.badgesWrapper} onClick={() => setShowModal(true)}>
+      <div className={css.badgesWrapper}>
         {isLoading ? (
           <div className={css.loadingBox}>
             <img
@@ -127,9 +116,16 @@ const RewardBadges = ({ username }) => {
         ) : (
           <Badges badges={earnedBadges.map((key) => BADGE_CONFIG[key].src)} />
         )}
+
+        <button
+          className={css.helpButton}
+          onClick={() => setShowModal(true)}
+          aria-label="뱃지 설명 보기"
+        >
+          <i className="bi bi-question-circle"></i>
+        </button>
       </div>
 
-      {/* 모달 */}
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
