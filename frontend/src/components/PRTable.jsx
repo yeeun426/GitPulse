@@ -7,9 +7,6 @@ const PRTable = ({ orgId, orgs, repo }) => {
   const { data: PRList, isLoading, isError } = useOrgsPR(orgs, repo);
   const navigate = useNavigate();
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>에러 발생!</p>;
-
   const handlePrComment = (number, url) => {
     navigate(`/org/${orgId}/${orgs}/${number}`, {
       state: { url },

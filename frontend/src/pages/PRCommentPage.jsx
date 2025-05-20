@@ -15,6 +15,7 @@ import Tab from "react-bootstrap/Tab";
 import PrCommentHeader from "../components/PrCommentHeader.jsx";
 import ColSidePrTab from "../components/ColSidePrTab.jsx";
 import TabPrInfo from "../components/TabPrInfo.jsx";
+import Loading from "../common/Loading.jsx";
 
 const PRCommentPage = () => {
   const location = useLocation();
@@ -37,7 +38,7 @@ const PRCommentPage = () => {
     refetch: refetchReviewComments,
   } = usePRLineReviews(orgs, repo, pullNumber);
 
-  if (isLoading || isReviewLoading) return <p>Loading...</p>;
+  if (isLoading || isReviewLoading) return <Loading />;
   if (isError) return <p>에러 발생!</p>;
 
   const handleCommentChange = (key, value) => {
