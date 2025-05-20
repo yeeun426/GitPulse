@@ -53,3 +53,9 @@ p {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.spinnerCon {
+  height: 100vh;
+  margin: auto;
+  align-content: center;
+  text-align: center;
+}
