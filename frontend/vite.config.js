@@ -7,7 +7,7 @@ export default defineConfig({
     historyApiFallback: true, // SPA 라우팅 지원
     proxy: {
       "/api": {
-        target: "http://localhost:3000", // 백엔드 서버 주소
+        target: "https://gitpulse-04.onrender.com", // 백엔드 서버 주소
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
