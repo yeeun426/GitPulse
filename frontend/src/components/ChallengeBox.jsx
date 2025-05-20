@@ -19,13 +19,14 @@ const ChallengeBox = ({ title, type, onSelect }) => {
   const [participants, setParticipants] = useState([]);
   const [joined, setJoined] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
+    setLoading(true);
     const data = await getAllParticipants();
     const currentUser = getUserFromJWT();
     setUser(currentUser);
 
-    // 년도/월 설정
     const year = 2025;
     const month = 5;
     const { since, until } = getKRMonthRange(year, month);
@@ -33,16 +34,11 @@ const ChallengeBox = ({ title, type, onSelect }) => {
     let commitData = [];
 
     if (type === "commit") {
-      //PushEvent가 아닌 실제 커밋 개수 기준
       commitData = await Promise.all(
         data
           .filter((p) => p.commit)
           .map(async (p) => {
-            const commits = await getAllUserCommitRepos(
-              p.githubId,
-              since,
-              until
-            );
+            const commits = await getAllUserCommitRepos(p.githubId, since, until);
             return {
               githubId: p.githubId,
               count: commits.length,
@@ -72,15 +68,12 @@ const ChallengeBox = ({ title, type, onSelect }) => {
 
     if (currentUser) {
       if (type === "commit")
-        setJoined(
-          data.some((p) => p.githubId === currentUser.login && p.commit)
-        );
+        setJoined(data.some((p) => p.githubId === currentUser.login && p.commit));
       if (type === "continue")
-        setJoined(
-          data.some((p) => p.githubId === currentUser.login && p.continue)
-        );
+        setJoined(data.some((p) => p.githubId === currentUser.login && p.continue));
       if (type === "star") setJoined(true);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -116,7 +109,7 @@ const ChallengeBox = ({ title, type, onSelect }) => {
         {medal ? (
           <img className={css.medal} src={medal} alt="medal" />
         ) : (
-          <div style={{ width: "3rem" }}></div> // 빈 칸 확보
+          <div style={{ width: "3rem" }}></div>
         )}
         <div className={css.label}>{label}</div>
         <div className={css.count}>
@@ -130,23 +123,32 @@ const ChallengeBox = ({ title, type, onSelect }) => {
     <div className={`${css.box} ${!joined ? css.blurred : ""}`}>
       <p className={css.header}>{title}</p>
 
-      <ul className={css.list}>
-        {participants.map((p, i) => renderListItem(p, i))}
-      </ul>
-
-      {!joined && (
-        <div className={css.overlay}>
-          <img src={challengeImage} alt="배경" />
-          <button className={css.joinButton} onClick={handleJoin}>
-            참여하기
-          </button>
+      {loading ? (
+        <div className={css.loadingWrapper}>
+          <img src="/img/ChallengeLoading.png" alt="로딩 중" className={css.loadingImage} />
+          <p className={css.loadingText}>챌린지 친구들을<br/>불러오고 있어요...</p>
         </div>
-      )}
+      ) : (
+        <>
+          <ul className={css.list}>
+            {participants.map((p, i) => renderListItem(p, i))}
+          </ul>
 
-      {joined && type !== "star" && (
-        <button className={css.leave} onClick={handleLeave}>
-          참여 취소
-        </button>
+          {!joined && (
+            <div className={css.overlay}>
+              <img src={challengeImage} alt="배경" />
+              <button className={css.joinButton} onClick={handleJoin}>
+                참여하기
+              </button>
+            </div>
+          )}
+
+          {joined && type !== "star" && (
+            <button className={css.leave} onClick={handleLeave}>
+              참여 취소
+            </button>
+          )}
+        </>
       )}
     </div>
   );

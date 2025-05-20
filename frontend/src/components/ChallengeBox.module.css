@@ -137,3 +137,37 @@
     color : white;
     background : #c54c4c
 }
+
+.loadingWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  min-height: 20rem;
+}
+
+.loadingImage {
+  width: 12rem;
+  animation: float 2s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+.loadingText {
+  font-size: 1.5rem;
+  color: #7c68c3;
+  font-weight: 600;
+  animation: float 2s ease-in-out infinite;
+}
+
+/* 🟣 부유 애니메이션 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
