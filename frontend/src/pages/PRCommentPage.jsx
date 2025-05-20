@@ -15,6 +15,7 @@ import Tab from "react-bootstrap/Tab";
 import PrCommentHeader from "../components/PrCommentHeader.jsx";
 import ColSidePrTab from "../components/ColSidePrTab.jsx";
 import TabPrInfo from "../components/TabPrInfo.jsx";
+import Loading from "../common/Loading.jsx";
 
 const PRCommentPage = () => {
   const location = useLocation();
@@ -37,7 +38,7 @@ const PRCommentPage = () => {
     refetch: refetchReviewComments,
   } = usePRLineReviews(orgs, repo, pullNumber);
 
-  if (isLoading || isReviewLoading) return <p>Loading...</p>;
+  if (isLoading || isReviewLoading) return <Loading />;
   if (isError) return <p>에러 발생!</p>;
 
   const handleCommentChange = (key, value) => {
@@ -182,13 +183,10 @@ const PRCommentPage = () => {
 
                                 {/* 댓글 작성 창 */}
                                 <div className={css.lineComment}>
-                                  <textarea
-                                    placeholder="해당 라인에 리뷰를 달아주세요."
-                                    rows={2}
-                                    style={{ width: "100%" }}
-                                    value={commentTargets[key] || ""}
-                                    onChange={(e) =>
-                                      handleCommentChange(key, e.target.value)
+                                  <LineCommentInput
+                                    value={commentTargets[key]}
+                                    onChange={(val) =>
+                                      handleCommentChange(key, val)
                                     }
                                   />
                                   <button
@@ -238,3 +236,13 @@ const PRCommentPage = () => {
 };
 
 export default PRCommentPage;
+
+const LineCommentInput = React.memo(({ value, onChange }) => (
+  <textarea
+    placeholder="해당 라인에 리뷰를 달아주세요."
+    rows={2}
+    style={{ width: "100%" }}
+    value={value || ""}
+    onChange={(e) => onChange(e.target.value)}
+  />
+));

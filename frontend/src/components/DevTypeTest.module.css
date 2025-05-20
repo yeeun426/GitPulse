@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "S-CoreDream-3Light";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -8,6 +16,7 @@
   padding: 2rem 5rem;
   width: 100%;
   margin: 0 auto;
+  gap: 2rem;
 }
 
 .header {
@@ -26,10 +35,9 @@
 .progressWrapper {
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 80%;
   margin-left: 3rem;
-  max-width: 1000px;
-  margin-bottom: 3;
+  margin-top: 2rem;
 }
 
 .progressBar {
@@ -65,19 +73,15 @@
 
 .questionTitle {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #2b3a4b;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .questionNumber {
   color: #7c3aed;
   margin-right: 0.5rem;
-}
-
-.questionTitle {
-  font-size: 2.5rem;
 }
 
 .options {
@@ -98,14 +102,12 @@
   cursor: pointer;
   color: #545d69;
   font-size: 1.4rem;
-  font-weight: 700;
   transition: 0.4s ease;
 }
 
 .optionButton:hover {
   background-color: #c1b0f0;
   color: white;
-  font-weight: 900;
   transform: translateY(-5px);
 }
 
@@ -116,20 +118,21 @@
   margin: 2rem auto;
   text-align: center;
 }
-
 .resultHeader {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-family: "S-CoreDream-3Light";
 }
-
+.resultContainer h2 {
+  font-family: "S-CoreDream-3Light";
+}
 .resultSubtitle {
-  font-size: 2rem;
+  font-size: 27px;
   color: #545d69;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
-
 .resultHeading {
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #000;
 }
 
@@ -141,42 +144,50 @@
 }
 
 .resultDescBox {
-  padding: 2rem;
-  border-radius: 12px;
-  white-space: pre-line;
-  color: #2b3a4b;
-  margin: 0 auto 1.5rem;
-  max-width: 700px;
+  margin: auto;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
+  padding: 1rem 0;
+  max-width: 600px;
+  justify-items: center;
+  word-break: keep-all;
+  padding-left: 1.5rem;
+}
+.resultDescBox ul {
+  font-weight: 500;
+  font-size: 1.4rem;
+  text-align: left;
+  line-height: 1.8;
+}
+.resultDescBox ul li {
+  text-align: left;
+  font-family: "S-CoreDream-3Light";
+}
+.resultSubDesc {
+  font-size: 2rem;
+  font-family: "S-CoreDream-3Light";
 }
 
 .buttonGroup {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  max-width: 650px;
+  max-width: 600px;
   margin: 0 auto;
 }
-
+.buttonGroup button {
+  font-size: 20px;
+  transition: 0.3s ease;
+  padding: 0.75rem;
+  border-radius: 24px;
+}
 .primaryButton {
   background: #c7bce4;
-  color: #545d69;
   border: none;
-  border-radius: 24px;
-  padding: 0.75rem;
-  font-weight: 550;
-  transition: 0.3s ease;
 }
-
 .outlinedButton {
   background: #fff;
-  color: #545d69;
   border: 2px solid #d2c4fc;
-  border-radius: 24px;
-  padding: 0.75rem;
-  font-weight: 550;
-  transition: 0.3s ease;
 }
 
 .outlinedButton:hover,
@@ -184,7 +195,6 @@
   background: #5f41b2;
   color: #fff;
   transform: translateY(-5px);
-  font-weight: 700;
 }
 
 @media (max-width: 1410px) {

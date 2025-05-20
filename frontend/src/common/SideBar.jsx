@@ -98,10 +98,10 @@ const SideBar = () => {
               icon="bi-joystick"
               onClick={handleNavClick}
             />
+            <button className={css.logoutButton} onClick={handleLogout}>
+              로그아웃
+            </button>
           </div>
-          <button className={css.logoutButton} onClick={handleLogout}>
-            로그아웃
-          </button>
         </div>
       </div>
     </>

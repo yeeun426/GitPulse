@@ -22,6 +22,7 @@ import {
 
 import ReactMarkdown from "react-markdown";
 import { useOrgsInfo, useOrgsRepos } from "../apis/useOrganizationApi";
+import Loading from "../common/Loading.jsx";
 
 const OrganizationPage = () => {
   const { id, name } = useParams();
@@ -101,7 +102,9 @@ const OrganizationPage = () => {
     setCommitCounts(commitCountByDay);
   }, [commit, curUserLogin]);
 
-  if (isLoading || isRepoLoading) return <p>Loading...</p>;
+  if (isLoading || isRepoLoading) {
+    return <Loading />;
+  }
   if (isError || isRepoError) return <p>에러 발생!</p>;
 
   const chartData = Object.entries(commitCounts).map(([date, counts]) => ({

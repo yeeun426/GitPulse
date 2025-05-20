@@ -1,64 +1,54 @@
 .container {
   display: flex;
-  flex : 1;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin : 0 auto;
+  margin: 0 auto;
   background-color: #f9f9fc;
   text-align: center;
-  width : 100%;
+  width: 100%;
   height: 100vh;
+  font-family: "Pretendard-Regular";
+  background-image: url(/img/bg-pattern.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .title {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 600;
-  color: #2B3A4B;
-  margin-bottom: 8rem;
+  font-family: "Pretendard-Regular";
 }
 
 .logo {
-  width: 400px;
+  width: 380px;
   height: auto;
 }
 
-.logoWrapper {
-  background-color: #f1ecff;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 3rem;
-  box-shadow: 0 0 20px rgba(197, 197, 255, 0.4);
-}
-
 .subtitle {
-  font-size: 2rem;
-  color: #6d6d6d;
-  margin-bottom: 3rem;
+  font-size: 26px;
+  color: var(--main-dark-gray);
+  margin-bottom: 2.5rem;
+  margin-top: 1.5rem;
+  font-family: "S-CoreDream-3Light";
 }
 
 .startButton {
-  padding: 12px 120px;
+  padding: 1rem 120px;
   font-size: 25px;
-  font-weight: bold;
-  color: #545D69;
-  background-color: #e4ddff;
+  background: linear-gradient(90deg, #a58eff, #e1bfff);
+  color: white;
+  font-weight: 600;
   border: none;
-  border-radius: 4rem;
-  box-shadow: 8px 10px 12px rgba(167, 167, 167, 0.34);
-  cursor: pointer;
+  border-radius: 50px;
+  box-shadow: 0 6px 12px rgba(150, 120, 255, 0.3);
   transition: all 0.3s ease;
-  translate : 0.3s ease;
 }
-
 .startButton:hover {
-  background-color: #d0c7f9;
-  transform : translateY(-5px);
-  
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(150, 120, 255, 0.4);
 }
 
 @media (max-width: 1410px) {
