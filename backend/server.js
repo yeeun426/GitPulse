@@ -2,7 +2,8 @@ const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: __dirname + "/.env" });
 
 const app = express();
 
@@ -227,3 +228,5 @@ connectDB(); // db연결
 
 const challengeRoutes = require("./routes/challengeRoutes");
 app.use("/api/challenge", challengeRoutes);
+
+app.use;

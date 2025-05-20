@@ -1,4 +1,12 @@
 {
+  "name": "GitPulse",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts" : {
+    "serve" : "nodemon backend/server.js",
+    "start" : "node backend/server.js",
+    "build" : "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+  },
   "devDependencies": {
     "@types/react": "^19.1.3"
   },
