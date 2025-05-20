@@ -19,7 +19,6 @@ const PORT = process.env.PORT || 4000;
 
 const userAccessTokens = {};
 
-const cors = require("cors");
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://gitpulse-04.onrender.com"],
