@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "serve": "nodemon backend/server.js",
+    "start": "node backend/server.js"
+  },
   "dependencies": {
     "axios": "^1.9.0",
     "cors": "^2.8.5",

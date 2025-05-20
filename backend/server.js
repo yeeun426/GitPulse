@@ -229,4 +229,6 @@ connectDB(); // db연결
 const challengeRoutes = require("./routes/challengeRoutes");
 app.use("/api/challenge", challengeRoutes);
 
-app.use;
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
