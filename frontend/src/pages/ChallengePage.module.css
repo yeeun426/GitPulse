@@ -11,27 +11,34 @@
   font-size: 3rem;
   color: #5a5f6b;
   text-align: left;
-  margin-left: 1rem;
-  margin-bottom: 1rem;
-  margin-top : 2rem;
-  font-weight : 700;
+  font-weight: 700;
+  max-width: 80%;
+  margin: auto;
+  margin-top: 2rem;
 }
 .challengeRow {
   display: flex;
   justify-content: space-between;
-  gap: var(--card-gap);
   width: calc(var(--card-width) * 3 + var(--card-gap) * 2);
   margin: 0 auto;
+  max-width: 80%;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 .viewerSection {
   margin-top: 2rem;
 }
-
 .period {
   font-size: 1.5rem;
-  font-weight : 700;
+  font-weight: 700;
   color: #666;
   text-align: left;
-  margin-bottom: 1.5rem;
-  margin-left : 1rem;
+  max-width: 80%;
+  margin: auto;
+}
+@media (max-width: 1080px) {
+  .challengeRow {
+    flex-direction: column;
+    width: 100%;
+  }
 }

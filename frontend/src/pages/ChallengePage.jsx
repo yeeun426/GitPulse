@@ -23,7 +23,6 @@ const ChallengePage = () => {
   };
   const periodText = `Period : ${formatDate(since)} ~ ${formatDate(until)}`;
 
-
   return (
     <div className={css.container}>
       <h2 className={css.title}>Challenge</h2>

@@ -131,7 +131,6 @@ const ChallengeBox = ({ title, type, onSelect }) => {
   return (
     <div className={`${css.box} ${!joined ? css.blurred : ""}`}>
       <p className={css.header}>{title}</p>
-      
 
       {loading ? (
         <div className={css.loadingWrapper}>
@@ -141,9 +140,19 @@ const ChallengeBox = ({ title, type, onSelect }) => {
             className={css.loadingImage}
           />
           <p className={css.loadingText}>
-            챌린지 친구들을
-            <br />
-            불러오고 있어요...
+            {type === "star" ? (
+              <>
+                전세계 레포지토리 순위를
+                <br />
+                불러오고 있어요...
+              </>
+            ) : (
+              <>
+                챌린지 친구들을
+                <br />
+                불러오고 있어요...
+              </>
+            )}
           </p>
         </div>
       ) : (
