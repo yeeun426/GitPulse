@@ -1,6 +1,7 @@
 .box {
     width: var(--card-width);
-    min-height: 27rem;
+    min-height: 20rem;
+    max-height : 35rem;
     background: #fff;
     border: 1px solid #D8D8D8;
     border-radius: 1rem;
@@ -33,11 +34,13 @@
   display: grid;
   grid-template-columns: 2.5rem 1.5rem 1fr auto;
   align-items: center;
-  padding: 0.5rem 0.75rem;
+  padding: 0.8rem 0.75rem;
   cursor: pointer;
-  column-gap: 0.25rem;
+  column-gap: 0.5rem;
   border-radius: 0.5rem;
   transition:  0.3s ease;
+  overflow: hidden;
+  height : 4rem;
   }
 
 .list li:hover {
@@ -46,14 +49,16 @@
   }
   
 .rank {
-    text-align: right;
+  text-align: right;
   color: #5a5f6b;
   font-weight: 600;
 }
   
 .medal {
-    flex-shrink: 0;
     width: 3rem;
+    height: 3rem;
+    object-fit : contain;
+    display : block;
     margin-left: -2.6rem;
   }
   
@@ -87,10 +92,30 @@
     justify-content: center;
     gap: 1rem;
   }
-  
-.blur {
-    filter: blur(0.05rem);
+
+  .blur {
+      filter: blur(0.05rem);
+    }
+
+  .joinButton {
+    background: linear-gradient(135deg, #b798eb, #9474d1);
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
   }
+  
+  .joinButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #a586e8, #7d60c6);
+  }
+  
   
 .leave {
     position: absolute;

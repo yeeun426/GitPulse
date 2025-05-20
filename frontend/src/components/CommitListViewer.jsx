@@ -1,27 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import css from "./CommitListViewer.module.css";
 import {
-  getRepoCommits,
+  getAllUserCommitRepos,
   fetchReadme,
-  getUserRepos,
   getCommitDiff,
+  getKRMonthRange,
 } from "../apis/github";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-const CommitListViewer = ({ selectedUser, selectedRepo, activeType }) => {
+const CommitListViewer = ({
+  selectedUser,
+  selectedRepo,
+  activeType,
+  year = 2025,
+  month = 5,
+}) => {
   const [commits, setCommits] = useState([]);
   const [readme, setReadme] = useState("");
   const [commitDiff, setCommitDiff] = useState("");
-  const [repoName, setRepoName] = useState("");
+  const [loading, setLoading] = useState(true);
+  const loaderRef = useRef(null);
+  const { since, until } = getKRMonthRange(year, month);
 
   useEffect(() => {
-    const load = async () => {
+    const init = async () => {
+      setLoading(true);
       setCommits([]);
       setReadme("");
       setCommitDiff("");
-      setRepoName("");
 
       if (activeType === "star" && selectedRepo) {
         const data = await fetchReadme(
@@ -29,25 +37,31 @@ const CommitListViewer = ({ selectedUser, selectedRepo, activeType }) => {
           selectedRepo.name
         );
         setReadme(data);
+        setLoading(false);
       } else if (
         (activeType === "commit" || activeType === "continue") &&
         selectedUser
       ) {
-        const repos = await getUserRepos(selectedUser, 1, 1);
-        if (!repos.length) return;
-        const firstRepo = repos[0].name;
-        setRepoName(firstRepo);
-        const list = await getRepoCommits(selectedUser, firstRepo, 10);
-        setCommits(list);
+        const data = await getAllUserCommitRepos(selectedUser, since, until);
+        setCommits(data);
+        setLoading(false);
+      } else {
+        setLoading(false);
       }
     };
-    load();
-  }, [selectedUser, selectedRepo, activeType]);
+    init();
+  }, [selectedUser, selectedRepo, activeType, since, until]);
 
-  const handleClickCommit = async (sha) => {
-    if (!selectedUser || !repoName) return;
-    const diff = await getCommitDiff(selectedUser, repoName, sha);
+  const handleClickCommit = async (sha, repo, owner) => {
+    if (!selectedUser || !repo) return;
+    const diff = await getCommitDiff(owner || selectedUser, repo, sha);
     setCommitDiff(diff);
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    return d.toISOString().split("T")[0];
   };
 
   return (
@@ -55,12 +69,30 @@ const CommitListViewer = ({ selectedUser, selectedRepo, activeType }) => {
       <div className={css.commitListBox}>
         <div className={css.commitListHeader}>Commits</div>
         <ul className={css.commitList}>
-          {commits.length ? (
-            commits.map((c, i) => (
-              <li key={i} onClick={() => handleClickCommit(c.sha)}>
-                {c.commit.message || "No message"}
-              </li>
-            ))
+          {loading ? (
+            <>
+              <li className={css.skeleton}></li>
+              <li className={css.skeleton}></li>
+              <li className={css.skeleton}></li>
+            </>
+          ) : commits.length ? (
+            commits.map((c, i) => {
+              const msg = c.commit.message || "No message";
+              const shortMsg = msg.length > 40 ? msg.slice(0, 40) + "..." : msg;
+              const date = formatDate(c.commit.author.date);
+              const owner = c.repo && c.org ? c.org : selectedUser;
+              return (
+                <li
+                  key={i}
+                  onClick={() => handleClickCommit(c.sha, c.repo, owner)}
+                  title={msg}
+                  className={css.commitItem}
+                >
+                  <span className={css.commitMessage}>{shortMsg}</span>
+                  <span className={css.commitDate}>{date}</span>
+                </li>
+              );
+            })
           ) : (
             <li>No commits</li>
           )}

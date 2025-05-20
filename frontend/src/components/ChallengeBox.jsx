@@ -9,9 +9,10 @@ import {
   getUserFromJWT,
 } from "../apis/Challenge";
 import {
-  getMonthlyCommitCount,
+  getAllUserCommitRepos,
   getMonthlyCommitDays,
   fetchRepos,
+  getKRMonthRange,
 } from "../apis/github";
 
 const ChallengeBox = ({ title, type, onSelect }) => {
@@ -24,16 +25,29 @@ const ChallengeBox = ({ title, type, onSelect }) => {
     const currentUser = getUserFromJWT();
     setUser(currentUser);
 
+    // 년도/월 설정
+    const year = 2025;
+    const month = 5;
+    const { since, until } = getKRMonthRange(year, month);
+
     let commitData = [];
 
     if (type === "commit") {
+      //PushEvent가 아닌 실제 커밋 개수 기준
       commitData = await Promise.all(
         data
           .filter((p) => p.commit)
-          .map(async (p) => ({
-            githubId: p.githubId,
-            count: await getMonthlyCommitCount(p.githubId),
-          }))
+          .map(async (p) => {
+            const commits = await getAllUserCommitRepos(
+              p.githubId,
+              since,
+              until
+            );
+            return {
+              githubId: p.githubId,
+              count: commits.length,
+            };
+          })
       );
     } else if (type === "continue") {
       commitData = await Promise.all(
@@ -41,7 +55,7 @@ const ChallengeBox = ({ title, type, onSelect }) => {
           .filter((p) => p.continue)
           .map(async (p) => ({
             githubId: p.githubId,
-            count: await getMonthlyCommitDays(p.githubId),
+            count: await getMonthlyCommitDays(p.githubId, since, until),
           }))
       );
     } else if (type === "star") {
@@ -123,7 +137,9 @@ const ChallengeBox = ({ title, type, onSelect }) => {
       {!joined && (
         <div className={css.overlay}>
           <img src={challengeImage} alt="배경" />
-          <button onClick={handleJoin}>참여하기</button>
+          <button className={css.joinButton} onClick={handleJoin}>
+            참여하기
+          </button>
         </div>
       )}
 

@@ -84,12 +84,27 @@ export const getUserRepos = async (username, page = 1, perPage = 5) => {
   }
 };
 
-export const getRepoCommits = async (username, repoName, perPage = 30) => {
+export const getRepoCommits = async (
+  username,
+  repoName,
+  perPage = 30,
+  since,
+  until,
+  page = 1
+) => {
   try {
-    if (!repoName) throw new Error("유효하지 않은 repoName");
-    const res = await fetchWithToken(`/repos/${username}/${repoName}/commits`, {
+    const params = {
       per_page: perPage,
-    });
+      page,
+    };
+
+    if (since) params.since = since;
+    if (until) params.until = until;
+
+    const res = await fetchWithToken(
+      `/repos/${username}/${repoName}/commits`,
+      params
+    );
     return res;
   } catch (err) {
     const errorMsg = err?.response?.data?.message;
@@ -283,16 +298,10 @@ export const getRateLimit = async () => {
   return await fetchWithToken("/rate_limit");
 };
 
-export const getMonthlyCommitCount = async (username) => {
+export const getMonthlyCommitCount = async (username, since, until) => {
   try {
-    const now = new Date();
-    const thisMonthFirst = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastMonthFirst = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-
-    const sinceISOString = lastMonthFirst.toISOString();
-    const untilISOString = thisMonthFirst.toISOString();
-
     const events = [];
+
     for (let page = 1; page <= 3; page++) {
       const res = await fetchWithToken(`/users/${username}/events`, {
         per_page: 100,
@@ -301,20 +310,26 @@ export const getMonthlyCommitCount = async (username) => {
 
       if (!Array.isArray(res) || res.length === 0) break;
 
-      res.forEach((event) => {
-        if (
-          event.type === "PushEvent" &&
-          event.created_at >= sinceISOString &&
-          event.created_at < untilISOString
-        ) {
+      for (const event of res) {
+        // 1. PushEvent만
+        if (event.type !== "PushEvent") continue;
+
+        // 2. KST 기준 비교 (UTC에서 9시간 더한 값으로 계산)
+        const eventDate = new Date(event.created_at);
+        const eventKST = new Date(eventDate.getTime() + 9 * 60 * 60 * 1000);
+        const sinceDate = new Date(since);
+        const untilDate = new Date(until);
+
+        if (eventKST >= sinceDate && eventKST <= untilDate) {
           events.push(event);
         }
-      });
+      }
     }
 
     let commitCount = 0;
     for (const e of events) {
-      e.payload.commits.forEach(() => commitCount++);
+      const commits = e.payload.commits || [];
+      commitCount += commits.length;
     }
 
     return commitCount;
@@ -324,15 +339,8 @@ export const getMonthlyCommitCount = async (username) => {
   }
 };
 
-export const getMonthlyCommitDays = async (username) => {
+export const getMonthlyCommitDays = async (username, since, until) => {
   try {
-    const now = new Date();
-    const thisMonthFirst = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastMonthFirst = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-
-    const sinceISOString = lastMonthFirst.toISOString();
-    const untilISOString = thisMonthFirst.toISOString();
-
     const dateSet = new Set();
 
     for (let page = 1; page <= 3; page++) {
@@ -346,8 +354,8 @@ export const getMonthlyCommitDays = async (username) => {
       res.forEach((event) => {
         if (
           event.type === "PushEvent" &&
-          event.created_at >= sinceISOString &&
-          event.created_at < untilISOString
+          event.created_at >= since &&
+          event.created_at <= until
         ) {
           const date = new Date(event.created_at).toISOString().split("T")[0];
           dateSet.add(date);
@@ -378,7 +386,7 @@ export const fetchRepos = async (sort = "stars", page = 1, perPage = 10) => {
   }
 };
 
-// Readme 불러오기기
+// Readme 불러오기
 export const fetchReadme = async (owner, repo) => {
   try {
     const readme = await fetchWithToken(`/repos/${owner}/${repo}/readme`);
@@ -389,7 +397,7 @@ export const fetchReadme = async (owner, repo) => {
   }
 };
 
-//Diff 가져오기기
+//Diff 가져오기
 export const getCommitDiff = async (username, repoName, sha) => {
   try {
     const res = await fetchWithToken(
@@ -405,5 +413,77 @@ ${file.patch || ""}
   } catch (err) {
     console.error("커밋 diff 불러오기 실패", err);
     return "불러오기 실패";
+  }
+};
+
+export const getKRMonthRange = (year, month) => {
+  // JS 기준: month는 0~11이 아니라 1~12 기준으로 받음
+  const start = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+  const end = new Date(Date.UTC(year, month, 0, 23, 59, 59));
+
+  return {
+    since: start.toISOString(),
+    until: end.toISOString(),
+    label: `${month}월 1일 ~ ${month}월 ${end.getUTCDate()}일`,
+  };
+};
+
+
+export const getAllUserCommitRepos = async (username, since, until) => {
+  try {
+    const combinedCommits = [];
+
+    // 개인 public 레포
+    const personalRepos = await fetchWithToken(`/users/${username}/repos`, {
+      per_page: 100,
+      sort: "pushed",
+    });
+
+    // 소속 조직 목록
+    const orgs = await fetchWithToken(`/users/${username}/orgs`);
+
+    // 각 조직의 public 레포 목록
+    let orgRepos = [];
+    for (const org of orgs) {
+      const repos = await fetchWithToken(`/orgs/${org.login}/repos`, {
+        per_page: 100,
+        sort: "pushed",
+      });
+      orgRepos.push(...repos);
+    }
+
+    const allRepos = [...personalRepos, ...orgRepos];
+
+    // 각 repo에 대해 author=username 커밋 가져오기
+    for (const repo of allRepos) {
+      const owner = repo.owner?.login;
+      const name = repo.name;
+      if (!owner || !name) continue;
+
+      const commits = await fetchWithToken(`/repos/${owner}/${name}/commits`, {
+        since,
+        until,
+        author: username,
+        per_page: 100,
+      });
+
+      const mapped = commits.map((c) => ({
+        ...c,
+        repo: name,
+        org: owner !== username ? owner : null,
+      }));
+
+      combinedCommits.push(...mapped);
+    }
+
+    // 최신순 정렬
+    const sorted = combinedCommits.sort(
+      (a, b) => new Date(b.commit.author.date) - new Date(a.commit.author.date)
+    );
+
+    return sorted;
+  } catch (err) {
+    console.error("통합 커밋 불러오기 실패:", err);
+    return [];
   }
 };

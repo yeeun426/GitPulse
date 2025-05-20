@@ -1,6 +1,6 @@
 :root {
-  --card-width: 21rem;
-  --card-gap: 13rem;
+  --card-width: 25rem;
+  --card-gap: 9rem;
 }
 .container {
   width: 100%;
