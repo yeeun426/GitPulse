@@ -20,13 +20,7 @@ const userAccessTokens = {};
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: ["http://localhost:5173", "https://gitpulse-04.onrender.com"],
     credentials: true,
   })
 );
