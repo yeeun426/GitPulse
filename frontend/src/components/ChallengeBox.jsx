@@ -131,6 +131,7 @@ const ChallengeBox = ({ title, type, onSelect }) => {
   return (
     <div className={`${css.box} ${!joined ? css.blurred : ""}`}>
       <p className={css.header}>{title}</p>
+      
 
       {loading ? (
         <div className={css.loadingWrapper}>

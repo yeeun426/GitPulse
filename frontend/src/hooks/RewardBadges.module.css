@@ -2,10 +2,11 @@
 
 .modalTitle {
   color: #5F41B2;
+  font-weight : 700;
 }
 
 .badgesWrapper {
-  position: relative; /* ✅ ? 버튼을 절대 위치시킬 수 있도록 */
+  position: relative; 
   cursor: default;
 }
 
