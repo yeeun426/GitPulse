@@ -39,7 +39,7 @@ const LoginPage = () => {
   }, []);
 
   const onClickSocialLogin = async () => {
-    const res = await fetch("https://gitpulse-04.onrender.com/oauth/github");
+    const res = await fetch("https://gitpulse-back.onrender.com/oauth/github");
     const { url } = await res.json();
     window.open(url, "_blank", "width=400,height=300");
   };
