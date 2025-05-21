@@ -84,6 +84,7 @@ app.get("/oauth/github/callback", async (req, res) => {
   }
 });
 
+// 인증 미들웨어
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "인증 토큰 없음" });
@@ -128,8 +129,22 @@ app.get("/github/proxy", authenticate, async (req, res) => {
     });
     res.send(githubRes.data);
   } catch (error) {
-    console.error("Proxy 실패:", error.response?.data || error.message);
-    res.status(500).json({ message: "GitHub 호출 실패" });
+    const status = error.response?.status || 500;
+    const message = error.response?.data?.message || "GitHub 호출 실패";
+
+    // 빈 레포 에러는 따로 처리해서 빈 배열을 반환
+    if (message === "Git Repository is empty.") {
+      console.warn(`⚠️ Empty repository for ${fullPath}`);
+      return res.status(200).json([]); // 프론트가 parse할 수 있게 정상 응답
+    }
+    console.error(
+      "GitHub API 호출 실패:",
+      error.response?.data || error.message
+    );
+    return res.status(status).json({
+      message: "GitHub 호출 실패",
+      githubMessage: message,
+    });
   }
 });
 
