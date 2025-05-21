@@ -10,7 +10,8 @@ const app = express();
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET || "my_jwt_secret_key";
-const FRONT_URL = `https://gitpulse-04.onrender.com` || "http://localhost:5173";
+const FRONT_URL =
+  `https://gitpulse-04.onrender.com/` || "http://localhost:5173";
 const SERVER_URL =
   `https://gitpulse-back.onrender.com` ||
   `http://localhost:${process.env.PORT || 4000}`;
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 4000;
 
 const userAccessTokens = {};
 
+const cors = require("cors");
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://gitpulse-04.onrender.com"],
