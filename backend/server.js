@@ -4,9 +4,11 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const connectDB = require("./config/db");
+const challengeRoutes = require("./routes/challengeRoutes");
+
 const app = express();
 
-// ✅ 환경 변수
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET || "my_jwt_secret_key";
@@ -28,14 +30,14 @@ app.use(
 
 app.use(express.json());
 
-// ✅ OAuth URL 발급
+// OAuth 경로
 app.get("/oauth/github", (req, res) => {
   const redirectUri = `${SERVER_URL}/oauth/github/callback`;
   const url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=repo`;
   res.json({ url });
 });
 
-// ✅ OAuth 콜백
+// OAuth 콜백
 app.get("/oauth/github/callback", async (req, res) => {
   const code = req.query.code;
 
@@ -99,10 +101,9 @@ function authenticate(req, res, next) {
   }
 }
 
-// GitHub Proxy (README 자동 디코딩 포함)
+// GitHub proxy
 app.get("/github/proxy", authenticate, async (req, res) => {
   const { path, ...params } = req.query;
-
   let dp = path;
   try {
     dp = decodeURIComponent(dp);
@@ -110,7 +111,6 @@ app.get("/github/proxy", authenticate, async (req, res) => {
   try {
     dp = decodeURIComponent(dp);
   } catch (e) {}
-
   const fullPath = dp.startsWith("/") ? dp : `/${dp}`;
   const token = userAccessTokens[req.user.login];
   if (!token) return res.status(404).json({ message: "AccessToken 없음" });
@@ -147,6 +147,75 @@ app.get("/github/proxy", authenticate, async (req, res) => {
     });
   }
 });
+// Challenge API 등록
+connectDB();
+app.use("/api/challenge", challengeRoutes);
+
+app.post(
+  "/github/proxy/repos/:owner/:repo/issues/:number/comments",
+  authenticate,
+  async (req, res) => {
+    const { owner, repo, number } = req.params;
+    const { body } = req.body;
+
+    const token = userAccessTokens[req.user.login];
+    if (!token) return res.status(404).json({ message: "AccessToken 없음" });
+
+    try {
+      const response = await axios.post(
+        `https://api.github.com/repos/${owner}/${repo}/issues/${number}/comments`,
+        { body },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+          },
+        }
+      );
+      res.json(response.data);
+    } catch (error) {
+      console.error(
+        "일반 PR 코멘트 실패:",
+        error.response?.data || error.message
+      );
+      res.status(500).json({ message: "GitHub POST 호출 실패" });
+    }
+  }
+);
+
+app.post(
+  "/github/proxy/repos/:owner/:repo/pulls/:number/comments",
+  authenticate,
+  async (req, res) => {
+    const { owner, repo, number } = req.params;
+    const { body, commit_id, path, position } = req.body;
+
+    const token = userAccessTokens[req.user.login];
+    if (!token) return res.status(404).json({ message: "AccessToken 없음" });
+
+    try {
+      const response = await axios.post(
+        `https://api.github.com/repos/${owner}/${repo}/pulls/${number}/comments`,
+        {
+          body,
+          commit_id,
+          path,
+          position,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+          },
+        }
+      );
+      res.json(response.data);
+    } catch (error) {
+      console.error("리뷰 코멘트 실패:", error.response?.data || error.message);
+      res.status(500).json({ message: "GitHub POST 호출 실패" });
+    }
+  }
+);
 
 // ✅ 서버 실행
 app.listen(PORT, () => {
