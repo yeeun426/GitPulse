@@ -2,7 +2,7 @@ import axios from "axios";
 
 // ✅ 백엔드 프록시 경로 설정
 const github = axios.create({
-  baseURL: "hhttps://gitpulse-04.onrender.com/github/proxy",
+  baseURL: "hhttps://gitpulse-back.onrender.com/github/proxy",
 });
 
 /**

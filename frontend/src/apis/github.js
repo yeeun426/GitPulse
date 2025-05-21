@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "https://gitpulse-04.onrender.com";
+const API_BASE = "https://gitpulse-back.onrender.com";
 
 export const githubAxios = axios.create({
   baseURL: "https://api.github.com",
